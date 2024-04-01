@@ -700,7 +700,6 @@ components:
           enum:
             - Polygon
             - Linea
-            - Ethereum
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
@@ -735,7 +734,6 @@ components:
           enum:
             - Polygon
             - Linea
-            - Ethereum
         blockscanUrl:
           type: string
           nullable: true
@@ -1040,8 +1038,7 @@ components:
               enum:
                 - Polygon
                 - Linea
-                - Ethereum
-        - $ref: '#/components/schemas/CustomTransactionMetadata'
+        - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
       title: Mint
