@@ -6,6 +6,35 @@ info:
 servers:
   - url: "https://protocol-staging.int.lumx.io/v2"
 paths:
+  /projects/auth:
+    post:
+      summary: Create a project.
+      description: Use this route to create a project and a default api key.
+      security: []
+      tags:
+        - projects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateProjectRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateProjectResponse"
+        "409":
+          description: This project name is already in use.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This project name already registered.
   /wallets:
     post:
       summary: Create a wallet
@@ -660,6 +689,60 @@ paths:
         - apiKey: []
 components:
   schemas:
+    CreateProjectRequest:
+      type: object
+      properties:
+        name:
+          description: The name of the project.
+          type: string
+    CreateProjectResponse:
+      type: object
+      properties:
+        key:
+          description: The api key of the project.
+          type: string
+        project:
+          type: object
+          properties:
+            id:
+              description: The id of the project.
+              type: string
+            name:
+              description: The id of the project.
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+              description: The timestamp from when the project was created.
+            updatedAt:
+              type: string
+              format: date-time
+              description: The timestamp from when the project was last updated.
+    CreateApiKeyRequest:
+      type: object
+      properties:
+        scopes:
+          type: array
+          items:
+            type: string
+            enum:
+              - ADMIN
+              - READ_WALLETS
+              - WRITE_WALLETS
+              - READ_CONTRACTS
+              - WRITE_CONTRACTS
+              - DEPLOY_CONTRACTS
+              - READ_TOKEN_TYPES
+              - WRITE_TOKEN_TYPES
+              - WRITE_MINTS
+              - WRITE_TRANSFERS
+              - WRITE_CUSTOM_TRANSACTIONS
+              - READ_TRANSACTIONS
+    CreateApiKeyResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
     BaseWalletResponse:
       type: object
       properties:
