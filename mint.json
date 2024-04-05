@@ -74,6 +74,13 @@
       ]
     },
     {
+      "group": "Auth",
+      "pages": [
+        "api-reference/v2/projects/create-an-api-key"
+      ],
+      "version": "v2.0"
+    },
+    {
       "group": "Wallets",
       "pages": [
         "api-reference/v2/wallets/create-a-wallet",
