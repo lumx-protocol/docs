@@ -788,6 +788,7 @@ components:
         maxPerAddress:
           type: string 
           format: number
+          example: '100'
           description: The maximum number of tokens allowed per address.
     ContractResponse:
       type: object
@@ -827,6 +828,7 @@ components:
         maxPerAddress:
           type: string 
           format: number
+          example: '100'
           description: >-
             The maximum number of tokens that a single wallet can get 
             from this contract through minting. This limit doesn't apply for transfers.
