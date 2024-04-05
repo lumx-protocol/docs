@@ -8,11 +8,11 @@ servers:
 paths:
   /projects/auth:
     post:
-      summary: Create a project.
+      summary: Create a project
       description: Use this route to create a project and a default api key.
       security: []
       tags:
-        - projects
+        - Projects
       requestBody:
         content:
           application/json:
