@@ -6,10 +6,10 @@ info:
 servers:
   - url: "https://protocol-staging.int.lumx.io/v2"
 paths:
-  /projects/internal:
+  /projects/auth:
     post:
       summary: Create a project.
-      description: Use this route to create a project for generating your API keys.
+      description: Use this route to create a project and a default api key.
       security: []
       tags:
         - projects
@@ -35,38 +35,6 @@ paths:
                   error:
                     type: string
                     example: This project name already registered.
-  "/projects/internal/:projectId/api-keys":
-    post:
-      tags:
-        - projects
-      summary: Create a API key.
-      security: []
-      description: >-
-        Use this endpoint to create a API key for your project. You can choose the scopes for the API key.
-      parameters:
-        - name: projectId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The ID of the project.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateApiKeyRequest"
-              required:
-                - scopes
-      responses:
-        "200":
-          description: The list of wallets was retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CreateApiKeyResponse"
   /wallets:
     post:
       summary: Create a wallet
@@ -730,20 +698,26 @@ components:
     CreateProjectResponse:
       type: object
       properties:
-        id:
-          description: The id of the project.
+        key:
+          description: The api key of the project.
           type: string
-        name:
-          description: The id of the project.
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the project was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the project was last updated.
+        project:
+          type: object
+          properties:
+            id:
+              description: The id of the project.
+              type: string
+            name:
+              description: The id of the project.
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+              description: The timestamp from when the project was created.
+            updatedAt:
+              type: string
+              format: date-time
+              description: The timestamp from when the project was last updated.
     CreateApiKeyRequest:
       type: object
       properties:
