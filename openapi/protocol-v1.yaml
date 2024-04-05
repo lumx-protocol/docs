@@ -555,14 +555,14 @@ paths:
                   $ref: "#/components/schemas/MintResponse"
       security:
         - apiKey: []
-  "/transactions/{trasactionId}":
+  "/transactions/{transactionId}":
     get:
       tags:
         - Transactions
       summary: Read a transaction
       description: "This endpoint reads a transaction made with your API key. DISCLAIMER: currently only works for mints, will return transfers soon."
       parameters:
-        - name: trasactionId
+        - name: transactionId
           in: path
           description: The ID of the transaction.
           required: true
@@ -655,7 +655,7 @@ components:
           description: The description of the contract.
         blockchainName:
           type: string
-          enum: ["ethereum", "polygon", "linea", "optimism"]
+          enum: ["polygon", "linea", "optimism", "bvm"]
           description: The name of the blockchain used for the contract.
         maxPerAddress:
           type: integer

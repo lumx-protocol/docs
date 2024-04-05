@@ -4,7 +4,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API V2
 servers:
-  - url: 'https://protocol-staging.int.lumx.io/v2'
+  - url: "https://protocol-staging.int.lumx.io/v2"
 paths:
   /wallets:
     post:
@@ -13,12 +13,22 @@ paths:
       tags:
         - Wallets
       responses:
-        '201':
+        "201":
           description: Successfully created the wallet.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletResponse'
+                $ref: "#/components/schemas/BaseWalletResponse"
+        "500":
+          description: A Error ocurred trying to create wallet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: A Error ocurred trying to create wallet
       security:
         - apiKey: []
     get:
@@ -29,17 +39,17 @@ paths:
         This endpoint reads the id and address of all wallets associated with
         your API key.
       responses:
-        '200':
+        "200":
           description: The list of wallets was retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WalletListResponse'
+                  $ref: "#/components/schemas/BaseWalletResponse"
       security:
         - apiKey: []
-  '/wallets/{walletId}':
+  "/wallets/{walletId}":
     get:
       tags:
         - Wallets
@@ -54,52 +64,70 @@ paths:
             format: uuid
           description: The ID of the wallet.
       responses:
-        '200':
+        "200":
           description: >-
             The details of the wallet and the list of tokens it holds were
             retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WalletResponse'
+                allOf:
+                  - $ref: "#/components/schemas/BaseWalletResponse"
+                  - type: object
+                    properties:
+                      tokens:
+                        description: Tokens that belong to this wallet.
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TokenResponse"
+        "404":
+          description: Wallet not found!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Wallet not found!
       security:
         - apiKey: []
   # '/wallets/{walletId}/sign':
-    # post:
-    #   tags:
-    #     - Wallets
-    #   summary: Sign a message
-    #   description: Sign a message using the specified wallet.
-    #   parameters:
-    #     - name: walletId
-    #       in: path
-    #       required: true
-    #       schema:
-    #         type: string
-    #         format: uuid
-    #       description: The ID of the wallet that will be used to sign.
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           type: object
-    #           properties:
-    #             message:
-    #               type: string
-    #           required:
-    #             - message
-    #   responses:
-    #     '200':
-    #       description: The message was signed succesfully.
-    #       content:
-    #         application/json:
-    #           schema:
-    #             type: object
-    #             properties:
-    #               message:
-    #                 type: string
-    #               signature:
-    #                 type: string
+  # post:
+  #   tags:
+  #     - Wallets
+  #   summary: Sign a message
+  #   description: Sign a message using the specified wallet.
+  #   parameters:
+  #     - name: walletId
+  #       in: path
+  #       required: true
+  #       schema:
+  #         type: string
+  #         format: uuid
+  #       description: The ID of the wallet that will be used to sign.
+  #   requestBody:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           type: object
+  #           properties:
+  #             message:
+  #               type: string
+  #           required:
+  #             - message
+  #   responses:
+  #     '200':
+  #       description: The message was signed succesfully.
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               message:
+  #                 type: string
+  #               signature:
+  #                 type: string
   /contracts:
     post:
       tags:
@@ -112,7 +140,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContractRequest'
+              $ref: "#/components/schemas/ContractRequest"
               required:
                 - name
                 - type
@@ -120,12 +148,32 @@ paths:
                 - blockchainName
                 - maxPerAddress
       responses:
-        '201':
+        "201":
           description: Contract created successfully (but not deployed yet).
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContractResponse'
+                $ref: "#/components/schemas/ContractResponse"
+        "403":
+          description: This contract does not belong to this project.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
+        "409":
+          description: You can not update a deployed contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: You can not update a deployed contract
       security:
         - apiKey: []
     get:
@@ -134,17 +182,17 @@ paths:
       summary: Read all contracts
       description: This endpoint reads all contracts
       responses:
-        '200':
+        "200":
           description: The list of contracts was retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ContractResponse'
+                  $ref: "#/components/schemas/ContractResponse"
       security:
         - apiKey: []
-  '/contracts/{contractId}':
+  "/contracts/{contractId}":
     get:
       tags:
         - Contracts
@@ -159,12 +207,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: The details of this contract were retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContractResponse'
+                $ref: "#/components/schemas/ContractResponse"
       security:
         - apiKey: []
     patch:
@@ -186,17 +234,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContractRequest'
+              $ref: "#/components/schemas/ContractRequest"
       responses:
-        '200':
+        "200":
           description: Contract updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContractResponse'
+                $ref: "#/components/schemas/ContractResponse"
       security:
         - apiKey: []
-  '/contracts/{contractId}/deploy':
+  "/contracts/{contractId}/deploy":
     post:
       tags:
         - Contracts
@@ -215,15 +263,46 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Contract deployed successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContractResponse'
+                $ref: "#/components/schemas/ContractResponse"
+        "403":
+          description: This contract does not belong to this project.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
+        "409":
+          description: This contract is already deployed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract is already deployed
+
+        "500":
+          description: Error while trying to deploy contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error while trying to deploy contract
       security:
         - apiKey: []
-  '/contracts/{contractId}/token-types':
+  "/contracts/{contractId}/token-types":
     post:
       tags:
         - Contracts
@@ -243,18 +322,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenTypeCreateRequest'
+              $ref: "#/components/schemas/TokenTypeCreateRequest"
               required:
                 - name
                 - description
                 - initialSupply
       responses:
-        '201':
-          description: Token type succesfully created.
+        "201":
+          description: Token type successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenTypeResponse'
+                $ref: "#/components/schemas/TokenTypeResponse"
+        "403":
+          description: This contract does not belong to this project.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
+        "500":
+          description: Failed while trying to export metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Failed while trying to export metadata.
       security:
         - apiKey: []
     get:
@@ -271,17 +370,17 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: The list of token types for this contract was retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TokenTypeResponse'
+                  $ref: "#/components/schemas/TokenTypeResponse"
       security:
         - apiKey: []
-  '/contracts/{contractId}/token-types/{tokenTypeId}':
+  "/contracts/{contractId}/token-types/{uriNumber}":
     get:
       tags:
         - Contracts
@@ -295,20 +394,29 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: tokenTypeId
+        - name: uriNumber
           in: path
-          description: The ID of the token type.
+          description: The sequential identifier of the token type within the contract.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: number
       responses:
-        '200':
+        "200":
           description: The details of this token type were retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenTypeResponse'
+                $ref: "#/components/schemas/TokenTypeResponse"
+        "403":
+          description: This token type does not belong to this contract id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This token type does not belong to this contract id
       security:
         - apiKey: []
     patch:
@@ -324,25 +432,34 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: tokenTypeId
+        - name: uriNumber
           in: path
-          description: The ID of the token type.
+          description: The sequential identifier of the token type within the contract.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: number
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenTypeUpdateRequest'
+              $ref: "#/components/schemas/TokenTypeUpdateRequest"
       responses:
-        '200':
+        "200":
           description: The token type was updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenTypeResponse'
+                $ref: "#/components/schemas/TokenTypeResponse"
+        "403":
+          description: This contract does not belong to this project.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
       security:
         - apiKey: []
   /transactions/mints:
@@ -358,13 +475,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MintRequest'
-              required:
-                - tokenTypeId
-                - walletId
-                - quantity
+              oneOf:
+                - allOf:
+                    - $ref: "#/components/schemas/MintRequest"
+                      title: Non-fungible token
+                      required:
+                        - contractId
+                        - walletId
+                    - type: object
+                      properties:
+                        uriNumber:
+                          type: number
+                          description: The sequential identifier of the token type within the contract.
+                      required:
+                        - uriNumber
+                - allOf:
+                    - $ref: "#/components/schemas/MintRequest"
+                      title: Fungible token
+                      required:
+                        - contractId
+                        - walletId
+                        - quantity
       responses:
-        '202':
+        "202":
           description: >-
             The mint request was submitted to the blockchain. Important: This is
             an ASYNC route! Use the read transaction route to check the mint's
@@ -372,7 +505,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MintTransactionResponse'
+                allOf:
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/MintTransactionResponse"
+        "409":
+          description: Contract not deployed yet!.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
+        "403":
+          description: Minting this amount will surpass the maximum tokens per address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Minting this amount will surpass the maximum tokens per address
       security:
         - apiKey: []
   /transactions/transfers:
@@ -387,13 +542,40 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
-              required:
-                - tokenTypeId
-                - to
-                - from
+              oneOf:
+                - allOf:
+                    - $ref: "#/components/schemas/TransferRequest"
+                      title: Non-fungible token
+                      required:
+                        - contractId
+                        - to
+                        - from
+                    - type: object
+                      properties:
+                        tokenId:
+                          type: string
+                          description: >-
+                            The ID of the token that will be transferred. Not applicable for fungible tokens.
+                      required:
+                        - tokenId
+                - allOf:
+                    - $ref: "#/components/schemas/TransferRequest"
+                      title: Fungible token
+                      required:
+                        - contractId
+                        - to
+                        - from
+                    - type: object
+                      properties:
+                        quantity:
+                          type: number
+                          description: >-
+                            The quantity of tokens to transfer. Not applicable for non-fungible
+                            tokens.
+                      required:
+                        - quantity
       responses:
-        '202':
+        "202":
           description: >-
             The transfer operation was submitted to the blockchain. Important:
             This is an ASYNC route! Use the read transaction route to check the
@@ -401,7 +583,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferTransactionResponse'
+                $ref: "#/components/schemas/TransferTransactionResponse"
       security:
         - apiKey: []
   /transactions:
@@ -414,61 +596,71 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomTransactionRequest'
+              $ref: "#/components/schemas/CustomTransactionRequest"
               required:
                 - walletId
                 - contractAddress
                 - functionSignature
       responses:
-        '202':
+        "202":
           description: >-
             The transaction was submitted to the blockchain. Important: This is
             an ASYNC route! Use the read transaction route to check its status.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomTransactionResponse'
+                $ref: "#/components/schemas/CustomTransactionResponse"
     get:
       tags:
         - Transactions
       summary: Read all transactions
       description: This endpoint reads all transactions made with your API key.
       responses:
-        '200':
+        "200":
           description: The list of transactions was retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransactionResponse'
+                  $ref: "#/components/schemas/BaseTransactionResponse"
       security:
         - apiKey: []
-  '/transactions/{trasactionId}':
+  "/transactions/{transactionId}":
     get:
       tags:
         - Transactions
       summary: Read a transaction
       description: This endpoint reads a transaction made with your API key.
       parameters:
-        - name: trasactionId
+        - name: transactionId
           in: path
           description: The ID of the transaction.
           required: true
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: The details of the transaction were retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionResponse'
+                $ref: "#/components/schemas/BaseTransactionResponse"
+        "404":
+          description: Transaction not found!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Transaction not found!
       security:
         - apiKey: []
 components:
   schemas:
-    WalletResponse:
+    BaseWalletResponse:
       type: object
       properties:
         id:
@@ -478,29 +670,14 @@ components:
         address:
           description: The blockchain address for this wallet.
           type: string
-        tokens:
-          description: Tokens that belong to this wallet.
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenResponse'
-        createdAt: 
-          type: string 
+        createdAt:
+          type: string
           format: date-time
           description: The timestamp from when the wallet was created.
         updatedAt:
-          type: string 
+          type: string
           format: date-time
           description: The timestamp from when the wallet was last updated.
-    WalletListResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id for this wallet.
-          format: uuid
-        address:
-          type: string
-          description: The blockchain address for this wallet.
     ContractRequest:
       type: object
       properties:
@@ -521,11 +698,10 @@ components:
         blockchainName:
           type: string
           enum:
-            - polygon
-            - linea
-            - ethereum
+            - Polygon
+            - Linea
           description: The name of the blockchain used for the contract.
-          default: polygon
+          default: Polygon
         maxPerAddress:
           type: integer
           description: The maximum number of tokens allowed per address.
@@ -556,10 +732,9 @@ components:
           type: string
           description: The blockchain name of the contract.
           enum:
-            - polygon
-            - linea
-            - ethereum
-        scanUrl:
+            - Polygon
+            - Linea
+        blockscanUrl:
           type: string
           nullable: true
           description: >-
@@ -570,16 +745,16 @@ components:
           description: >-
             The maximum number of tokens that a single wallet can get 
             from this contract through minting. This limit doesn't apply for transfers.
-        createdAt: 
-          type: string 
+        createdAt:
+          type: string
           format: date-time
           description: The timestamp from when the contract was created.
         updatedAt:
-          type: string 
+          type: string
           format: date-time
           description: The timestamp from when the contract was last updated.
         deployedAt:
-          type: string 
+          type: string
           format: date-time
           nullable: true
           description: The timestamp from when the contract was deployed to the blockchain.
@@ -654,12 +829,12 @@ components:
         metadataUrl:
           type: string
           description: The URL where this token's metadata JSON is located.
-        createdAt: 
-          type: string 
+        createdAt:
+          type: string
           format: date-time
           description: The timestamp from when the token type was created.
         updatedAt:
-          type: string 
+          type: string
           format: date-time
           description: The timestamp from when the token type was last updated.
     TokenTypeUpdateRequest:
@@ -689,20 +864,26 @@ components:
             GIF or MP4.
     TokenResponse:
       properties:
-        tokenTypeId:
+        contractId:
           type: string
           format: uuid
           nullable: true
           description: >-
             If this token belongs to a contract created through Lumx Protocol,
-            this field indicates the id of the corresponding token type.
+            this field indicates the id of that contract.
+        uriNumber:
+          type: number
+          nullable: true
+          description: >-
+            If this token belongs to a contract created through Lumx Protocol,
+            this field indicates the uriNumber of the token type used to mint this token.
         blockchainName:
           type: string
           description: The name of the blockchain to which this token belongs.
           enum:
-            - polygon
-            - linea
-            - ethereum
+            - Polygon
+            - Linea
+            - Ethereum
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -730,7 +911,7 @@ components:
         metadata:
           type: object
           nullable: true
-          description: 'The token''s metadata, such as image address, traits, etc.'
+          description: "The token's metadata, such as image address, traits, etc."
         symbol:
           type: string
           nullable: true
@@ -738,29 +919,20 @@ components:
         quantity:
           type: number
           description: How much of that token is present at this wallet.
-    TransactionResponse:
+    BaseTransactionResponse:
       type: object
       properties:
-        metadata: 
-          description: An object containing the parameters used for this transaction.
-          oneOf:
-            - $ref: '#/components/schemas/MintTransactionMetadata'
-            - $ref: '#/components/schemas/TransferTransactionMetadata'
-            - $ref: '#/components/schemas/CustomTransactionMetadata'
         id:
           type: string
           description: The ID of the transaction.
           format: uuid
-        type:
+        contractId:
           type: string
-          description: The transaction type (mint or transfer)
-          enum:
-            - mint
-            - transfer
-            - custom
+          format: uuid
+          description: The ID of the contract where this transaction happened.
         status:
           type: string
-          description: The status of the transaction.
+          description: The status of the transaction on the blockchain.
           enum:
             - pending
             - success
@@ -769,165 +941,63 @@ components:
           type: string
           description: The identifier of this transaction on the blockchain.
           nullable: true
-        scanUrl:
+        blockscanUrl:
           type: string
           description: >-
             The block scan address of this transaction, where you can see it
             live on the blockchain.
-        createdAt: 
-          type: string 
+        createdAt:
+          type: string
           format: date-time
           description: The timestamp from when the transaction was submitted.
-        updatedAt: 
-          type: string 
+        updatedAt:
+          type: string
           format: date-time
           description: The timestamp from when the transaction was last updated.
         completedAt:
-          type: string 
+          type: string
           format: date-time
           description: The timestamp from when the transaction was completed.
           nullable: true
     MintTransactionResponse:
       type: object
       properties:
-        metadata: 
+        metadata:
           description: An object containing the parameters used for this transaction.
-          oneOf:
-            - $ref: '#/components/schemas/MintTransactionMetadata'
-        id:
-          type: string
-          description: The ID of the transaction.
-          format: uuid
+          $ref: "#/components/schemas/MintTransactionMetadata"
         type:
           type: string
-          description: The transaction type (mint or transfer)
+          description: The transaction type
           enum:
             - mint
-        status:
-          type: string
-          description: The status of the transaction.
-          enum:
-            - pending
-            - success
-            - failed
-        transactionHash:
-          type: string
-          description: The identifier of this transaction on the blockchain.
-          nullable: true
-        scanUrl:
-          type: string
-          description: >-
-            The block scan address of this transaction, where you can see it
-            live on the blockchain.
-        createdAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was submitted.
-        updatedAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was last updated.
-        completedAt:
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was completed.
-          nullable: true
     TransferTransactionResponse:
       type: object
       properties:
-        metadata: 
+        metadata:
           description: An object containing the parameters used for this transaction.
-          oneOf:
-            - $ref: '#/components/schemas/TransferTransactionMetadata'
-        id:
-          type: string
-          description: The ID of the transaction.
-          format: uuid
+          $ref: "#/components/schemas/TransferTransactionMetadata"
         type:
           type: string
-          description: The transaction type (mint or transfer)
+          description: The transaction type
           enum:
             - transfer
-        status:
-          type: string
-          description: The status of the transaction.
-          enum:
-            - pending
-            - success
-            - failed
-        transactionHash:
-          type: string
-          description: The identifier of this transaction on the blockchain.
-          nullable: true
-        scanUrl:
-          type: string
-          description: >-
-            The block scan address of this transaction, where you can see it
-            live on the blockchain.
-        createdAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was submitted.
-        updatedAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was last updated.
-        completedAt:
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was completed.
-          nullable: true
     CustomTransactionResponse:
       type: object
       properties:
-        metadata: 
+        metadata:
           description: An object containing the parameters used for this transaction.
-          oneOf:
-            - $ref: '#/components/schemas/CustomTransactionMetadata'
-        id:
-          type: string
-          description: The ID of the transaction.
-          format: uuid
+          $ref: "#/components/schemas/CustomTransactionMetadata"
         type:
           type: string
-          description: The transaction type (mint or transfer)
+          description: The transaction type
           enum:
             - custom
-        status:
-          type: string
-          description: The status of the transaction.
-          enum:
-            - pending
-            - success
-            - failed
-        transactionHash:
-          type: string
-          description: The identifier of this transaction on the blockchain.
-          nullable: true
-        scanUrl:
-          type: string
-          description: >-
-            The block scan address of this transaction, where you can see it
-            live on the blockchain.
-        createdAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was submitted.
-        updatedAt: 
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was last updated.
-        completedAt:
-          type: string 
-          format: date-time
-          description: The timestamp from when the transaction was completed.
-          nullable: true
     MintRequest:
       properties:
-        tokenTypeId:
+        contractId:
           format: uuid
           type: string
-          description: The ID of the token type to be minted.
+          description: The ID of the contract from which to mint tokens.
         walletId:
           type: string
           format: uuid
@@ -935,13 +1005,13 @@ components:
         quantity:
           type: number
           default: 1
-          description: The quantity of tokens.
+          description: The quantity of tokens. Required if minting fungible tokens.
     TransferRequest:
       type: object
       properties:
-        tokenTypeId:
+        contractId:
           type: string
-          description: The ID of the token type to be transferred.
+          description: The ID of the contract to which the tokens belong.
           format: uuid
         from:
           type: string
@@ -950,60 +1020,41 @@ components:
         to:
           type: string
           description: The address of the wallet that will receive tokens.
-        quantity:
-          type: number
-          description: >-
-            The quantity of tokens to transfer. Required if you're trying to
-            transfer a **fungible token**. Not applicable for non-fungible
-            tokens.
-        tokenId:
-          type: string
-          description: >-
-            The ID of the token. Required if you're trying to transfer a
-            **non-fungible token**. Not applicable for fungible tokens.
     CustomTransactionRequest:
-      properties:
-        walletId:
-          format: uuid
-          type: string
-          description: The ID of the wallet that will be used to perform the transaction.
-        contractAddress:
-          type: string
-          description: The address of the contract where the transaction will occur.
-        blockchainName:
-          type: string
-          description: The blockchain where the contract is deployed.
-          enum:
-            - polygon
-            - linea
-            - ethereum
-        functionSignature:
-          type: string
-          description: The function's signature (name and parameter types).
-        parameters:
-          type: array
-          description: >-
-            Array containing the values to be passed to the function, in the
-            order  they appear in the function's signature.
-          items: 
-            anyOf:
-              - type: string
-              - type: number
-              - type: boolean
-              - type: array
-                items: 
-                  anyOf:
-                  - type: string
-                  - type: number
-                  - type: boolean
+      allOf:
+        - type: object
+          title: Custom
+          properties:
+            walletId:
+              format: uuid
+              type: string
+              description: The ID of the wallet that will be used to perform the transaction.
+            contractAddress:
+              type: string
+              description: The address of the contract where the transaction will occur.
+            blockchainName:
+              type: string
+              description: The blockchain where the contract is deployed.
+              enum:
+                - Polygon
+                - Linea
+        - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
       title: Mint
       description: Parameters for a mint transaction.
       properties:
-        tokenTypeId:
+        uriNumber:
           type: string
-          description: The id of the token type that was minted.
+          description: The uriNumber of the token type that was minted.
+        nftIds:
+          type: array
+          description: >-
+            Only for non-fungible contracts. Represents the on-chain sequential mint
+            numbers of the NFTs minted in this operation.
+          items:
+            type: number
+          nullable: true
         quantity:
           type: number
           description: How many tokens were minted.
@@ -1012,40 +1063,55 @@ components:
       title: Transfer
       description: Parameters for a transfer transaction.
       properties:
-        tokenTypeId:
+        uriNumber:
           type: string
-          description: The id of the token type that was transferred.
+          description: The uriNumber of the token type that was minted.
         quantity:
           type: number
           description: How many tokens were transferred.
         from:
-          type: string 
+          type: string
           description: The address that sent the transfer.
         to:
-          type: string 
+          type: string
           description: The address that received the transfer.
     CustomTransactionMetadata:
       type: object
       title: Custom
       description: Parameters for a custom transaction.
       properties:
-        functionSignature:
-          type: string
-          description: The invoked function's signature (name and parameter types).
-        parameters:
+        operations:
           type: array
-          description: The parameters that were passed to the function.
-          items: 
-            anyOf:
-              - type: string
-              - type: number
-              - type: boolean
-              - type: array
-                items: 
+          description: An array with objects defining the operations to be executed in this transaction.
+          items:
+            type: object
+            properties:
+              functionSignature:
+                type: string
+                description: The function's signature (name and parameter types).
+              functionParams:
+                type: array
+                description: >-
+                  Array containing the values to be passed to the function, in the
+                  order they appear in the function's signature.
+                items:
                   anyOf:
-                  - type: string
-                  - type: number
-                  - type: boolean
+                    - type: string
+                    - type: number
+                    - type: boolean
+                    - type: array
+                      items:
+                        anyOf:
+                          - type: string
+                          - type: number
+                          - type: boolean
+              nativeTokensAmount:
+                type: number
+                description: Optional. The amount of native tokens (ETH, MATIC, etc) to be sent along with the transaction.
+                default: 0
+            required:
+              - functionSignature
+              - functionParams
   securitySchemes:
     apiKey:
       type: http
