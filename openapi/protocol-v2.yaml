@@ -786,7 +786,8 @@ components:
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
-          type: integer
+          type: string 
+          format: number
           description: The maximum number of tokens allowed per address.
     ContractResponse:
       type: object
@@ -824,7 +825,8 @@ components:
             The block scan address of this contract, where you can see it live
             on the blockchain (only for deployed contracts).
         maxPerAddress:
-          type: integer
+          type: string 
+          format: number
           description: >-
             The maximum number of tokens that a single wallet can get 
             from this contract through minting. This limit doesn't apply for transfers.
