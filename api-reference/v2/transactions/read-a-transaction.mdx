@@ -1,58 +1,69 @@
 ---
-openapi: protocol-v2 get /transactions/{trasactionId}
+openapi: protocol-v2 get /transactions/{transactionId}
 ---
 <ResponseExample>
 
 ```json 200 - Mint
 {
-  "metadata": {
-    "tokenTypeId": "<string>",
-    "quantity": 123
-  },
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "mint",
   "status": "pending",
   "transactionHash": "<string>",
   "scanUrl": "<string>",
   "createdAt": "2023-11-07T05:31:56Z",
   "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z"
+  "completedAt": "2023-11-07T05:31:56Z",
+  "metadata": {
+    "uriNumber": "<string>",
+    "quantity": 123,
+    "from": "<string>",
+    "to": "<string>",
+    "nftIds": []
+  }
 }
 ```
 
 ```json 200 - Transfer
 {
-  "metadata": {
-    "tokenTypeId": "<string>",
-    "quantity": 123,
-    "from": "<string>",
-    "to": "<string>"
-  },
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "transfer",
   "status": "pending",
   "transactionHash": "<string>",
   "scanUrl": "<string>",
   "createdAt": "2023-11-07T05:31:56Z",
   "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z"
+  "completedAt": "2023-11-07T05:31:56Z",
+  "metadata": {
+    "uriNumber": "<string>",
+    "quantity": 123,
+    "from": "<string>",
+    "to": "<string>"
+  }
 }
 ```
 
 ```json 200 - Custom
 {
-  "metadata": {
-    "functionSignature": "<string>",
-    "parameters": []
-  },
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "custom",
   "status": "pending",
   "transactionHash": "<string>",
   "scanUrl": "<string>",
   "createdAt": "2023-11-07T05:31:56Z",
   "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z"
+  "completedAt": "2023-11-07T05:31:56Z",
+  "metadata": {
+    "operations": [
+      {
+        "functionSignature": "<string>",
+        "functionParams": [],
+        "nativeTokensAmount": 123
+      }
+    ]
+  }
 }
 ```
 
