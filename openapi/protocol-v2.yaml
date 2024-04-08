@@ -616,29 +616,29 @@ paths:
       security:
         - apiKey: []
   /transactions:
-    post:
-      tags:
-        - Transactions
-      summary: Invoke a custom transaction
-      description: Invoke any function of a smart contract
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CustomTransactionRequest"
-              required:
-                - walletId
-                - contractAddress
-                - functionSignature
-      responses:
-        "202":
-          description: >-
-            The transaction was submitted to the blockchain. Important: This is
-            an ASYNC route! Use the read transaction route to check its status.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomTransactionResponse"
+    # post:
+    #   tags:
+    #     - Transactions
+    #   summary: Invoke a custom transaction
+    #   description: Invoke any function of a smart contract
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/CustomTransactionRequest"
+    #           required:
+    #             - walletId
+    #             - contractAddress
+    #             - functionSignature
+    #   responses:
+    #     "202":
+    #       description: >-
+    #         The transaction was submitted to the blockchain. Important: This is
+    #         an ASYNC route! Use the read transaction route to check its status.
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/CustomTransactionResponse"
     get:
       tags:
         - Transactions
@@ -782,7 +782,7 @@ components:
           type: string
           enum:
             - Polygon
-            - Linea
+            # - Linea
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
@@ -818,7 +818,7 @@ components:
           description: The blockchain name of the contract.
           enum:
             - Polygon
-            - Linea
+            # - Linea
         blockscanUrl:
           type: string
           nullable: true
@@ -969,8 +969,8 @@ components:
           description: The name of the blockchain to which this token belongs.
           enum:
             - Polygon
-            - Linea
-            - Ethereum
+            # - Linea
+            # - Ethereum
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -1124,7 +1124,7 @@ components:
               description: The blockchain where the contract is deployed.
               enum:
                 - Polygon
-                - Linea
+                # - Linea
         - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
