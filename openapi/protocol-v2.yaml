@@ -9,10 +9,10 @@ paths:
   /projects/auth:
     post:
       summary: Create a project
-      description: Use this route to create a project and a default api key.
+      description: Use this route to create a project and an API key. In production environments, the API key must be requested through our support team.
       security: []
       tags:
-        - Projects
+        - Auth
       requestBody:
         content:
           application/json:
@@ -25,16 +25,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/CreateProjectResponse"
-        "409":
-          description: This project name is already in use.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: This project name already registered.
   /wallets:
     post:
       summary: Create a wallet
@@ -65,8 +55,8 @@ paths:
         - Wallets
       summary: Read all wallets
       description: >-
-        This endpoint reads the id and address of all wallets associated with
-        your API key.
+        This endpoint reads the id and address of all wallets created through your
+        API key.
       responses:
         "200":
           description: The list of wallets was retrieved successfully
@@ -616,29 +606,29 @@ paths:
       security:
         - apiKey: []
   /transactions:
-    post:
-      tags:
-        - Transactions
-      summary: Invoke a custom transaction
-      description: Invoke any function of a smart contract
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CustomTransactionRequest"
-              required:
-                - walletId
-                - contractAddress
-                - functionSignature
-      responses:
-        "202":
-          description: >-
-            The transaction was submitted to the blockchain. Important: This is
-            an ASYNC route! Use the read transaction route to check its status.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomTransactionResponse"
+    # post:
+    #   tags:
+    #     - Transactions
+    #   summary: Invoke a custom transaction
+    #   description: Invoke any function of a smart contract
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/CustomTransactionRequest"
+    #           required:
+    #             - walletId
+    #             - contractAddress
+    #             - functionSignature
+    #   responses:
+    #     "202":
+    #       description: >-
+    #         The transaction was submitted to the blockchain. Important: This is
+    #         an ASYNC route! Use the read transaction route to check its status.
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: "#/components/schemas/CustomTransactionResponse"
     get:
       tags:
         - Transactions
@@ -699,7 +689,7 @@ components:
       type: object
       properties:
         key:
-          description: The api key of the project.
+          description: The API key of the project.
           type: string
         project:
           type: object
@@ -707,8 +697,9 @@ components:
             id:
               description: The id of the project.
               type: string
+              format: uuid
             name:
-              description: The id of the project.
+              description: The name of the project.
               type: string
             createdAt:
               type: string
@@ -718,31 +709,6 @@ components:
               type: string
               format: date-time
               description: The timestamp from when the project was last updated.
-    CreateApiKeyRequest:
-      type: object
-      properties:
-        scopes:
-          type: array
-          items:
-            type: string
-            enum:
-              - ADMIN
-              - READ_WALLETS
-              - WRITE_WALLETS
-              - READ_CONTRACTS
-              - WRITE_CONTRACTS
-              - DEPLOY_CONTRACTS
-              - READ_TOKEN_TYPES
-              - WRITE_TOKEN_TYPES
-              - WRITE_MINTS
-              - WRITE_TRANSFERS
-              - WRITE_CUSTOM_TRANSACTIONS
-              - READ_TRANSACTIONS
-    CreateApiKeyResponse:
-      type: object
-      properties:
-        apiKey:
-          type: string
     BaseWalletResponse:
       type: object
       properties:
@@ -753,6 +719,10 @@ components:
         address:
           description: The blockchain address for this wallet.
           type: string
+        projectId:
+          description: The id of the project to which this wallet belongs.
+          type: string
+          format: uuid
         createdAt:
           type: string
           format: date-time
@@ -782,7 +752,7 @@ components:
           type: string
           enum:
             - Polygon
-            - Linea
+            # - Linea
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
@@ -818,7 +788,7 @@ components:
           description: The blockchain name of the contract.
           enum:
             - Polygon
-            - Linea
+            # - Linea
         blockscanUrl:
           type: string
           nullable: true
@@ -969,8 +939,8 @@ components:
           description: The name of the blockchain to which this token belongs.
           enum:
             - Polygon
-            - Linea
-            - Ethereum
+            # - Linea
+            # - Ethereum
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -1124,7 +1094,7 @@ components:
               description: The blockchain where the contract is deployed.
               enum:
                 - Polygon
-                - Linea
+                # - Linea
         - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
