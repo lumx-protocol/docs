@@ -8,7 +8,9 @@
   "api": {
     "maintainOrder": true
   },
-  "openapi": ["openapi/protocol-v1.yaml"],
+  "openapi": [
+    "openapi/protocol-v1.yaml"
+  ],
   "versions": [
     "v1.1",
     "v1.0 - Deprecated"
@@ -147,5 +149,19 @@
     "github": "https://github.com/lumx-protocol",
     "twitter": "https://twitter.com/hellolumx",
     "linkedin": "https://www.linkedin.com/company/hellolumx"
-  }
+  },
+  "redirects": [
+    {
+      "source": "/api-reference/auth",
+      "destination": "/api-reference/v1/account/get-an-api-key"
+    },
+    {
+      "source": "/api-reference/transactions/mint-a-token",
+      "destination": "/api-reference/v1/transactions/mint-a-token"
+    },
+    {
+      "source": "/api-reference/transactions/read-a-transaction",
+      "destination": "/api-reference/v1/transactions/read-a-transaction"
+    }
+  ]
 }
