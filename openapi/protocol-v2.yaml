@@ -28,7 +28,7 @@ paths:
   /wallets:
     post:
       summary: Create a wallet
-      description: Creates a wallet.
+      description: Creates a wallet that has the same address in all our EVM supported chains.
       tags:
         - Wallets
       responses:
