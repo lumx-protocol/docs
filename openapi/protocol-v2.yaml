@@ -497,7 +497,7 @@ paths:
               oneOf:
                 - allOf:
                     - $ref: "#/components/schemas/MintRequest"
-                      title: Non-fungible token
+                      title: Non-fungible
                       required:
                         - contractId
                         - walletId
@@ -510,7 +510,7 @@ paths:
                         - uriNumber
                 - allOf:
                     - $ref: "#/components/schemas/MintRequest"
-                      title: Fungible token
+                      title: Fungible
                       required:
                         - contractId
                         - walletId
@@ -756,9 +756,9 @@ components:
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
-          type: string 
+          type: string
           format: number
-          example: '100'
+          example: "100"
           description: The maximum number of tokens allowed per address.
     ContractResponse:
       type: object
@@ -796,9 +796,9 @@ components:
             The block scan address of this contract, where you can see it live
             on the blockchain (only for deployed contracts).
         maxPerAddress:
-          type: string 
+          type: string
           format: number
-          example: '100'
+          example: "100"
           description: >-
             The maximum number of tokens that a single wallet can get 
             from this contract through minting. This limit doesn't apply for transfers.
