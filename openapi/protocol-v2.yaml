@@ -9,7 +9,7 @@ paths:
   /projects/auth:
     post:
       summary: Create a project
-      description: Use this route to create a project and an API key. In production environments, the API key must be requested through our support team.
+      description: Use this route to create a project and receive an API key. In production environments, project creation, and consequently, the request for an API key, must be made through our support team.
       security: []
       tags:
         - Auth

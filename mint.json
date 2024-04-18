@@ -27,7 +27,7 @@
     {
       "name": "Join our Slack",
       "icon": "slack",
-      "url": "https://join.slack.com/t/lumxpartners/shared_invite/zt-1z920ovmb-V6~OlHpvQSQupe7kJLu5YA"
+      "url": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-1z920ovmb-V6~OlHpvQSQupe7kJLu5YA"
     },
     {
       "name": "System Status",
@@ -48,10 +48,6 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "Integrations",
-      "url": "integrations"
     },
     {
       "name": "Embedded Wallet",
@@ -80,10 +76,20 @@
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction", "guides/your-first-project"]
+      "pages": ["guides/introduction"]
     },
     {
-      "group": "Using create-dapp (Boilerplate)",
+      "group": "Start building",
+      "pages": [
+        "guides/get-an-api-key",
+        "guides/your-first-contract",
+        "guides/create-a-wallet",
+        "guides/mint-a-token",
+        "guides/the-road-so-far"
+      ]
+    },
+    {
+      "group": "Next.js boilerplate",
       "pages": [
         "guides/install-cli",
         "guides/run-cli",
@@ -91,17 +97,17 @@
       ]
     },
     {
-      "group": "Using API requests",
+      "group": "Recipes",
       "pages": [
-        "guides/create-project",
-        "guides/create-contract",
-        "guides/create-wallet",
-        "guides/mint-token"
+        "guides/mint-multiple-tokens",
+        "guides/transfer-between-two-wallets",
+        "guides/integrate-payment-gateway",
+        "guides/interaction-with-custom-contracts"
       ]
     },
     {
-      "group": "Auth",
-      "pages": ["api-reference/v2/projects/create-an-api-key"],
+      "group": "Projects",
+      "pages": ["api-reference/v2/projects/create-a-project"],
       "version": "v2.0"
     },
     {
