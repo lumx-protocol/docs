@@ -81,19 +81,18 @@
     {
       "group": "Start building",
       "pages": [
-        "guides/get-an-api-key",
-        "guides/your-first-contract",
-        "guides/create-a-wallet",
-        "guides/mint-a-token",
-        "guides/the-road-so-far"
+        "guides/start-building/get-an-api-key",
+        "guides/start-building/your-first-contract",
+        "guides/start-building/create-a-wallet",
+        "guides/start-building/mint-a-token",
+        "guides/start-building/the-road-so-far"
       ]
     },
     {
       "group": "Next.js boilerplate",
       "pages": [
-        "guides/install-cli",
-        "guides/run-cli",
-        "guides/start-boilerplate"
+        "guides/next-js-boilerplate/install-cli",
+        "guides/next-js-boilerplate/start-boilerplate"
       ]
     },
     {
