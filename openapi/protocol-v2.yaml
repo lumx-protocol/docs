@@ -345,7 +345,7 @@ paths:
               required:
                 - name
                 - description
-                - initialSupply
+                - maxSupply
       responses:
         "201":
           description: Token type successfully created.
@@ -824,9 +824,9 @@ components:
         description:
           type: string
           description: The description of the token type.
-        initialSupply:
+        maxSupply:
           type: number
-          description: The initial supply of the token type.
+          description: The max supply of the token type.
           maximum: 2000000000
         traits:
           type: object
@@ -856,9 +856,9 @@ components:
           type: string
           description: The description of the token type.
           nullable: true
-        initialSupply:
+        maxSupply:
           type: number
-          description: The initial supply of the token type.
+          description: The max supply of the token type.
           maximum: 2000000000
         currentSupply:
           type: number
@@ -903,10 +903,10 @@ components:
         description:
           type: string
           description: The description of the token type.
-        initialSupply:
+        maxSupply:
           type: number
           description: >-
-            The initial supply of the token type. Can only be updated if this
+            The max supply of the token type. Can only be updated if this
             token type's contract hasn't been deployed yet.
           maximum: 2000000000
         traits:
