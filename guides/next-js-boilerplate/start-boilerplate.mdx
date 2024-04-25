@@ -1,31 +1,75 @@
 ---
-title: "Start the boilerplate"
-description: "Learn how to start the boilerplate"
+title: 'Explore the boilerplate'
+description: 'Learn how the boilerplate works'
 ---
 
 We are very close to see it running.
 
-Now, it's time to start the application.
+Now, it's time to talk about the project structure and how it works.
+
+<Note>
+	The create-dapp is based on the NextJS app router, leveraging the use of RSC
+	for great performance and security. If you are not familiar with the framework
+	please refer to their [documentation](https://nextjs.org/docs)
+</Note>
+
+### Philosophy
+
+The project generated is a digital asset claim page that uses our embedded wallet for easy onboard of a user using conventional authorization method such as oauth and email. Once the signup/login is done the user can then claim the NFT that belongs to the contractId provided to the CLI.
+
+Optionally, it has a token-gated page that checks on the server if a user has the asset to access the page.
+
+By using RSC we use the API protocol to mint and retrieve itemTypeIds and contract informations without leaking our apiKey to the client.
+
+### Stack
+
+The create-dapp uses the following stack:
+
+- **Zod**: for schema validation on forms
+- **React-hook-form**: for form management
+- **ShadCN UI**: for the UI components
+- **Next-Themes**: Dark mode support
+- **Lucide-react**: Icons
+
+### Folder structure
+
+The project is structured around the app folder, that contains the following folders:
+
+| Folder     | Description                                                                                                    |
+| ---------- | -------------------------------------------------------------------------------------------------------------- |
+| Api        | Contains server fetches and other server-side logic                                                            |
+| Components | Contains all the components used in the project. They mainly come from [shadcn UI lib](https://ui.shadcn.com/) |
+| Helpers    | Contains helper functions used in the project                                                                  |
+| Hooks      | Contains custom hooks used in the project                                                                      |
+| Types      | Contains types used in the project                                                                             |
+
+### Environment Variables
+
+After using our CLI, the project will have a `.env.local` that contains the information you provided, such as the `apiKey`, `contractId`, and `itemTypeId`. Once you are ready to do a production app, the variables can be switched to prod variables on a CI/CD service such as **Github actions**.
+
+### Run the application locally
 
 <CodeGroup>
 
-```bash npm
-cd ./boilerplate
-npm run dev
-```
+    ```bash npm
+    npm run dev
+    ```
 
-```bash yarn
-cd ./boilerplate
-npm run dev
-```
+    ```bash yarn
+    yarn dev
+    ```
 
-```bash pnpm
-cd ./boilerplate
-npm run dev
-```
+    ```bash pnpm
+    pnpm dev
+    ```
 
-</CodeGroup>
+  </CodeGroup>
 
-**You're good to go!** You can deploy it to any cloud service or even use ngrok to share you're application with the rest of the world.
+### Deploy
 
-<Snippet file="troubleshooting.mdx" />
+To deploy your application, please refer to the NextJS [documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+
+### Issues
+
+Please refer to our [Slack](https://join.slack.com/t/lumxprotocol/shared_invite/zt-1z920ovmb-V6~OlHpvQSQupe7kJLu5YA).
+Pull requests are welcome!
