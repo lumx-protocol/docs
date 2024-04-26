@@ -8,7 +8,10 @@
   "api": {
     "maintainOrder": true
   },
-  "openapi": ["openapi/protocol-v1.yaml","openapi/protocol-v2.yaml"],
+  "openapi": [
+    "openapi/protocol-v1.yaml",
+    "openapi/protocol-v2.yaml"
+  ],
   "versions": [
     "v2.0",
     "v1.1",
@@ -109,6 +112,7 @@
       "pages": [
         "api-reference/v2/transactions/mint-tokens",
         "api-reference/v2/transactions/transactions-transfer",
+        "api-reference/v2/transactions/invoke-a-custom-transaction",
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
