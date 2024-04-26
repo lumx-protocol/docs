@@ -165,7 +165,6 @@ paths:
                 - type
                 - description
                 - blockchainName
-                - maxPerAddress
       responses:
         "201":
           description: Contract created successfully (but not deployed yet).
@@ -755,11 +754,6 @@ components:
             # - Linea
           description: The name of the blockchain used for the contract.
           default: Polygon
-        maxPerAddress:
-          type: string
-          format: number
-          example: "100"
-          description: The maximum number of tokens allowed per address.
     ContractResponse:
       type: object
       properties:
@@ -795,13 +789,6 @@ components:
           description: >-
             The block scan address of this contract, where you can see it live
             on the blockchain (only for deployed contracts).
-        maxPerAddress:
-          type: string
-          format: number
-          example: "100"
-          description: >-
-            The maximum number of tokens that a single wallet can get 
-            from this contract through minting. This limit doesn't apply for transfers.
         createdAt:
           type: string
           format: date-time
