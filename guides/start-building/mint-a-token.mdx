@@ -1,0 +1,83 @@
+---
+title: "Mint a token"
+description: "Learn how to mint a token"
+---
+
+Minting is the action to create a new token on the blockchain and send it to a specific wallet.
+
+<Steps>
+  <Step title="Mint a token">
+
+First, we need to mint the token.
+
+  <Info>Remember to switch `<TOKEN_TYPE_ID>` and `<WALLET_ID>` for the ID of the token type and the ID of the wallet.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request POST \
+  --url https://protocol-sandbox.lumx.io/v1/transactions/mints \
+  --header 'Authorization: Bearer $API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "itemTypeId": "<TOKEN_TYPE_ID>",
+  "walletId": "<WALLET_ID>",
+  "amount": 1
+}'
+```
+
+```javascript JavaScript
+axios
+  .post("https://protocol-sandbox.lumx.io/v1/transactions/mints", {
+    itemTypeId: "<ITEM_TYPE_ID>",
+    walletId: "<WALLET_ID>",
+    amount: 1,
+  })
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 201 with an object containing with the ID of the transaction.
+
+</Step>
+<Step title="Read a transaction">
+
+Every new mint is queued up to mitigate the possibility of a transaction failing.
+
+Now, let's check the transaction's status on the blockchain.
+
+  <Info>Remember to switch `<TRANSACTION_ID>` for the ID of the transaction.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID> \
+  --header 'Authorization: Bearer $API_KEY'
+```
+
+```javascript JavaScript
+axios
+  .get(
+    "https://protocol-sandbox.lumx.io/v1/transactions/<id_received_on_step_1>"
+  )
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 200 with an object containing the mint request status and transaction hash.
+
+**Congratulations!** You can check your transaction on the [block explorer](https://amoy.polygonscan.com).
+
+</Step>
+</Steps>
+
+<Snippet file="troubleshooting.mdx" />

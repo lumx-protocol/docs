@@ -1,0 +1,66 @@
+---
+title: "Get an API key"
+description: "Learn how to create a project and receive an API key"
+---
+
+Let's start building! Creating a blockchain project using the Procotol is easy.
+
+<Steps>
+  <Step title="Create a project">
+
+First, we need to create a project to receive an API key and start interacting with other endpoints.
+
+<CodeGroup>
+
+```bash cURL
+curl --request POST \
+  --url https://protocol-sandbox.lumx.io/projects \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "My first project"
+}
+'
+```
+
+```javascript JavaScript
+axios
+  .post("https://protocol-sandbox.lumx.io/projects", {
+    name: "My first project",
+  })
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 201 with an object containing the API key.
+
+</Step>
+<Step title="Add your API key to all request headers">
+
+Now, make sure to insert your key to the headers of all following request.
+
+<Info>Remember to switch `<API_KEY>` to the API key.</Info>
+
+<CodeGroup>
+
+```bash cURL
+API_KEY=<API_KEY>
+```
+
+```javascript JavaScript
+import axios from "axios";
+
+axios.defaults.headers.common["Authorization"] = <API_KEY>;
+```
+
+</CodeGroup>
+
+</Step>
+</Steps>
+
+Coming up next, let's create your first contract on the blockchain.
+
+<Snippet file="troubleshooting.mdx" />
