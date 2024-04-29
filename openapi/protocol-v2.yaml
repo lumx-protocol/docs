@@ -166,6 +166,7 @@ paths:
                 - description
                 - blockchainName
                 - maxPerAddress
+                - symbol
       responses:
         "201":
           description: Contract created successfully (but not deployed yet).
@@ -745,6 +746,9 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length.
         description:
           type: string
           description: The description of the contract.
@@ -779,6 +783,9 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length.
         description:
           type: string
           nullable: true
