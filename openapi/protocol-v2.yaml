@@ -747,6 +747,10 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
+          default: same as contract name
         description:
           type: string
           description: The description of the contract.
@@ -779,6 +783,10 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
+          default: same as contract name
         description:
           type: string
           nullable: true
