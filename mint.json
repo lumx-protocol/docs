@@ -134,6 +134,7 @@
       "pages": [
         "api-reference/v2/transactions/mint-tokens",
         "api-reference/v2/transactions/transactions-transfer",
+        "api-reference/v2/transactions/invoke-a-custom-transaction",
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
