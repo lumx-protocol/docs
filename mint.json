@@ -8,6 +8,9 @@
   "api": {
     "maintainOrder": true
   },
+  "feedback": {
+    "thumbsRating": true
+  },
   "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
   "versions": ["v2.0", "v1.0"],
   "favicon": "/favicon.png",
@@ -50,8 +53,8 @@
       "url": "api-reference"
     },
     {
-      "name": "Embedded Wallet",
-      "url": "embedded-wallet"
+      "name": "Applications",
+      "url": "applications"
     }
   ],
   "navigation": [
@@ -86,13 +89,6 @@
         "guides/start-building/create-a-wallet",
         "guides/start-building/mint-a-token",
         "guides/start-building/the-road-so-far"
-      ]
-    },
-    {
-      "group": "Next.js boilerplate",
-      "pages": [
-        "guides/next-js-boilerplate/install-cli",
-        "guides/next-js-boilerplate/start-boilerplate"
       ]
     },
     {
@@ -187,13 +183,25 @@
       "version": "v1.0"
     },
     {
+      "group": "Applications",
+      "pages": ["applications/introduction"]
+    },
+    {
+      "group": "Next.js Boilerplate",
+      "pages": [
+        "applications/next-js-boilerplate/overview",
+        "applications/next-js-boilerplate/install-cli",
+        "applications/next-js-boilerplate/start-boilerplate"
+      ]
+    },
+    {
       "group": "Embedded Wallet",
       "pages": [
-        "embedded-wallet/introduction",
-        "embedded-wallet/why-to-use",
-        "embedded-wallet/get-started",
-        "embedded-wallet/properties",
-        "embedded-wallet/customization"
+        "applications/embedded-wallet/overview",
+        "applications/embedded-wallet/why-to-use",
+        "applications/embedded-wallet/get-started",
+        "applications/embedded-wallet/properties",
+        "applications/embedded-wallet/customization"
       ]
     }
   ],
