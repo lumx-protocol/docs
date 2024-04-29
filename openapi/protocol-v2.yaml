@@ -605,30 +605,32 @@ paths:
                 $ref: "#/components/schemas/TransferTransactionResponse"
       security:
         - apiKey: []
-  /transactions:
-    # post:
-    #   tags:
-    #     - Transactions
-    #   summary: Invoke a custom transaction
-    #   description: Invoke any function of a smart contract
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: "#/components/schemas/CustomTransactionRequest"
-    #           required:
-    #             - walletId
-    #             - contractAddress
-    #             - functionSignature
-    #   responses:
-    #     "202":
-    #       description: >-
-    #         The transaction was submitted to the blockchain. Important: This is
-    #         an ASYNC route! Use the read transaction route to check its status.
-    #       content:
-    #         application/json:
-    #           schema:
-    #             $ref: "#/components/schemas/CustomTransactionResponse"
+  /transactions/custom:
+    post:
+      tags:
+        - Transactions
+      summary: Invoke a custom transaction
+      description: Invoke any function of a smart contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomTransactionRequest"
+              required:
+                - walletId
+                - contractAddress
+                - functionSignature
+      responses:
+        "202":
+          description: >-
+            The transaction was submitted to the blockchain. Important: This is
+            an ASYNC route! Use the read transaction route to check its status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomTransactionResponse"
+      security:
+        - apiKey: []
     get:
       tags:
         - Transactions
@@ -1082,10 +1084,6 @@ components:
             contractAddress:
               type: string
               description: The address of the contract where the transaction will occur.
-            blockchainName:
-              type: string
-              description: The blockchain where the contract is deployed.
-              enum: ["Polygon", "Linea", "Optimism"]
         - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
