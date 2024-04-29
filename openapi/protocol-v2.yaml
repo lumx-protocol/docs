@@ -750,7 +750,7 @@ components:
           description: The description of the contract.
         blockchainName:
           type: string
-          enum: ["polygon", "linea", "optimism"]
+          enum: ["Polygon", "Linea", "Optimism"]
           description: The name of the blockchain used for the contract.
           default: Polygon
         maxPerAddress:
@@ -784,7 +784,7 @@ components:
         blockchainName:
           type: string
           description: The blockchain name of the contract.
-          enum: ["polygon", "linea", "optimism"]
+          enum: ["Polygon", "Linea", "Optimism"]
         blockscanUrl:
           type: string
           nullable: true
@@ -933,7 +933,7 @@ components:
         blockchainName:
           type: string
           description: The name of the blockchain to which this token belongs.
-          enum: ["polygon", "linea", "optimism"]
+          enum: ["Polygon", "Linea", "Optimism"]
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -1085,7 +1085,7 @@ components:
             blockchainName:
               type: string
               description: The blockchain where the contract is deployed.
-              enum: ["polygon", "linea", "optimism"]
+              enum: ["Polygon", "Linea", "Optimism"]
         - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
