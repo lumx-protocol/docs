@@ -2,14 +2,14 @@ openapi: 3.0.3
 info:
   version: 2.0.0
   title: Lumx Protocol
-  description: Lumx Protocol API V2
+  description: Lumx Protocol API
 servers:
   - url: "https://protocol-staging.int.lumx.io/v2"
 paths:
   /projects/auth:
     post:
       summary: Create a project
-      description: Use this route to create a project and an API key. In production environments, the API key must be requested through our support team.
+      description: Use this route to create a project and receive an API key. In production environments, project creation, and consequently, the request for an API key, must be made through our support team.
       security: []
       tags:
         - Auth
@@ -164,7 +164,6 @@ paths:
                 - name
                 - type
                 - description
-                - blockchainName
       responses:
         "201":
           description: Contract created successfully (but not deployed yet).
@@ -604,30 +603,32 @@ paths:
                 $ref: "#/components/schemas/TransferTransactionResponse"
       security:
         - apiKey: []
-  /transactions:
-    # post:
-    #   tags:
-    #     - Transactions
-    #   summary: Invoke a custom transaction
-    #   description: Invoke any function of a smart contract
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: "#/components/schemas/CustomTransactionRequest"
-    #           required:
-    #             - walletId
-    #             - contractAddress
-    #             - functionSignature
-    #   responses:
-    #     "202":
-    #       description: >-
-    #         The transaction was submitted to the blockchain. Important: This is
-    #         an ASYNC route! Use the read transaction route to check its status.
-    #       content:
-    #         application/json:
-    #           schema:
-    #             $ref: "#/components/schemas/CustomTransactionResponse"
+  /transactions/custom:
+    post:
+      tags:
+        - Transactions
+      summary: Invoke a custom transaction
+      description: Invoke any function of a smart contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomTransactionRequest"
+              required:
+                - walletId
+                - contractAddress
+                - functionSignature
+      responses:
+        "202":
+          description: >-
+            The transaction was submitted to the blockchain. Important: This is
+            an ASYNC route! Use the read transaction route to check its status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomTransactionResponse"
+      security:
+        - apiKey: []
     get:
       tags:
         - Transactions
@@ -684,6 +685,10 @@ components:
         name:
           description: The name of the project.
           type: string
+        blockchainName:
+          description: The blockchain you want to use for this project.
+          type: string
+          enum: ["Polygon", "Linea", "Optimism"]
     CreateProjectResponse:
       type: object
       properties:
@@ -744,16 +749,13 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
+          default: same as contract name
         description:
           type: string
           description: The description of the contract.
-        blockchainName:
-          type: string
-          enum:
-            - Polygon
-            # - Linea
-          description: The name of the blockchain used for the contract.
-          default: Polygon
     ContractResponse:
       type: object
       properties:
@@ -773,6 +775,10 @@ components:
         name:
           type: string
           description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
+          default: same as contract name
         description:
           type: string
           nullable: true
@@ -780,9 +786,7 @@ components:
         blockchainName:
           type: string
           description: The blockchain name of the contract.
-          enum:
-            - Polygon
-            # - Linea
+          enum: ["Polygon", "Linea", "Optimism"]
         blockscanUrl:
           type: string
           nullable: true
@@ -924,10 +928,7 @@ components:
         blockchainName:
           type: string
           description: The name of the blockchain to which this token belongs.
-          enum:
-            - Polygon
-            # - Linea
-            # - Ethereum
+          enum: ["Polygon", "Linea", "Optimism"]
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -1076,12 +1077,6 @@ components:
             contractAddress:
               type: string
               description: The address of the contract where the transaction will occur.
-            blockchainName:
-              type: string
-              description: The blockchain where the contract is deployed.
-              enum:
-                - Polygon
-                # - Linea
         - $ref: "#/components/schemas/CustomTransactionMetadata"
     MintTransactionMetadata:
       type: object
