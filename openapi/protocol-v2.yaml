@@ -836,6 +836,9 @@ components:
           format: uuid
           type: string
           description: The ID of the token type.
+        uriNumber:
+          type: number
+          description: The uri number of the token.
         contractId:
           format: uuid
           type: string
