@@ -5,6 +5,7 @@ info:
   description: Lumx Protocol API
 servers:
   - url: "https://protocol-staging.int.lumx.io/v2"
+  # - url: "https://efcc-177-142-104-169.ngrok-free.app"
 paths:
   /projects/auth:
     post:
@@ -18,13 +19,16 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/CreateProjectRequest"
+              required:
+                - name
+                - blockchainName
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/CreateProjectResponse"
+                $ref: "#/components/schemas/CreateProjectResponse"
   /wallets:
     post:
       summary: Create a wallet
@@ -677,6 +681,24 @@ paths:
         - apiKey: []
 components:
   schemas:
+    SupportedBlockchains:
+      type: string
+      enum:
+        - Polygon
+        - Ethereum
+        - Chiliz
+        - Linea
+        - Optimism
+    Blockchain: 
+      type: object
+      title: Blockchain 
+      properties: 
+        name: 
+          $ref: '#/components/schemas/SupportedBlockchains'
+          description: The blockchain's name.
+        decimalChainId:
+          type: number
+          description: The blockchain's decimal chain id.
     CreateProjectRequest:
       type: object
       properties:
@@ -685,32 +707,31 @@ components:
           type: string
         blockchainName:
           description: The blockchain you want to use for this project.
-          type: string
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
     CreateProjectResponse:
       type: object
       properties:
-        key:
+        id:
+          description: The id of the project.
+          type: string
+          format: uuid
+        name:
+          description: The name of the project.
+          type: string
+        apiKey:
           description: The API key of the project.
           type: string
-        project:
-          type: object
-          properties:
-            id:
-              description: The id of the project.
-              type: string
-              format: uuid
-            name:
-              description: The name of the project.
-              type: string
-            createdAt:
-              type: string
-              format: date-time
-              description: The timestamp from when the project was created.
-            updatedAt:
-              type: string
-              format: date-time
-              description: The timestamp from when the project was last updated.
+        blockchain: 
+          $ref: "#/components/schemas/Blockchain"
+          description: The blockchain where this project's assets will be created.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was last updated.
     BaseWalletResponse:
       type: object
       properties:
@@ -782,9 +803,8 @@ components:
           nullable: true
           description: The description of the contract.
         blockchainName:
-          type: string
           description: The blockchain name of the contract.
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
         blockscanUrl:
           type: string
           nullable: true
@@ -927,9 +947,8 @@ components:
             If this token belongs to a contract created through Lumx Protocol,
             this field indicates the uriNumber of the token type used to mint this token.
         blockchainName:
-          type: string
           description: The name of the blockchain to which this token belongs.
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
