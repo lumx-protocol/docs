@@ -51,6 +51,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Applications",
+      "url": "applications"
     }
   ],
   "navigation": [
@@ -176,6 +180,27 @@
         "api-reference/v1/transactions/read-a-transaction"
       ],
       "version": "v1.0"
+    },
+    {
+      "group": "Applications",
+      "pages": ["applications/introduction"]
+    },
+    {
+      "group": "Boilerplate",
+      "pages": [
+        "applications/boilerplate/overview",
+        "applications/boilerplate/get-started",
+        "applications/boilerplate/architecture"
+      ]
+    },
+    {
+      "group": "Embedded Wallet",
+      "pages": [
+        "applications/embedded-wallet/overview",
+        "applications/embedded-wallet/get-started",
+        "applications/embedded-wallet/properties",
+        "applications/embedded-wallet/customization"
+      ]
     }
   ],
   "footerSocials": {
