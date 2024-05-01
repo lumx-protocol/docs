@@ -1,51 +1,86 @@
 ---
-title: "Run CLI"
-description: "Learn how to run the CLI"
+title: "Transfer a token"
+description: "Learn how to transfer a token"
 ---
 
-The create-dapp CLI is tool create by Lumx to help developers to generate a full end-to-end creation in Next.js.
-
-With the CLI you will be able to launch your project in less than 5 minutes!
-
-Its super easy. Let's run it on your machine.
+Tranfering is the action to send a token from the owner of the token to another wallet on the blockchain and send it to a specific wallet.
 
 <Steps>
-<Step title="Run the CLI">
-  <CodeGroup>
+  <Step title="Transfer a token">
 
-    ```bash npm
-    npm i @lumx-protocol/create-dapp@latest
-    ```
+First, we need to transfer the token.
 
-    ```bash yarn
-    yarn add @lumx-protocol/create-dapp@latest
-    ```
+Please use the [read a wallet endpoint](/api-reference/v2/wallets/read-a-wallet.mdx) to find the ID of the token that you wan't to transfer.
 
-    ```bash pnpm
-    pnpm i @lumx-protocol/create-dapp@latest
-    ```
+<Info>Remember to switch `<CONTRACT_ID>`, `<WALLET_ID>`, `<EXTERNAL_WALLET_ADDRESS>` and `<TOKEN_ID>`.</Info>
 
-  </CodeGroup>
+<CodeGroup>
+
+```bash cURL
+curl --request POST \
+  --url https://protocol-staging.int.lumx.io/v2/transactions/transfers \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "contractId": <CONTRACT_ID>,
+  "from": "<WALLET_ID>",
+  "to": "<EXTERNAL_WALLET_ADDRESS>",
+  "tokenId": "<TOKEN_ID"
+}'
+```
+
+```javascript JavaScript
+axios
+  .post("https://protocol-sandbox.lumx.io/v1/transactions/mints", {
+    itemTypeId: "<ITEM_TYPE_ID>",
+    walletId: "<WALLET_ID>",
+    amount: 1,
+  })
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 201 with an object containing with the ID of the transaction.
+
 </Step>
-<Step title="Choose the params">
-  <CodeGroup>
+<Step title="Read a transaction">
 
-```bash npm
-@lumx-protocol/create-dapp
+Every new transfer is queued up to mitigate the possibility of a transaction failing.
+
+Now, let's check the transaction's status on the blockchain.
+
+  <Info>Remember to switch `<TRANSACTION_ID>`.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID> \
+  --header 'Authorization: Bearer $API_KEY'
 ```
 
-```bash yarn
-@lumx-protocol/create-dapp
+```javascript JavaScript
+axios
+  .get(
+    "https://protocol-sandbox.lumx.io/v1/transactions/<id_received_on_step_1>"
+  )
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
 ```
 
-```bash pnpm
-@lumx-protocol/create-dapp
-```
+</CodeGroup>
 
-  </CodeGroup>
+You will receive a status 200 with an object containing the transaction status and transaction hash.
+
+**Congratulations!** You can check your transaction on the [block explorer](https://amoy.polygonscan.com).
+
 </Step>
 </Steps>
-
-Coming up next, lets run the CLI!
 
 <Snippet file="troubleshooting.mdx" />

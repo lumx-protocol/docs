@@ -1,0 +1,117 @@
+---
+title: "Invoke a custom transaction"
+description: "Learn how to transfer a token"
+---
+
+Custom transaction is the action to interact with Solidity smart contracts that are not pre-built on the smart contracts module.
+
+<Warning>
+  Please be cautious! This is an advanced route made for Solidity developers.
+</Warning>
+
+<Steps>
+    <Step title="Create a custom contract">
+
+To invoke a custom transaction you need a develop a Solidity smart contract.
+
+For this recipe **we developed a "airdrop contract"** what will be able to generate a random quantity of tokens and transfer them to a external wallet (wallet outside Lumx Protocol context)
+
+The contract is at contract on [Polygon testnet](https://amoy.polygonscan.com/address/0x04f87ed3bed8eb1557d722d7a0620b6bff9ee126)
+
+</Step>
+  <Step title="Invoke a custom transaction">
+
+Now, its time to invoke the custom transaction.
+
+  <Info>Remember to switch `<WALLET_ID>` and `<EXTERNAL_WALLET_ADDRESS>`.</Info>
+
+<CodeGroup>
+
+```bash cURL
+    curl --request POST \
+    --url https://protocol-staging.int.lumx.io/v2/transactions/custom \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "contractAddress": "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08",
+    "walletId": "<WALLET_ID>",
+    "operations": [
+        {
+          "functionSignature": "generateRandomAirdrop(string)",
+          "argumentsValues": [
+              "randomStringValue"
+          ]
+        },
+        {
+          "functionSignature": "transfer(address, uint256)",
+          "argumentsValues": [
+              "<EXTERNAL_WALLET_ADDRESS>",
+              "25644842301077323776"
+          ]
+        }
+    ],
+    }'
+```
+
+```javascript JavaScript
+axios
+  .post("https://protocol-sandbox.lumx.io/v1/transactions/transfers", {
+    contractAddress: "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08",
+    walletId: "<WALLET_ID>",
+    operations: [
+      {
+        functionSignature: "generateRandomAirdrop(string)",
+        argumentsValues: ["randomStringValue"],
+      },
+      {
+        functionSignature: "transfer(address, uint256)",
+        argumentsValues: ["<EXTERNAL_WALLET>", "25644842301077323776"],
+      },
+    ],
+  })
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 201 with an object containing with the ID of the transaction.
+
+</Step>
+<Step title="Read a transaction">
+
+Every new custom transaction is queued up to mitigate the possibility of a transaction failing.
+
+Now, let's check the transaction's status on the blockchain.
+
+  <Info>Remember to switch `<TRANSACTION_ID>`.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID> \
+  --header 'Authorization: Bearer $API_KEY'
+```
+
+```javascript JavaScript
+axios
+  .get("https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID>")
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 200 with an object containing the transaction status and transaction hash.
+
+**Congratulations!** You can check your transaction on the [block explorer](https://amoy.polygonscan.com).
+
+</Step>
+</Steps>
+
+<Snippet file="troubleshooting.mdx" />

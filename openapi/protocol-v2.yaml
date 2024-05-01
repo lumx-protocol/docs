@@ -629,6 +629,7 @@ paths:
                 $ref: "#/components/schemas/CustomTransactionResponse"
       security:
         - apiKey: []
+  /transactions:
     get:
       tags:
         - Transactions

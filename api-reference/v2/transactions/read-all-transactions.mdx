@@ -3,63 +3,65 @@ openapi: protocol-v2 get /transactions
 ---
 
 <ResponseExample>
-  ```javascript 200
-  [
-    // mint example
-    {
-      "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-      "type": "mint",
-      "status": "pending",
-      "transactionHash": "<string>",
-      "scanUrl": "<string>",
-      "createdAt": "2023-11-07T05:31:56Z",
-      "updatedAt": "2023-11-07T05:31:56Z",
-      "completedAt": "2023-11-07T05:31:56Z",
-      "metadata": {
-        "uriNumber": "<string>",
-        "quantity": 123,
-        "from": "<string>",
-        "to": "<string>",
-        "nftIds": []
-      }
+
+```javascript 200
+[
+  // mint example
+  {
+    "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+    "type": "mint",
+    "status": "pending",
+    "transactionHash": "<string>",
+    "scanUrl": "<string>",
+    "createdAt": "2023-11-07T05:31:56Z",
+    "updatedAt": "2023-11-07T05:31:56Z",
+    "completedAt": "2023-11-07T05:31:56Z",
+    "metadata": {
+      "uriNumber": "<string>",
+      "quantity": 123,
+      "from": "<string>",
+      "to": "<string>",
+      "nftIds": []
     }
-    // transfer example
-    {
-      "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-      "type": "transfer",
-      "status": "pending",
-      "transactionHash": "<string>",
-      "scanUrl": "<string>",
-      "createdAt": "2023-11-07T05:31:56Z",
-      "updatedAt": "2023-11-07T05:31:56Z",
-      "completedAt": "2023-11-07T05:31:56Z",
-      "metadata": {
-        "uriNumber": "<string>",
-        "quantity": 123,
-        "from": "<string>",
-        "to": "<string>"
-      }
-    },
-    // custom transaction example
-    {
-      "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-      "type": "custom",
-      "status": "pending",
-      "transactionHash": "<string>",
-      "scanUrl": "<string>",
-      "createdAt": "2023-11-07T05:31:56Z",
-      "updatedAt": "2023-11-07T05:31:56Z",
-      "completedAt": "2023-11-07T05:31:56Z",
-      "metadata": {
-        "operations": [
-          {
-            "functionSignature": "<string>",
-            "functionParams": [],
-            "nativeTokensAmount": 123
-          }
-        ]
-      }
+  }
+  // transfer example
+  {
+    "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+    "type": "transfer",
+    "status": "pending",
+    "transactionHash": "<string>",
+    "scanUrl": "<string>",
+    "createdAt": "2023-11-07T05:31:56Z",
+    "updatedAt": "2023-11-07T05:31:56Z",
+    "completedAt": "2023-11-07T05:31:56Z",
+    "metadata": {
+      "uriNumber": "<string>",
+      "quantity": 123,
+      "from": "<string>",
+      "to": "<string>"
     }
-  ]
-  ```
+  },
+  // custom transaction example
+  {
+    "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+    "type": "custom",
+    "status": "pending",
+    "transactionHash": "<string>",
+    "scanUrl": "<string>",
+    "createdAt": "2023-11-07T05:31:56Z",
+    "updatedAt": "2023-11-07T05:31:56Z",
+    "completedAt": "2023-11-07T05:31:56Z",
+    "metadata": {
+      "operations": [
+        {
+          "functionSignature": "<string>",
+          "functionParams": [],
+          "nativeTokensAmount": 123
+        }
+      ]
+    }
+  }
+]
+```
+
 </ResponseExample>
