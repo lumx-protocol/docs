@@ -962,7 +962,7 @@ components:
         name:
           type: string
           description: The token's name.
-        nftId:
+        tokenId:
           type: string
           nullable: true
           description: >-
@@ -1105,7 +1105,7 @@ components:
         uriNumber:
           type: string
           description: The uriNumber of the token type that was minted.
-        nftIds:
+        tokenIds:
           type: array
           description: >-
             Only for non-fungible contracts. Represents the on-chain sequential mint
