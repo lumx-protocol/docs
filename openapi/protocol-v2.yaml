@@ -168,7 +168,6 @@ paths:
               required:
                 - name
                 - type
-                - description
       responses:
         "201":
           description: Contract created successfully (but not deployed yet).
