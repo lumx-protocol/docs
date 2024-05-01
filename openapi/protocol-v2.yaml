@@ -9,7 +9,7 @@ paths:
   /projects/auth:
     post:
       summary: Create a project
-      description: Use this route to create a project and receive an API key. In production environments, project creation, and consequently, the request for an API key, must be made through our support team.
+      description: This endpoint creates a project and receives an API key.
       security: []
       tags:
         - Auth
@@ -28,7 +28,7 @@ paths:
   /wallets:
     post:
       summary: Create a wallet
-      description: Creates a wallet that has the same address in all our EVM supported chains.
+      description: This endpoint creates a wallet.
       tags:
         - Wallets
       responses:
@@ -55,8 +55,7 @@ paths:
         - Wallets
       summary: Read all wallets
       description: >-
-        This endpoint reads the id and address of all wallets created through your
-        API key.
+        This endpoint reads a specific wallet and returns a list of all tokens contained within it.
       responses:
         "200":
           description: The list of wallets was retrieved successfully
@@ -153,8 +152,10 @@ paths:
         - Contracts
       summary: Create a contract
       description: >-
-        This endpoint creates a contract, but doesn't deploy it. Use the "Deploy
-        a contract" endpoint to deploy the contract to the blockchain.
+        This endpoint creates a contract.
+
+
+        Please, remember to deploy the contract before interacting with it.
       requestBody:
         content:
           application/json:
@@ -237,8 +238,7 @@ paths:
         - Contracts
       summary: Update a contract
       description: >-
-        This endpoint updates a contract. Only contracts that haven't been
-        deployed yet can be updated.
+        This endpoint updates a contract.
       parameters:
         - name: contractId
           in: path
@@ -267,10 +267,7 @@ paths:
         - Contracts
       summary: Deploy a contract
       description: >-
-        This endpoint deploys a contract to the blockchain. Because this action
-        creates a transaction on the blockchain, it might take some seconds to
-        finish. We recommend using this route to deploy contracts beforehand, as
-        opposed to calling it upon your end-user's interaction.
+        This endpoint deploys a contract.
       parameters:
         - name: contractId
           in: path

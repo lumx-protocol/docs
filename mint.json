@@ -28,9 +28,9 @@
   },
   "anchors": [
     {
-      "name": "Join our Slack",
-      "icon": "slack",
-      "url": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-1z920ovmb-V6~OlHpvQSQupe7kJLu5YA"
+      "name": "Join our Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/RvHymsBDHD"
     },
     {
       "name": "System Status",
@@ -51,10 +51,6 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "Applications",
-      "url": "applications"
     }
   ],
   "navigation": [

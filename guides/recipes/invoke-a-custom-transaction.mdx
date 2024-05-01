@@ -1,9 +1,9 @@
 ---
 title: "Invoke a custom transaction"
-description: "Learn how to transfer a token"
+description: "Learn how to invoke a custom transaction"
 ---
 
-Custom transaction is the action to interact with Solidity smart contracts that are not pre-built on the smart contracts module.
+Custom transaction is the action to interact with Solidity smart contracts that were not created using the Contracts module.
 
 <Warning>
   Please be cautious! This is an advanced route made for Solidity developers.
@@ -12,18 +12,18 @@ Custom transaction is the action to interact with Solidity smart contracts that 
 <Steps>
     <Step title="Create a custom contract">
 
-To invoke a custom transaction you need a develop a Solidity smart contract.
+To invoke a custom transaction you need to interact with a Solidity smart contract.
 
-For this recipe **we developed a "airdrop contract"** what will be able to generate a random quantity of tokens and transfer them to a external wallet (wallet outside Lumx Protocol context)
+For this recipe we developed an “airdrop contract” that will be able to generate a random quantity of tokens and transfer them to a external wallet (wallet not created through our Wallet module)
 
-The contract is at contract on [Polygon testnet](https://amoy.polygonscan.com/address/0x04f87ed3bed8eb1557d722d7a0620b6bff9ee126)
+You can check the contract at the [block explorer](https://amoy.polygonscan.com/address/0x04f87ed3bed8eb1557d722d7a0620b6bff9ee126)
 
 </Step>
   <Step title="Invoke a custom transaction">
 
 Now, its time to invoke the custom transaction.
 
-  <Info>Remember to switch `<WALLET_ID>` and `<EXTERNAL_WALLET_ADDRESS>`.</Info>
+<Info>Remember to switch `<WALLET_ID>` and `<EXTERNAL_WALLET_ADDRESS>`.</Info>
 
 <CodeGroup>
 
@@ -77,7 +77,7 @@ axios
 
 </CodeGroup>
 
-You will receive a status 201 with an object containing with the ID of the transaction.
+You will receive a status 201 with an object containing the ID of the transaction.
 
 </Step>
 <Step title="Read a transaction">
