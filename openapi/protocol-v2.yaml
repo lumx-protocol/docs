@@ -157,14 +157,22 @@ paths:
       summary: Create a contract
       description: >-
         This endpoint creates a contract.
-
-
         Please, remember to deploy the contract before interacting with it.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContractRequest"
+              allOf:
+                - $ref: "#/components/schemas/ContractRequest"
+                - type: object 
+                  properties:
+                    type: 
+                      type: string
+                      enum:
+                        - fungible
+                        - non_fungible
+                      description: >-
+                        The type of the contract.
               required:
                 - name
                 - type
@@ -756,14 +764,6 @@ components:
     ContractRequest:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-            - fungible
-            - non_fungible
-          description: >-
-            The type of the contract. See <help page URL> to understand the
-            differences between the contract types.
         name:
           type: string
           description: The name of the contract.
