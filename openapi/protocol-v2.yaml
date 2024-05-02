@@ -208,7 +208,7 @@ paths:
       tags:
         - Contracts
       summary: Read all contracts
-      description: This endpoint reads all contracts
+      description: This endpoint reads all your contracts
       responses:
         "200":
           description: The list of contracts was retrieved successfully

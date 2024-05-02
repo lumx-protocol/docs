@@ -16,7 +16,7 @@ Firstly, we need to mint the token.
 
 ```bash cURL
 curl --request POST \
-  --url https://protocol-sandbox.lumx.io/v1/transactions/mints \
+  --url https://protocol-sandbox.lumx.io/v2/transactions/mints \
   --header 'Authorization: Bearer $API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -28,7 +28,7 @@ curl --request POST \
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/v1/transactions/mints", {
+  .post("https://protocol-sandbox.lumx.io/v2/transactions/mints", {
     itemTypeId: "<ITEM_TYPE_ID>",
     walletId: "<WALLET_ID>",
     amount: 1,
@@ -41,7 +41,7 @@ axios
 
 </CodeGroup>
 
-You will receive a status 201 with an object containing the ID of the transaction.
+You will receive a status 202 with an object containing the ID of the transaction.
 
 </Step>
 <Step title="Read a transaction">
@@ -56,14 +56,14 @@ Now, let's check the transaction's status on the blockchain.
 
 ```bash cURL
 curl --request GET \
-  --url https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID> \
+  --url https://protocol-sandbox.lumx.io/v2/transactions/<TRANSACTION_ID> \
   --header 'Authorization: Bearer $API_KEY'
 ```
 
 ```javascript JavaScript
 axios
   .get(
-    "https://protocol-sandbox.lumx.io/v1/transactions/<id_received_on_step_1>"
+    "https://protocol-sandbox.lumx.io/v2/transactions/<id_received_on_step_1>"
   )
   .then((response) => {
     // Handle Success

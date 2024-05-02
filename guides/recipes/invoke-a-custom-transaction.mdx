@@ -55,7 +55,7 @@ Now, its time to invoke the custom transaction.
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/v1/transactions/transfers", {
+  .post("https://protocol-sandbox.lumx.io/v2/transactions/custom", {
     contractAddress: "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08",
     walletId: "<WALLET_ID>",
     operations: [
@@ -77,7 +77,7 @@ axios
 
 </CodeGroup>
 
-You will receive a status 201 with an object containing the ID of the transaction.
+You will receive a status 202 with an object containing the ID of the transaction.
 
 </Step>
 <Step title="Read a transaction">
@@ -92,13 +92,13 @@ Now, let's check the transaction's status on the blockchain.
 
 ```bash cURL
 curl --request GET \
-  --url https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID> \
+  --url https://protocol-sandbox.lumx.io/v2/transactions/<TRANSACTION_ID> \
   --header 'Authorization: Bearer $API_KEY'
 ```
 
 ```javascript JavaScript
 axios
-  .get("https://protocol-sandbox.lumx.io/v1/transactions/<TRANSACTION_ID>")
+  .get("https://protocol-sandbox.lumx.io/v2/transactions/<TRANSACTION_ID>")
   .then((response) => {
     // Handle Success
     console.log(response);

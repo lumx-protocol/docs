@@ -14,18 +14,20 @@ Firstly, we need to create a project to receive an API key and start interacting
 
 ```bash cURL
 curl --request POST \
-  --url https://protocol-sandbox.lumx.io/projects \
+  --url https://protocol-sandbox.lumx.io/projects/auth \
   --header 'Content-Type: application/json' \
   --data '{
-  "name": "My first project"
+  "name": "My first project",
+  "blockchainName": "Polygon"
 }
 '
 ```
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/projects", {
+  .post("https://protocol-sandbox.lumx.io/projects/auth", {
     name: "My first project",
+    blockchainName: "Polygon"
   })
   .then((response) => {
     // Handle Success
