@@ -12,7 +12,7 @@
     "thumbsRating": true
   },
   "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0", "v1.0"],
+  "versions": ["v2.0 - Beta", "v1.0"],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -97,7 +97,7 @@
     {
       "group": "Projects",
       "pages": ["api-reference/v2/projects/create-a-project"],
-      "version": "v2.0"
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Wallets",
@@ -106,7 +106,7 @@
         "api-reference/v2/wallets/read-a-wallet",
         "api-reference/v2/wallets/read-all-wallets"
       ],
-      "version": "v2.0"
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Contracts",
@@ -121,7 +121,7 @@
         "api-reference/v2/contracts/read-a-token-type",
         "api-reference/v2/contracts/read-all-token-types"
       ],
-      "version": "v2.0"
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Transactions",
@@ -132,7 +132,7 @@
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
-      "version": "v2.0"
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Account",
