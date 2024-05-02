@@ -5,7 +5,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v1
+  - url: https://protocol-staging.int.lumx.io/v1
 paths:
   # v1.0 (deprecated)
   "/mints/airdrop":
@@ -174,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/ClientResponse"
+                $ref: "#/components/schemas/ClientResponse"
       security:
         - apiKey: []
   "/wallets":
@@ -523,19 +523,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomTransactionRequest'
+              $ref: "#/components/schemas/CustomTransactionRequest"
               required:
                 - walletId
                 - contractId
                 - operations
       responses:
-        '200':
+        "200":
           description: >-
             The transaction was successfully submitted to the blockchain.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MintTransferResponse'
+                $ref: "#/components/schemas/MintTransferResponse"
       security:
         - apiKey: []
   "/transactions":
@@ -1049,29 +1049,29 @@ components:
           type: array
           description: An array with objects defining the operations to be executed in this transaction.
           items:
-            type: object 
+            type: object
             properties:
               functionSignature:
                 type: string
                 description: The function's signature (name and parameter types).
-              functionParams: 
+              functionParams:
                 type: array
                 description: >-
                   Array containing the values to be passed to the function, in the
                   order they appear in the function's signature.
-                items: 
+                items:
                   anyOf:
                     - type: string
                     - type: number
                     - type: boolean
                     - type: array
-                      items: 
+                      items:
                         anyOf:
-                        - type: string
-                        - type: number
-                        - type: boolean
+                          - type: string
+                          - type: number
+                          - type: boolean
               nativeTokensAmount:
-                type: number 
+                type: number
                 description: Optional. The amount of native tokens (ETH, MATIC, etc) to be sent along with the transaction.
                 default: 0
             required:
