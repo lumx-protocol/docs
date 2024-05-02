@@ -46,7 +46,8 @@
   "tabs": [
     {
       "name": "Guides",
-      "url": "guides"
+      "url": "guides",
+      "version": "v2.0 - Beta"
     },
     {
       "name": "API Reference",
@@ -75,7 +76,8 @@
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction"]
+      "pages": ["guides/introduction"],
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Start building",

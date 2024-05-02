@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/CreateProjectRequest"
+              "$ref": "#/components/schemas/ProjectRequest"
               required:
                 - name
                 - blockchainName
@@ -27,11 +27,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateProjectResponse"
+                $ref: "#/components/schemas/ProjectResponse"
   /wallets:
     post:
       summary: Create a wallet
-      description: This endpoint creates a wallet.
+      description: This endpoint creates a wallet
       tags:
         - Wallets
       responses:
@@ -40,7 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BaseWalletResponse"
+                $ref: "#/components/schemas/WalletResponse"
         "500":
           description: A Error ocurred trying to create wallet
           content:
@@ -58,7 +58,7 @@ paths:
         - Wallets
       summary: Read all wallets
       description: >-
-        This endpoint reads a specific wallet and returns a list of all tokens contained within it.
+        This endpoint reads all wallets
       responses:
         "200":
           description: The list of wallets was retrieved successfully
@@ -67,7 +67,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/BaseWalletResponse"
+                  $ref: "#/components/schemas/WalletResponse"
       security:
         - apiKey: []
   "/wallets/{walletId}":
@@ -75,7 +75,7 @@ paths:
       tags:
         - Wallets
       summary: Read a wallet
-      description: This endpoint reads the tokens that belong to a wallet
+      description: This endpoint reads a wallet and returns a list of all tokens contained within it
       parameters:
         - name: walletId
           in: path
@@ -88,16 +88,16 @@ paths:
         "200":
           description: >-
             The details of the wallet and the list of tokens it holds were
-            retrieved successfully
+            retrieved successfully.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseWalletResponse"
+                  - $ref: "#/components/schemas/WalletResponse"
                   - type: object
                     properties:
                       tokens:
-                        description: Tokens that belong to this wallet.
+                        description: The tokens owned by this wallet.
                         type: array
                         items:
                           $ref: "#/components/schemas/TokenResponse"
@@ -113,42 +113,6 @@ paths:
                     example: Wallet not found!
       security:
         - apiKey: []
-  # '/wallets/{walletId}/sign':
-  # post:
-  #   tags:
-  #     - Wallets
-  #   summary: Sign a message
-  #   description: Sign a message using the specified wallet.
-  #   parameters:
-  #     - name: walletId
-  #       in: path
-  #       required: true
-  #       schema:
-  #         type: string
-  #         format: uuid
-  #       description: The ID of the wallet that will be used to sign.
-  #   requestBody:
-  #     content:
-  #       application/json:
-  #         schema:
-  #           type: object
-  #           properties:
-  #             message:
-  #               type: string
-  #           required:
-  #             - message
-  #   responses:
-  #     '200':
-  #       description: The message was signed succesfully.
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               message:
-  #                 type: string
-  #               signature:
-  #                 type: string
   /contracts:
     post:
       tags:
@@ -332,12 +296,11 @@ paths:
         - Contracts
       summary: Create a token type
       description: >-
-        Create a token type for a contract, enabling that contract to mint
-        tokens that will have the characteristics defined here.
+        This endpoint creates a token type for a contract.
       parameters:
         - name: contractId
           in: path
-          description: The ID of the contract to which the token type will be added.
+          description: The ID of the contract.
           required: true
           schema:
             type: string
@@ -346,7 +309,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenTypeCreateRequest"
+              $ref: "#/components/schemas/TokenTypeRequest"
               required:
                 - name
                 - description
@@ -384,7 +347,7 @@ paths:
       tags:
         - Contracts
       summary: Read all token types
-      description: Read all token types of a given contract
+      description: This endpoint reads all token type from a contract.
       parameters:
         - name: contractId
           in: path
@@ -409,7 +372,7 @@ paths:
       tags:
         - Contracts
       summary: Read a token type
-      description: Read a token type from a contract
+      description: This endpoint reads a token type from a contract.
       parameters:
         - name: contractId
           in: path
@@ -447,7 +410,7 @@ paths:
       tags:
         - Contracts
       summary: Update a token type
-      description: Update a token type of a contract
+      description: This endpoint update a token type of a contract.
       parameters:
         - name: contractId
           in: path
@@ -501,7 +464,7 @@ paths:
             schema:
               oneOf:
                 - allOf:
-                    - $ref: "#/components/schemas/MintRequest"
+                    - $ref: "#/components/schemas/TransactionMintRequest"
                       title: Non-fungible
                       required:
                         - contractId
@@ -514,7 +477,7 @@ paths:
                       required:
                         - uriNumber
                 - allOf:
-                    - $ref: "#/components/schemas/MintRequest"
+                    - $ref: "#/components/schemas/TransactionMintRequest"
                       title: Fungible
                       required:
                         - contractId
@@ -530,8 +493,8 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: "#/components/schemas/MintTransactionResponse"
+                  - $ref: "#/components/schemas/TransactionResponse"
+                  - $ref: "#/components/schemas/TransactionMintResponse"
         "409":
           description: Contract not deployed yet!.
           content:
@@ -568,7 +531,7 @@ paths:
             schema:
               oneOf:
                 - allOf:
-                    - $ref: "#/components/schemas/TransferRequest"
+                    - $ref: "#/components/schemas/TransactionTransferRequest"
                       title: Non-fungible token
                       required:
                         - contractId
@@ -583,7 +546,7 @@ paths:
                       required:
                         - tokenId
                 - allOf:
-                    - $ref: "#/components/schemas/TransferRequest"
+                    - $ref: "#/components/schemas/TransactionTransferRequest"
                       title: Fungible token
                       required:
                         - contractId
@@ -608,8 +571,8 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: "#/components/schemas/TransferTransactionResponse"
+                  - $ref: "#/components/schemas/TransactionResponse"
+                  - $ref: "#/components/schemas/TransactionTransferResponse"
       security:
         - apiKey: []
   /transactions/custom:
@@ -622,7 +585,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CustomTransactionRequest"
+              $ref: "#/components/schemas/TransactionCustomRequest"
               required:
                 - walletId
                 - contractAddress
@@ -637,8 +600,8 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: "#/components/schemas/CustomTransactionResponse"
+                  - $ref: "#/components/schemas/TransactionResponse"
+                  - $ref: "#/components/schemas/TransactionCustomResponse"
       security:
         - apiKey: []
   /transactions:
@@ -655,7 +618,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/BaseTransactionResponse"
+                  $ref: "#/components/schemas/TransactionResponse"
       security:
         - apiKey: []
   "/transactions/{transactionId}":
@@ -677,7 +640,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BaseTransactionResponse"
+                $ref: "#/components/schemas/TransactionResponse"
         "404":
           description: Transaction not found!
           content:
@@ -692,23 +655,13 @@ paths:
         - apiKey: []
 components:
   schemas:
-    SupportedBlockchains:
+    Blockchains:
       type: string
       enum:
         - Ethereum
         - Polygon
         - Chiliz
-    Blockchain:
-      type: object
-      title: Blockchain
-      properties:
-        name:
-          $ref: "#/components/schemas/SupportedBlockchains"
-          description: The blockchain's name.
-        decimalChainId:
-          type: number
-          description: The blockchain's decimal chain id.
-    CreateProjectRequest:
+    ProjectRequest:
       type: object
       properties:
         name:
@@ -716,20 +669,27 @@ components:
           type: string
         blockchainName:
           description: The blockchain of the project.
-          $ref: "#/components/schemas/SupportedBlockchains"
-    CreateProjectResponse:
+          $ref: "#/components/schemas/Blockchains"
+    ProjectResponse:
       type: object
       properties:
         id:
-          description: The id of the project.
+          description: The ID of the project.
           type: string
           format: uuid
         name:
           description: The name of the project.
           type: string
         blockchain:
-          $ref: "#/components/schemas/Blockchain"
+          type: object
           description: The blockchain of the project.
+          properties:
+            name:
+              $ref: "#/components/schemas/Blockchains"
+              description: The blockchain's name.
+            decimalChainId:
+              type: number
+              description: The blockchain's decimal chain id.
         createdAt:
           type: string
           format: date-time
@@ -741,18 +701,18 @@ components:
         apiKey:
           description: The API key of the project.
           type: string
-    BaseWalletResponse:
+    WalletResponse:
       type: object
       properties:
         id:
           type: string
-          description: The id for this wallet.
+          description: The ID for this wallet.
           format: uuid
         address:
           description: The blockchain address for this wallet.
           type: string
         projectId:
-          description: The id of the project to which this wallet belongs.
+          description: The ID of the project.
           type: string
           format: uuid
         createdAt:
@@ -763,175 +723,6 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the wallet was last updated.
-    ContractRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the contract.
-        symbol:
-          type: string
-          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
-          default: same as contract name
-        description:
-          type: string
-          description: The description of the contract.
-    ContractResponse:
-      type: object
-      properties:
-        id:
-          format: uuid
-          type: string
-          description: The ID of the contract.
-        type:
-          type: string
-          description: The type of the contract.
-        address:
-          type: string
-          description: >-
-            The blockchain address of this contract (only for deployed
-            contracts)
-          nullable: true
-        name:
-          type: string
-          description: The name of the contract.
-        symbol:
-          type: string
-          description: The symbol of the contract. Must be between 3 and 5 characters alphanumeric in length. If not provided, the contract name will be used as the symbol.
-          default: same as contract name
-        description:
-          type: string
-          nullable: true
-          description: The description of the contract.
-        blockchainName:
-          description: The blockchain name of the contract.
-          $ref: "#/components/schemas/SupportedBlockchains"
-        blockscanUrl:
-          type: string
-          nullable: true
-          description: >-
-            The block scan address of this contract, where you can see it live
-            on the blockchain (only for deployed contracts).
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the contract was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the contract was last updated.
-        deployedAt:
-          type: string
-          format: date-time
-          nullable: true
-          description: The timestamp from when the contract was deployed to the blockchain.
-    TokenTypeCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the token type. Two tokens belonging to a same contract cannot have the same name.
-        description:
-          type: string
-          description: The description of the token type.
-        maxSupply:
-          type: number
-          description: The max supply of the token type.
-          maximum: 2000000000
-        traits:
-          type: object
-          description: >-
-            The traits of the token type. The key is the name of the trait and
-            the value is the value of the trait.
-        imageUrl:
-          type: string
-          description: >-
-            The image URL of the token type. Supported formats are PNG, JPEG,
-            GIF or MP4.
-    TokenTypeResponse:
-      type: object
-      properties:
-        id:
-          format: uuid
-          type: string
-          description: The ID of the token type.
-        uriNumber:
-          type: number
-          description: The uri number of the token.
-        contractId:
-          format: uuid
-          type: string
-          description: The ID of the contract to which this token type belongs.
-        name:
-          type: string
-          description: The name of the token type.
-        description:
-          type: string
-          description: The description of the token type.
-          nullable: true
-        maxSupply:
-          type: number
-          description: The max supply of the token type.
-          maximum: 2000000000
-        currentSupply:
-          type: number
-          description: The remaining supply for this token type.
-        traits:
-          type: object
-          description: >-
-            The traits of the token type. The key is the name of the trait and
-            the value is the value of the trait.
-          properties:
-            trait1_name:
-              type: string
-              default: trait1_value
-            trait2_name:
-              type: string
-              default: trait2_value
-            trait3_name:
-              type: string
-              default: trait3_value
-        imageUrl:
-          type: string
-          nullable: true
-          description: >-
-            The URL for the image you want to display for this token type.
-        metadataUrl:
-          type: string
-          description: The URL where this token's metadata JSON is located.
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the token type was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the token type was last updated.
-    TokenTypeUpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the token type.
-        description:
-          type: string
-          description: The description of the token type.
-        maxSupply:
-          type: number
-          description: >-
-            The max supply of the token type. Can only be updated if this
-            token type's contract hasn't been deployed yet.
-          maximum: 2000000000
-        traits:
-          type: object
-          description: >-
-            The traits of the token type. The key is the name of the trait and
-            the value is the value of the trait.
-        imageUrl:
-          type: string
-          description: >-
-            The image URL of the token type. Supported formats are PNG, JPEG,
-            GIF or MP4.
     TokenResponse:
       properties:
         contractId:
@@ -949,7 +740,7 @@ components:
             this field indicates the uriNumber of the token type used to mint this token.
         blockchainName:
           description: The name of the blockchain to which this token belongs.
-          $ref: "#/components/schemas/SupportedBlockchains"
+          $ref: "#/components/schemas/Blockchains"
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -985,7 +776,215 @@ components:
         quantity:
           type: number
           description: How much of that token is present at this wallet.
-    BaseTransactionResponse:
+    ContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 alphanumeric characters.
+          default: contractName
+        description:
+          type: string
+          description: The description of the contract.
+    ContractResponse:
+      type: object
+      properties:
+        id:
+          format: uuid
+          type: string
+          description: The ID of the contract.
+        type:
+          type: string
+          description: The type of the contract.
+        address:
+          type: string
+          description: >-
+            The blockchain address of this contract.
+          nullable: true
+        name:
+          type: string
+          description: The name of the contract.
+        symbol:
+          type: string
+          description: The symbol of the contract. Must be between 3 and 5 alphanumeric characters.
+          default: contractName
+        description:
+          type: string
+          nullable: true
+          description: The description of the contract.
+        blockchainName:
+          description: The blockchain name of the contract.
+          $ref: "#/components/schemas/Blockchains"
+        blockscanUrl:
+          type: string
+          nullable: true
+          description: >-
+            The block explorer url of this contract.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the contract was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the contract was last updated.
+        deployedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp from when the contract was deployed to the blockchain.
+    TokenTypeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the token type. Two token types belonging to a same contract cannot have the same name.
+        description:
+          type: string
+          description: The description of the token type.
+        maxSupply:
+          type: number
+          description: The max supply of the token type.
+          maximum: 2000000000
+        traits:
+          type: object
+          description: >-
+            The traits of the token type. The key is the name of the trait and
+            the value is the value of the trait.
+        imageUrl:
+          type: string
+          description: >-
+            The image URL of the token type. Supported formats are PNG, JPEG,
+            GIF or MP4.
+    TokenTypeResponse:
+      type: object
+      properties:
+        id:
+          format: uuid
+          type: string
+          description: The ID of the token type.
+        uriNumber:
+          type: number
+          description: The URI number of the token.
+        contractId:
+          format: uuid
+          type: string
+          description: The ID of the contract.
+        name:
+          type: string
+          description: The name of the token type.
+        description:
+          type: string
+          description: The description of the token type.
+          nullable: true
+        maxSupply:
+          type: number
+          description: The max supply of the token type.
+          maximum: 2000000000
+        currentSupply:
+          type: number
+          description: The current supply for this token type.
+        traits:
+          type: object
+          description: >-
+            The traits of the token type. The key is the name of the trait and
+            the value is the value of the trait.
+          properties:
+            trait1_name:
+              type: string
+              default: trait1_value
+            trait2_name:
+              type: string
+              default: trait2_value
+            trait3_name:
+              type: string
+              default: trait3_value
+        imageUrl:
+          type: string
+          nullable: true
+          description: >-
+            The image URL of the token type. Supported formats are PNG, JPEG,
+            GIF or MP4.
+        metadataUrl:
+          type: string
+          description: The URL where this token types's metadata JSON is located.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the token type was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the token type was last updated.
+    TokenTypeUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the token type.
+        description:
+          type: string
+          description: The description of the token type.
+        maxSupply:
+          type: number
+          description: >-
+            The max supply of the token type.
+          maximum: 2000000000
+        traits:
+          type: object
+          description: >-
+            The traits of the token type. The key is the name of the trait and
+            the value is the value of the trait.
+        imageUrl:
+          type: string
+          description: >-
+            The image URL of the token type. Supported formats are PNG, JPEG,
+            GIF or MP4.
+    TransactionMintRequest:
+      properties:
+        contractId:
+          format: uuid
+          type: string
+          description: The ID of the contract from which to mint tokens.
+        walletId:
+          type: string
+          format: uuid
+          description: The ID of the wallet that will receive the tokens.
+        quantity:
+          type: number
+          default: 1
+          description: The quantity of tokens. Required if minting fungible tokens.
+    TransactionTransferRequest:
+      type: object
+      properties:
+        contractId:
+          type: string
+          description: The ID of the contract to which the tokens belong.
+          format: uuid
+        from:
+          type: string
+          description: The id of the wallet that will send the tokens.
+          format: uuid
+        to:
+          type: string
+          description: The address of the wallet that will receive tokens.
+    TransactionCustomRequest:
+      allOf:
+        - type: object
+          title: Custom
+          properties:
+            walletId:
+              format: uuid
+              type: string
+              description: The ID of the wallet that will be used to perform the transaction.
+            contractAddress:
+              type: string
+              description: The address of the contract where the transaction will occur.
+        - $ref: "#/components/schemas/TransactionCustomMetadata"
+    TransactionResponse:
       type: object
       properties:
         id:
@@ -1025,81 +1024,40 @@ components:
           format: date-time
           description: The timestamp from when the transaction was completed.
           nullable: true
-    MintTransactionResponse:
+    TransactionMintResponse:
       type: object
       properties:
         metadata:
           description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/MintTransactionMetadata"
+          $ref: "#/components/schemas/TransactionMintMetadata"
         type:
           type: string
           description: The transaction type
           enum:
             - mint
-    TransferTransactionResponse:
+    TransactionTransferResponse:
       type: object
       properties:
         metadata:
           description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/TransferTransactionMetadata"
+          $ref: "#/components/schemas/TransactionTransferMetadata"
         type:
           type: string
           description: The transaction type
           enum:
             - transfer
-    CustomTransactionResponse:
+    TransactionCustomResponse:
       type: object
       properties:
         metadata:
           description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/CustomTransactionMetadata"
+          $ref: "#/components/schemas/TransactionCustomMetadata"
         type:
           type: string
           description: The transaction type
           enum:
             - custom
-    MintRequest:
-      properties:
-        contractId:
-          format: uuid
-          type: string
-          description: The ID of the contract from which to mint tokens.
-        walletId:
-          type: string
-          format: uuid
-          description: The ID of the wallet that will receive the tokens.
-        quantity:
-          type: number
-          default: 1
-          description: The quantity of tokens. Required if minting fungible tokens.
-    TransferRequest:
-      type: object
-      properties:
-        contractId:
-          type: string
-          description: The ID of the contract to which the tokens belong.
-          format: uuid
-        from:
-          type: string
-          description: The id of the wallet that will send the tokens.
-          format: uuid
-        to:
-          type: string
-          description: The address of the wallet that will receive tokens.
-    CustomTransactionRequest:
-      allOf:
-        - type: object
-          title: Custom
-          properties:
-            walletId:
-              format: uuid
-              type: string
-              description: The ID of the wallet that will be used to perform the transaction.
-            contractAddress:
-              type: string
-              description: The address of the contract where the transaction will occur.
-        - $ref: "#/components/schemas/CustomTransactionMetadata"
-    MintTransactionMetadata:
+    TransactionMintMetadata:
       type: object
       title: Mint
       description: Parameters for a mint transaction.
@@ -1118,7 +1076,7 @@ components:
         quantity:
           type: number
           description: How many tokens were minted.
-    TransferTransactionMetadata:
+    TransactionTransferMetadata:
       type: object
       title: Transfer
       description: Parameters for a transfer transaction.
@@ -1135,7 +1093,7 @@ components:
         to:
           type: string
           description: The address that received the transfer.
-    CustomTransactionMetadata:
+    TransactionCustomMetadata:
       type: object
       title: Custom
       description: Parameters for a custom transaction.

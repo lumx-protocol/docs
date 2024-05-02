@@ -6,7 +6,7 @@ openapi: protocol-v2 get /transactions
 
 ```javascript 200
 [
-  // mint example
+  // Mint
   {
     "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
     "type": "mint",
@@ -24,7 +24,7 @@ openapi: protocol-v2 get /transactions
       "tokenIds": []
     }
   }
-  // transfer example
+  // Transfer
   {
     "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
     "type": "transfer",
@@ -41,7 +41,7 @@ openapi: protocol-v2 get /transactions
       "to": "<string>"
     }
   },
-  // custom transaction example
+  // Custom transaction
   {
     "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
     "type": "custom",
@@ -51,12 +51,14 @@ openapi: protocol-v2 get /transactions
     "createdAt": "2023-11-07T05:31:56Z",
     "updatedAt": "2023-11-07T05:31:56Z",
     "completedAt": "2023-11-07T05:31:56Z",
-    "metadata": {
-      "operations": [
+      "metadata": {
+        "operations": [
         {
           "functionSignature": "<string>",
-          "functionParams": [],
-          "nativeTokensAmount": 123
+          "argumentsValues": [
+            "<string>"
+          ],
+          "messageValue": 123
         }
       ]
     }
