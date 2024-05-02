@@ -7,7 +7,7 @@ Every token needs a smart contract on the blockchain but you don't need to know 
 
 <Steps>
   <Step title="Create a contract">
-  Firstly, we need to create the contract that we will be using. In this case, we will create a non-fungible token contract on the Polygon blockchain.
+  Firstly, we need to create the contract that we will be using. In this case, we will create a non-fungible token contract.
 
   <CodeGroup>
 
@@ -20,8 +20,7 @@ curl --request POST \
 {
   "type": "non-fungible",
   "name": "First contract",
-  "description": "My first non-fungible contract",
-  "blockchainName": "polygon",
+  "description": "My first non-fungible contract"
 }
 '
 ```
@@ -31,8 +30,7 @@ axios
   .post("https://protocol-sandbox.lumx.io/contracts", {
     type: "non-fungible",
     name: "First contract",
-    description: "My first non-fungible contract",
-    blockchainName: "polygon",
+    description: "My first non-fungible contract"
   })
   .then((response) => {
     // Handle Success
@@ -61,7 +59,7 @@ curl --request POST \
 {
   "name": "First item type",
   "description": "My first item type",
-  "initialSupply": 100
+  "maxSupply": 100
 }
 '
 ```
@@ -73,7 +71,7 @@ axios
     {
       name: "First item type",
       description: "My first item type",
-      initialSupply: 100,
+      maxSupply: 100,
     }
   )
   .then((response) => {
