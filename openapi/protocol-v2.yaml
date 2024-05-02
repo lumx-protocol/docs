@@ -607,7 +607,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TransferTransactionResponse"
+                allOf:
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/TransferTransactionResponse"
       security:
         - apiKey: []
   /transactions/custom:
@@ -625,6 +627,7 @@ paths:
                 - walletId
                 - contractAddress
                 - functionSignature
+                - operations
       responses:
         "202":
           description: >-
@@ -633,7 +636,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomTransactionResponse"
+                allOf:
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/CustomTransactionResponse"
       security:
         - apiKey: []
   /transactions:
@@ -1144,11 +1149,12 @@ components:
               functionSignature:
                 type: string
                 description: The function's signature (name and parameter types).
-              functionParams:
+              argumentsValues:
                 type: array
                 description: >-
                   Array containing the values to be passed to the function, in the
                   order they appear in the function's signature.
+                default: []
                 items:
                   anyOf:
                     - type: string
@@ -1160,13 +1166,12 @@ components:
                           - type: string
                           - type: number
                           - type: boolean
-              nativeTokensAmount:
+              messageValue:
                 type: number
-                description: Optional. The amount of native tokens (ETH, MATIC, etc) to be sent along with the transaction.
+                description: Optional. The amount of native tokens (ETH, MATIC, etc) to be sent along with the operation.
                 default: 0
             required:
               - functionSignature
-              - functionParams
   securitySchemes:
     apiKey:
       type: http
