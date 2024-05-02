@@ -4,12 +4,12 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v2
+  - url: https://protocol-staging.lumx.io/v2
 paths:
   /projects/auth:
     post:
       summary: Create a project
-      description: This endpoint creates a project and receives an API key.
+      description: This endpoint creates a project and an API key.
       security: []
       tags:
         - Auth
@@ -715,7 +715,7 @@ components:
           description: The name of the project.
           type: string
         blockchainName:
-          description: The blockchain you want to use for this project.
+          description: The blockchain of the project.
           $ref: "#/components/schemas/SupportedBlockchains"
     CreateProjectResponse:
       type: object
@@ -729,7 +729,7 @@ components:
           type: string
         blockchain:
           $ref: "#/components/schemas/Blockchain"
-          description: The blockchain where this project's assets will be created.
+          description: The blockchain of the project.
         createdAt:
           type: string
           format: date-time
