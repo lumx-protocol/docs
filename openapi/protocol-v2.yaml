@@ -693,8 +693,6 @@ components:
         - Polygon
         - Ethereum
         - Chiliz
-        - Linea
-        - Optimism
     Blockchain: 
       type: object
       title: Blockchain 
