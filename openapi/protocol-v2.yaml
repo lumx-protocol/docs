@@ -18,13 +18,16 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/CreateProjectRequest"
+              required:
+                - name
+                - blockchainName
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/CreateProjectResponse"
+                $ref: "#/components/schemas/CreateProjectResponse"
   /wallets:
     post:
       summary: Create a wallet
@@ -153,18 +156,25 @@ paths:
       summary: Create a contract
       description: >-
         This endpoint creates a contract.
-
-
         Please, remember to deploy the contract before interacting with it.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContractRequest"
+              allOf:
+                - $ref: "#/components/schemas/ContractRequest"
+                - type: object 
+                  properties:
+                    type: 
+                      type: string
+                      enum:
+                        - fungible
+                        - non_fungible
+                      description: >-
+                        The type of the contract.
               required:
                 - name
                 - type
-                - description
       responses:
         "201":
           description: Contract created successfully (but not deployed yet).
@@ -677,6 +687,24 @@ paths:
         - apiKey: []
 components:
   schemas:
+    SupportedBlockchains:
+      type: string
+      enum:
+        - Polygon
+        - Ethereum
+        - Chiliz
+        - Linea
+        - Optimism
+    Blockchain: 
+      type: object
+      title: Blockchain 
+      properties: 
+        name: 
+          $ref: '#/components/schemas/SupportedBlockchains'
+          description: The blockchain's name.
+        decimalChainId:
+          type: number
+          description: The blockchain's decimal chain id.
     CreateProjectRequest:
       type: object
       properties:
@@ -685,32 +713,31 @@ components:
           type: string
         blockchainName:
           description: The blockchain you want to use for this project.
-          type: string
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
     CreateProjectResponse:
       type: object
       properties:
-        key:
+        id:
+          description: The id of the project.
+          type: string
+          format: uuid
+        name:
+          description: The name of the project.
+          type: string
+        apiKey:
           description: The API key of the project.
           type: string
-        project:
-          type: object
-          properties:
-            id:
-              description: The id of the project.
-              type: string
-              format: uuid
-            name:
-              description: The name of the project.
-              type: string
-            createdAt:
-              type: string
-              format: date-time
-              description: The timestamp from when the project was created.
-            updatedAt:
-              type: string
-              format: date-time
-              description: The timestamp from when the project was last updated.
+        blockchain: 
+          $ref: "#/components/schemas/Blockchain"
+          description: The blockchain where this project's assets will be created.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was last updated.
     BaseWalletResponse:
       type: object
       properties:
@@ -736,14 +763,6 @@ components:
     ContractRequest:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-            - fungible
-            - non_fungible
-          description: >-
-            The type of the contract. See <help page URL> to understand the
-            differences between the contract types.
         name:
           type: string
           description: The name of the contract.
@@ -782,9 +801,8 @@ components:
           nullable: true
           description: The description of the contract.
         blockchainName:
-          type: string
           description: The blockchain name of the contract.
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
         blockscanUrl:
           type: string
           nullable: true
@@ -809,7 +827,7 @@ components:
       properties:
         name:
           type: string
-          description: The name of the token type.
+          description: The name of the token type. Two tokens belonging to a same contract cannot have the same name.
         description:
           type: string
           description: The description of the token type.
@@ -927,9 +945,8 @@ components:
             If this token belongs to a contract created through Lumx Protocol,
             this field indicates the uriNumber of the token type used to mint this token.
         blockchainName:
-          type: string
           description: The name of the blockchain to which this token belongs.
-          enum: ["Polygon", "Linea", "Optimism"]
+          $ref: '#/components/schemas/SupportedBlockchains'
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
@@ -944,7 +961,7 @@ components:
         name:
           type: string
           description: The token's name.
-        nftId:
+        tokenId:
           type: string
           nullable: true
           description: >-
@@ -1087,7 +1104,7 @@ components:
         uriNumber:
           type: string
           description: The uriNumber of the token type that was minted.
-        nftIds:
+        tokenIds:
           type: array
           description: >-
             Only for non-fungible contracts. Represents the on-chain sequential mint
