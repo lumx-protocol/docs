@@ -5,7 +5,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-staging.int.lumx.io/v1
+  - url: https://protocol-sandbox.lumx.io/v1
 paths:
   # v1.0 (deprecated)
   "/mints/airdrop":
@@ -655,7 +655,7 @@ components:
           description: The description of the contract.
         blockchainName:
           type: string
-          enum: ["ethereum", "polygon", "linea", "optimism"]
+          enum: ["polygon", "linea", "optimism", "bvm"]
           description: The name of the blockchain used for the contract.
         maxPerAddress:
           type: integer
