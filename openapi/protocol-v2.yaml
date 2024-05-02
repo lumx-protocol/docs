@@ -163,9 +163,9 @@ paths:
             schema:
               allOf:
                 - $ref: "#/components/schemas/ContractRequest"
-                - type: object 
+                - type: object
                   properties:
-                    type: 
+                    type:
                       type: string
                       enum:
                         - fungible
@@ -690,15 +690,15 @@ components:
     SupportedBlockchains:
       type: string
       enum:
-        - Polygon
         - Ethereum
+        - Polygon
         - Chiliz
-    Blockchain: 
+    Blockchain:
       type: object
-      title: Blockchain 
-      properties: 
-        name: 
-          $ref: '#/components/schemas/SupportedBlockchains'
+      title: Blockchain
+      properties:
+        name:
+          $ref: "#/components/schemas/SupportedBlockchains"
           description: The blockchain's name.
         decimalChainId:
           type: number
@@ -711,7 +711,7 @@ components:
           type: string
         blockchainName:
           description: The blockchain you want to use for this project.
-          $ref: '#/components/schemas/SupportedBlockchains'
+          $ref: "#/components/schemas/SupportedBlockchains"
     CreateProjectResponse:
       type: object
       properties:
@@ -722,10 +722,7 @@ components:
         name:
           description: The name of the project.
           type: string
-        apiKey:
-          description: The API key of the project.
-          type: string
-        blockchain: 
+        blockchain:
           $ref: "#/components/schemas/Blockchain"
           description: The blockchain where this project's assets will be created.
         createdAt:
@@ -736,6 +733,9 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the project was last updated.
+        apiKey:
+          description: The API key of the project.
+          type: string
     BaseWalletResponse:
       type: object
       properties:
@@ -778,15 +778,15 @@ components:
           format: uuid
           type: string
           description: The ID of the contract.
+        type:
+          type: string
+          description: The type of the contract.
         address:
           type: string
           description: >-
             The blockchain address of this contract (only for deployed
             contracts)
           nullable: true
-        type:
-          type: string
-          description: The type of the contract.
         name:
           type: string
           description: The name of the contract.
@@ -800,7 +800,7 @@ components:
           description: The description of the contract.
         blockchainName:
           description: The blockchain name of the contract.
-          $ref: '#/components/schemas/SupportedBlockchains'
+          $ref: "#/components/schemas/SupportedBlockchains"
         blockscanUrl:
           type: string
           nullable: true
@@ -944,7 +944,7 @@ components:
             this field indicates the uriNumber of the token type used to mint this token.
         blockchainName:
           description: The name of the blockchain to which this token belongs.
-          $ref: '#/components/schemas/SupportedBlockchains'
+          $ref: "#/components/schemas/SupportedBlockchains"
         contractAddress:
           type: string
           description: The address of the contract to which this token belongs.
