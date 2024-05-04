@@ -495,6 +495,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
                   - $ref: "#/components/schemas/TransactionMintResponse"
+                  - $ref: "#/components/schemas/TransactionTimeStamps"
         "409":
           description: Contract not deployed yet!.
           content:
@@ -573,6 +574,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
                   - $ref: "#/components/schemas/TransactionTransferResponse"
+                  - $ref: "#/components/schemas/TransactionTimeStamps"
       security:
         - apiKey: []
   /transactions/custom:
@@ -602,6 +604,7 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
                   - $ref: "#/components/schemas/TransactionCustomResponse"
+                  - $ref: "#/components/schemas/TransactionTimeStamps"
       security:
         - apiKey: []
   /transactions:
@@ -616,9 +619,29 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TransactionResponse"
+                description: An array containing all transactions made by wallets of this project.
+                anyOf:
+                  - type: array
+                    title: Mints
+                    items:
+                      allOf:
+                        - $ref: "#/components/schemas/TransactionResponse"
+                        - $ref: "#/components/schemas/TransactionMintResponse"
+                        - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: array
+                    title: Transfers
+                    items:
+                      allOf:
+                        - $ref: "#/components/schemas/TransactionResponse"
+                        - $ref: "#/components/schemas/TransactionTransferResponse"
+                        - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: array
+                    title: Custom
+                    items:
+                      allOf:
+                        - $ref: "#/components/schemas/TransactionResponse"
+                        - $ref: "#/components/schemas/TransactionCustomResponse"
+                        - $ref: "#/components/schemas/TransactionTimeStamps"
       security:
         - apiKey: []
   "/transactions/{transactionId}":
@@ -640,7 +663,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TransactionResponse"
+                oneOf:
+                  - type: object
+                    title: Mint
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionMintResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: object
+                    title: Transfer
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionTransferResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: object
+                    title: Custom
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionCustomResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
         "404":
           description: Transaction not found!
           content:
@@ -966,11 +1007,12 @@ components:
           format: uuid
         from:
           type: string
-          description: The id of the wallet that will send the tokens.
+          description: The id of the wallet transferring the tokens.
           format: uuid
         to:
           type: string
-          description: The address of the wallet that will receive tokens.
+          description: The address of the wallet receiving the tokens. Can be any address, not limited to wallets created through  the API.
+          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
     TransactionCustomRequest:
       allOf:
         - type: object
@@ -982,7 +1024,8 @@ components:
               description: The ID of the wallet that will be used to perform the transaction.
             contractAddress:
               type: string
-              description: The address of the contract where the transaction will occur.
+              description: The address of the contract where the transaction will occur. Can be any contract as long as it is deployed in the same blockchain used for the current project.
+              example: "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08"
         - $ref: "#/components/schemas/TransactionCustomMetadata"
     TransactionResponse:
       type: object
@@ -991,10 +1034,10 @@ components:
           type: string
           description: The ID of the transaction.
           format: uuid
-        contractId:
+        walletId: 
           type: string
+          description: The ID of the wallet that performed the transaction.
           format: uuid
-          description: The ID of the contract where this transaction happened.
         status:
           type: string
           description: The status of the transaction on the blockchain.
@@ -1006,11 +1049,11 @@ components:
           type: string
           description: The identifier of this transaction on the blockchain.
           nullable: true
-        blockscanUrl:
-          type: string
-          description: >-
-            The block scan address of this transaction, where you can see it
-            live on the blockchain.
+        result: 
+          type: object
+    TransactionTimeStamps:
+      type: object
+      properties:
         createdAt:
           type: string
           format: date-time
@@ -1027,9 +1070,11 @@ components:
     TransactionMintResponse:
       type: object
       properties:
-        metadata:
+        request:
           description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/TransactionMintMetadata"
+          oneOf:
+            - $ref: "#/components/schemas/TransactionMintFungibleMetadata"
+            - $ref: "#/components/schemas/TransactionMintNFTMetadata"
         type:
           type: string
           description: The transaction type
@@ -1038,9 +1083,11 @@ components:
     TransactionTransferResponse:
       type: object
       properties:
-        metadata:
+        request:
           description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/TransactionTransferMetadata"
+          oneOf:
+            - $ref: "#/components/schemas/TransactionTransferFungibleMetadata"
+            - $ref: "#/components/schemas/TransactionTransferNFTMetadata"
         type:
           type: string
           description: The transaction type
@@ -1049,7 +1096,7 @@ components:
     TransactionCustomResponse:
       type: object
       properties:
-        metadata:
+        request:
           description: An object containing the parameters used for this transaction.
           $ref: "#/components/schemas/TransactionCustomMetadata"
         type:
@@ -1057,42 +1104,75 @@ components:
           description: The transaction type
           enum:
             - custom
-    TransactionMintMetadata:
+    TransactionMintFungibleMetadata:
       type: object
-      title: Mint
+      title: Mint - fungible
       description: Parameters for a mint transaction.
       properties:
-        uriNumber:
+        contractId:
           type: string
-          description: The uriNumber of the token type that was minted.
-        tokenIds:
-          type: array
-          description: >-
-            Only for non-fungible contracts. Represents the on-chain sequential mint
-            numbers of the NFTs minted in this operation.
-          items:
-            type: number
-          nullable: true
+          description: The ID of the contract for this mint.
+          format: uuid
         quantity:
           type: number
-          description: How many tokens were minted.
-    TransactionTransferMetadata:
+          description: The quantity of tokens for this mint.
+    TransactionMintNFTMetadata:
       type: object
-      title: Transfer
-      description: Parameters for a transfer transaction.
+      title: Mint - non-fungible
+      description: Parameters for a mint transaction.
       properties:
+        contractId:
+          type: string
+          description: The ID of the contract for this mint.
+          format: uuid
         uriNumber:
           type: string
-          description: The uriNumber of the token type that was minted.
+          description: Indicates which of the token types defined by the contract is used for this mint.
+        quantity:
+          type: number
+          description: The quantity of tokens for this mint.
+    TransactionTransferFungibleMetadata:
+      type: object
+      title: Transfer - fungible
+      description: Parameters for transferring fungible tokens.
+      properties:
+        contractId:
+          type: string
+          description: The ID of the contract of the fungible token.
+          format: uuid
         quantity:
           type: number
           description: How many tokens were transferred.
+          minimum: 1
         from:
           type: string
-          description: The address that sent the transfer.
+          description: The id of the wallet transferring the tokens.
+          format: uuid
         to:
           type: string
-          description: The address that received the transfer.
+          description: The address of the wallet receiving the tokens. Can be any address, not limited to wallets created through  the API.
+          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+    TransactionTransferNFTMetadata:
+      type: object
+      title: Transfer - non-fungible
+      description: Parameters for transferring non-fungible tokens.
+      properties:
+        contractId:
+          type: string
+          description: The ID of the contract of the fungible token.
+          format: uuid
+        tokenId:
+          type: string
+          description: The on-chain id of the token you want to transfer. You can find it using the read wallet route.
+          example: "0"
+        from:
+          type: string
+          description: The id of the wallet transferring the token.
+          format: uuid
+        to:
+          type: string
+          description: The address of the wallet receiving the token. Can be any address, not limited to wallets created through  the API.
+          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
     TransactionCustomMetadata:
       type: object
       title: Custom
