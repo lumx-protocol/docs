@@ -756,6 +756,11 @@ components:
           description: The ID of the project.
           type: string
           format: uuid
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: >-
+            The block explorer url of this wallet.
         createdAt:
           type: string
           format: date-time
@@ -859,7 +864,7 @@ components:
         blockchainName:
           description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
-        blockscanUrl:
+        blockExplorerUrl:
           type: string
           nullable: true
           description: >-
@@ -1049,6 +1054,11 @@ components:
           type: string
           description: The identifier of this transaction on the blockchain.
           nullable: true
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: >-
+            The block explorer url where the details of this transaction can be read.
         result: 
           type: object
     TransactionTimeStamps:
