@@ -137,6 +137,16 @@
       "version": "v2.0 - Beta"
     },
     {
+      "group": "Webhooks",
+      "pages": [
+        "api-reference/v2/webhooks/create-a-webhook",
+        "api-reference/v2/webhooks/read-a-webhook",
+        "api-reference/v2/webhooks/read-all-webhooks",
+        "api-reference/v2/webhooks/delete-a-webhook"
+      ],
+      "version": "v2.0 - Beta"
+    },
+    {
       "group": "Account",
       "pages": [
         "api-reference/v1/account/get-an-api-key",

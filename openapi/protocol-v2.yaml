@@ -694,6 +694,101 @@ paths:
                     example: Transaction not found!
       security:
         - apiKey: []
+  /webhooks:
+    get:
+      summary: Read all webhooks
+      description: This endpoint reads all webhooks previously created.
+      tags:
+        - Webhooks
+      responses:
+        "200":
+          description: The list of webhooks was retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/WebhookModel"
+      security:
+        - apiKey: []
+    post:
+      summary: Create a webhook
+      description: This endpoint creates a webhook
+      tags:
+        - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                  description: The event that will trigger the webhook.
+                  enum:
+                    - mint
+                    - transfer
+                    - custom
+                url:
+                  type: string
+                  description: The URL that will be called when the event is triggered.
+              required:
+                - event
+                - url
+      responses:
+        "200":
+          description: Webhook created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebhookModelWithSecret"
+      security:
+        - apiKey: []
+  "/webhooks/{webhookId}":
+    get:
+      summary: Read a webhook
+      description: This endpoint reads a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the webhook.
+      responses:
+        "200":
+          description: The details of the webhook were retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebhookModel"
+      security:
+        - apiKey: []
+    delete:
+      summary: Delete a webhook
+      description: This endpoint deletes a webhook
+      tags:
+        - Webhooks
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the webhook.
+      responses:
+        "200":
+          description: Webhook deleted
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebhookModel"
+      security:
+        - apiKey: []
 components:
   schemas:
     Blockchains:
@@ -1210,6 +1305,43 @@ components:
                 default: 0
             required:
               - functionSignature
+    WebhookModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the webhook.
+        url:
+          type: string
+          description: The URL of the webhook.
+        event:
+          type: string
+          description: The event that trigger the webhook.
+          enum:
+            - mint
+            - transfer
+            - custom
+        projectId:
+          type: string
+          format: uuid
+          description: The ID of the project.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the webhook was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the webhook was last updated.
+    WebhookModelWithSecret:
+      allOf:
+        - $ref: "#/components/schemas/WebhookModel"
+        - type: object
+          properties:
+            secret:
+              type: string
+              description: The secret key of the webhook.
   securitySchemes:
     apiKey:
       type: http
