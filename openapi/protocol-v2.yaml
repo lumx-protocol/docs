@@ -1264,29 +1264,10 @@ components:
     SignMessageResponse:
       type: object
       properties:
-        public_key:
+        signedMessage:
           type: string
           description: >-
-            The public key associated with the address.
-        address:
-          type: string
-          description: >-
-            The address associated with the public key in hexadecimal format.
-        signatures:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: >-
-                  The message that was signed. Represents the original text of the message.
-              signature:
-                type: string
-                description: >-
-                  The signature of the message in hexadecimal format.
-          description: >-
-            A list of signatures containing messages and their respective signatures.
+            The signature of the message in hexadecimal format.
   securitySchemes:
     apiKey:
       type: http
