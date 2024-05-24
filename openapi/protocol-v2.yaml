@@ -752,10 +752,6 @@ components:
         address:
           description: The blockchain address for this wallet.
           type: string
-        projectId:
-          description: The ID of the project.
-          type: string
-          format: uuid
         blockExplorerUrl:
           type: string
           nullable: true
@@ -1039,7 +1035,7 @@ components:
           type: string
           description: The ID of the transaction.
           format: uuid
-        walletId: 
+        walletId:
           type: string
           description: The ID of the wallet that performed the transaction.
           format: uuid
@@ -1059,7 +1055,7 @@ components:
           nullable: true
           description: >-
             The block explorer url where the details of this transaction can be read.
-        result: 
+        result:
           type: object
     TransactionTimeStamps:
       type: object
