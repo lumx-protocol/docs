@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   version: 2.0.0
   title: Lumx Protocol
@@ -111,6 +111,38 @@ paths:
                   error:
                     type: string
                     example: Wallet not found!
+      security:
+        - apiKey: []
+  "/wallets/sign-message":
+    post:
+      summary: Sign a message
+      description: Use this endpoint to sign a message to prove wallet ownership.
+      tags:
+        - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignMessageRequest"
+              required:
+                - message
+      responses:
+        "201":
+          description: Successfully signed a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignMessageResponse"
+        "500":
+          description: A Error ocurred trying to sign a message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: A Error ocurred trying to sign a message
       security:
         - apiKey: []
   /contracts:
@@ -756,6 +788,11 @@ components:
           description: The ID of the project.
           type: string
           format: uuid
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: >-
+            The block explorer url of this wallet.
         createdAt:
           type: string
           format: date-time
@@ -859,7 +896,7 @@ components:
         blockchainName:
           description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
-        blockscanUrl:
+        blockExplorerUrl:
           type: string
           nullable: true
           description: >-
@@ -1011,8 +1048,10 @@ components:
           format: uuid
         to:
           type: string
-          description: The address of the wallet receiving the tokens. Can be any address, not limited to wallets created through  the API.
-          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+          description: The address or ID of the wallet receiving the tokens. Can be any address, not limited to wallets created through the API.
+          examples:
+            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+            - "123e4567-e89b-12d3-a456-426614174000"
     TransactionCustomRequest:
       allOf:
         - type: object
@@ -1034,7 +1073,7 @@ components:
           type: string
           description: The ID of the transaction.
           format: uuid
-        walletId: 
+        walletId:
           type: string
           description: The ID of the wallet that performed the transaction.
           format: uuid
@@ -1049,7 +1088,12 @@ components:
           type: string
           description: The identifier of this transaction on the blockchain.
           nullable: true
-        result: 
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: >-
+            The block explorer url where the details of this transaction can be read.
+        result:
           type: object
     TransactionTimeStamps:
       type: object
@@ -1210,6 +1254,22 @@ components:
                 default: 0
             required:
               - functionSignature
+    SignMessageRequest:
+      type: object
+      properties:
+        message:
+          type: string
+      description: >-
+        The message that will be signed.
+      required:
+        - message
+    SignMessageResponse:
+      type: object
+      properties:
+        signedMessage:
+          type: string
+          description: >-
+            The signature of the message in hexadecimal format.
   securitySchemes:
     apiKey:
       type: http

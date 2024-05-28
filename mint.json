@@ -114,7 +114,8 @@
       "pages": [
         "api-reference/v2/wallets/create-a-wallet",
         "api-reference/v2/wallets/read-a-wallet",
-        "api-reference/v2/wallets/read-all-wallets"
+        "api-reference/v2/wallets/read-all-wallets",
+        "api-reference/v2/wallets/sign-a-message"
       ],
       "version": "v2.0 - Beta"
     },
