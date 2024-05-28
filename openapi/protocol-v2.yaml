@@ -116,7 +116,7 @@ paths:
   "/wallets/sign-message":
     post:
       summary: Sign a message.
-      description: This endpoint sign a message.
+      description: Use this endpoint to sign a message to prove wallet ownership.
       tags:
         - Wallets
       requestBody:
@@ -128,7 +128,7 @@ paths:
                 - message
       responses:
         "201":
-          description: Successfully singed a message.
+          description: Successfully signed a message.
           content:
             application/json:
               schema:
