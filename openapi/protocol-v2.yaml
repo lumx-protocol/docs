@@ -115,7 +115,7 @@ paths:
         - apiKey: []
   "/wallets/sign-message":
     post:
-      summary: Sign a message.
+      summary: Sign a message
       description: Use this endpoint to sign a message to prove wallet ownership.
       tags:
         - Wallets
