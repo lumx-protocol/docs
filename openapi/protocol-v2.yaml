@@ -854,7 +854,7 @@ components:
           nullable: true
           description: A brief description of the contract.
         blockchainName:
-          description: The name of the blockchain where the contract is deployed.
+          description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
         blockExplorerUrl:
           type: string
