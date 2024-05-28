@@ -807,7 +807,7 @@ components:
         metadata:
           type: object
           nullable: true
-          description: Metadata associated with the token, such as image address and traits.
+          description: Metadata associated with the token.
         symbol:
           type: string
           nullable: true
@@ -1025,15 +1025,15 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: O carimbo de data/hora quando a transação foi submetida.
+          description: A data/hora quando a transação foi submetida.
         updatedAt:
           type: string
           format: date-time
-          description: O carimbo de data/hora quando a transação foi atualizada pela última vez.
+          description: A data/hora quando a transação foi atualizada pela última vez.
         completedAt:
           type: string
           format: date-time
-          description: O carimbo de data/hora quando a transação foi concluída.
+          description: A data/hora quando a transação foi concluída.
           nullable: true
     TransactionMintResponse:
       type: object
