@@ -113,6 +113,38 @@ paths:
                     example: Wallet not found!
       security:
         - apiKey: []
+  "/wallets/sign-message":
+    post:
+      summary: Sign a message
+      description: Use this endpoint to sign a message to prove wallet ownership.
+      tags:
+        - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignMessageRequest"
+              required:
+                - message
+      responses:
+        "201":
+          description: Successfully signed a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignMessageResponse"
+        "500":
+          description: A Error ocurred trying to sign a message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: A Error ocurred trying to sign a message
+      security:
+        - apiKey: []
   /contracts:
     post:
       tags:
@@ -1222,6 +1254,22 @@ components:
                 default: 0
             required:
               - functionSignature
+    SignMessageRequest:
+      type: object
+      properties:
+        message:
+          type: string
+      description: >-
+        The message that will be signed.
+      required:
+        - message
+    SignMessageResponse:
+      type: object
+      properties:
+        signedMessage:
+          type: string
+          description: >-
+            The signature of the message in hexadecimal format.
   securitySchemes:
     apiKey:
       type: http
