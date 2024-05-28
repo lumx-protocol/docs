@@ -1016,8 +1016,10 @@ components:
           format: uuid
         to:
           type: string
-          description: The address of the wallet receiving the tokens. Can be any address, not limited to wallets created through  the API.
-          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+          description: The address or ID of the wallet receiving the tokens. Can be any address, not limited to wallets created through the API.
+          example:
+            addressExample: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+            uuidExample: "123e4567-e89b-12d3-a456-426614174000"
     TransactionCustomRequest:
       allOf:
         - type: object
@@ -1039,7 +1041,7 @@ components:
           type: string
           description: The ID of the transaction.
           format: uuid
-        walletId: 
+        walletId:
           type: string
           description: The ID of the wallet that performed the transaction.
           format: uuid
@@ -1059,7 +1061,7 @@ components:
           nullable: true
           description: >-
             The block explorer url where the details of this transaction can be read.
-        result: 
+        result:
           type: object
     TransactionTimeStamps:
       type: object
