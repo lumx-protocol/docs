@@ -985,7 +985,7 @@ components:
         quantity:
           type: number
           default: 1
-          description: The amount of tokens to be minted. Required if minting fungible tokens.
+          description: The quantity of tokens to be minted. Required if minting fungible tokens.
     TransactionTransferRequest:
       type: object
       properties:
@@ -1107,7 +1107,7 @@ components:
           description: The id of the contract for this minting.
         quantity:
           type: number
-          description: The amount of tokens for this minting.
+          description: The quantity of tokens for this minting.
     TransactionMintNFTMetadata:
       type: object
       title: Mint - non-fungible
@@ -1122,7 +1122,7 @@ components:
           description: Indicates which of the token types defined by the contract is used for this minting.
         quantity:
           type: number
-          description: The amount of tokens for this minting.
+          description: The quantity of tokens for this minting.
     TransactionTransferFungibleMetadata:
       type: object
       title: Transfer - fungible
@@ -1134,7 +1134,7 @@ components:
           description: The id of the fungible token contract.
         quantity:
           type: number
-          description: Amount of tokens transferred.
+          description: Quantity of tokens transferred.
           minimum: 1
         from:
           type: string
@@ -1172,13 +1172,13 @@ components:
       properties:
         operations:
           type: array
-          description: An array with objects defining the operations to be performed in this transaction.
+          description: An array with objects defining the operations to be executed in this transaction.
           items:
             type: object
             properties:
               functionSignature:
                 type: string
-                description: The function signature (name and parameter types).
+                description: The function's signature (name and parameter types).
               argumentsValues:
                 type: array
                 description: An array containing the values to be passed to the function, in the order they appear in the function signature.
@@ -1196,7 +1196,7 @@ components:
                           - type: boolean
               messageValue:
                 type: number
-                description: Optional. The value of native tokens (ETH, MATIC, etc.) to be sent along with the operation.
+                description: Optional. The amount of native tokens (ETH, MATIC, etc.) to be sent along with the operation.
                 default: 0
           required:
             - functionSignature
