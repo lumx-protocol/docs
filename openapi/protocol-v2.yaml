@@ -1049,21 +1049,21 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The date/time when the transaction was submitted.
+          description: The timestamp from when the transaction was submitted.
         updatedAt:
           type: string
           format: date-time
-          description: The date/time when the transaction was last updated.
+          description: The timestamp from when the transaction was last updated.
         completedAt:
           type: string
           format: date-time
-          description: A data/hora quando a transação foi concluída.
+          description: The timestamp from when the transaction was completed.
           nullable: true
     TransactionMintResponse:
       type: object
       properties:
         request:
-          description: The date/time when the transaction was completed.
+          description: An object containing the parameters used for this transaction.
           oneOf:
             - $ref: "#/components/schemas/TransactionMintFungibleMetadata"
             - $ref: "#/components/schemas/TransactionMintNFTMetadata"
