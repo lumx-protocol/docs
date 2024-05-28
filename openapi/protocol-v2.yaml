@@ -948,6 +948,30 @@ components:
           type: string
           format: date-time
           description: The timestamp when the token type was last updated.
+    TokenTypeUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the token type.
+        description:
+          type: string
+          description: The description of the token type.
+        maxSupply:
+          type: number
+          description: >-
+            The max supply of the token type.
+          maximum: 2000000000
+        traits:
+          type: object
+          description: >-
+            The traits of the token type. The key is the name of the trait and
+            the value is the value of the trait.
+        imageUrl:
+          type: string
+          description: >-
+            The image URL of the token type. Supported formats are PNG, JPEG,
+            GIF or MP4.
     TransactionMintRequest:
       properties:
         contractId:
