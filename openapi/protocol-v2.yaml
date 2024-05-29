@@ -854,6 +854,16 @@ components:
         quantity:
           type: number
           description: How much of that token is present at this wallet.
+        rawBalance:
+          type: string
+          description: >-
+            The unformatted balance of the token, representing the quantity of the
+            token present at this wallet.
+        floatBalance:
+          type: string
+          description: >-
+            The formatted balance of the token, representing the quantity of the
+            token present at this wallet with proper formatting for display purposes.
     ContractRequest:
       type: object
       properties:
