@@ -8,12 +8,11 @@
   "api": {
     "maintainOrder": true
   },
-  "openapi": ["openapi/protocol-v1.yaml","openapi/protocol-v2.yaml"],
-  "versions": [
-    "v2.0",
-    "v1.1",
-    "v1.0 - Deprecated"
-  ],
+  "feedback": {
+    "thumbsRating": true
+  },
+  "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
+  "versions": ["v2.0", "v1.0"],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -27,28 +26,35 @@
       "to": "#5900D4"
     }
   },
-  "topbarLinks": [
+  "anchors": [
+    {
+      "name": "Join our Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/RvHymsBDHD"
+    },
     {
       "name": "System Status",
+      "icon": "rocket",
       "url": "https://status.lumx.io"
     },
     {
-      "name": "Playground",
-      "url": "https://lumx.io/playground"
-    },
-    {
-      "name": "Support",
-      "url": "https://join.slack.com/t/lumxpartners/shared_invite/zt-1z920ovmb-V6~OlHpvQSQupe7kJLu5YA"
+      "name": "Github",
+      "icon": "Github",
+      "url": "https://github.com/lumx-protocol"
     }
   ],
   "tabs": [
+    {
+      "name": "Guides",
+      "url": "guides"
+    },
     {
       "name": "API Reference",
       "url": "api-reference"
     },
     {
-      "name": "Embedded Wallet",
-      "url": "embedded-wallet"
+      "name": "Applications",
+      "url": "applications"
     }
   ],
   "navigation": [
@@ -59,19 +65,43 @@
         "get-started/authentication",
         "get-started/environments",
         "get-started/blockchains",
-        "get-started/troubleshooting",
-        "get-started/changelog"
+        "get-started/troubleshooting"
+      ]
+    },
+    {
+      "group": "Concepts",
+      "pages": [
+        "concepts/protocol",
+        "concepts/wallets",
+        "concepts/contracts",
+        "concepts/transactions"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": ["guides/introduction"]
+    },
+    {
+      "group": "Start building",
+      "pages": [
+        "guides/start-building/get-an-api-key",
+        "guides/start-building/your-first-contract",
+        "guides/start-building/create-a-wallet",
+        "guides/start-building/mint-a-token",
+        "guides/start-building/the-road-so-far"
       ]
     },
     {
       "group": "Recipes",
       "pages": [
-        "recipes/overview",
-        "recipes/first-request",
-        "recipes/create-contract",
-        "recipes/create-wallet",
-        "recipes/mint-tokens"
+        "guides/recipes/transfer-a-token",
+        "guides/recipes/invoke-a-custom-transaction"
       ]
+    },
+    {
+      "group": "Projects",
+      "pages": ["api-reference/v2/projects/create-a-project"],
+      "version": "v2.0"
     },
     {
       "group": "Wallets",
@@ -114,7 +144,7 @@
         "api-reference/v1/account/get-an-api-key",
         "api-reference/v1/account/get-account"
       ],
-      "version": "v1.1"
+      "version": "v1.0"
     },
     {
       "group": "Wallets",
@@ -123,7 +153,7 @@
         "api-reference/v1/wallets/create-a-wallet",
         "api-reference/v1/wallets/read-a-wallet"
       ],
-      "version": "v1.1"
+      "version": "v1.0"
     },
     {
       "group": "Contracts",
@@ -138,7 +168,7 @@
         "api-reference/v1/contracts/read-an-item-type-from-a-contract",
         "api-reference/v1/contracts/update-an-item-type-of-a-contract"
       ],
-      "version": "v1.1"
+      "version": "v1.0"
     },
     {
       "group": "Transactions",
@@ -149,33 +179,27 @@
         "api-reference/v1/transactions/read-all-transactions",
         "api-reference/v1/transactions/read-a-transaction"
       ],
-      "version": "v1.1"
+      "version": "v1.0"
     },
     {
-      "group": "Accounts",
-      "pages": [
-        "api-reference/v1/deprecated/transfer-tokens",
-        "api-reference/v1/deprecated/create-account-for-user",
-        "api-reference/v1/deprecated/update-a-user",
-        "api-reference/v1/deprecated/read-wallet"
-      ],
-      "version": "v1.0 - Deprecated"
+      "group": "Applications",
+      "pages": ["applications/introduction"]
     },
     {
-      "group": "Mints",
+      "group": "Boilerplate",
       "pages": [
-        "api-reference/v1/deprecated/send-an-airdrop"
-      ],
-      "version": "v1.0 - Deprecated"
+        "applications/boilerplate/overview",
+        "applications/boilerplate/get-started",
+        "applications/boilerplate/architecture"
+      ]
     },
     {
       "group": "Embedded Wallet",
       "pages": [
-        "embedded-wallet/introduction",
-        "embedded-wallet/why-to-use",
-        "embedded-wallet/get-started",
-        "embedded-wallet/properties",
-        "embedded-wallet/customization"
+        "applications/embedded-wallet/overview",
+        "applications/embedded-wallet/get-started",
+        "applications/embedded-wallet/properties",
+        "applications/embedded-wallet/customization"
       ]
     }
   ],
