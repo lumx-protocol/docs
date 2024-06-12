@@ -11,16 +11,8 @@
   "feedback": {
     "thumbsRating": true
   },
-  "analytics": {
-    "ga4": {
-      "measurementId": "G-0MVRGD699K"
-    },
-    "mixpanel": {
-      "projectToken": "87f5c334d0c77d5e7585a110f542f9ed"
-    }
-  },
   "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0 - Beta", "v1.0"],
+  "versions": ["v2.0", "v1.0"],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -54,12 +46,15 @@
   "tabs": [
     {
       "name": "Guides",
-      "url": "guides",
-      "version": "v2.0 - Beta"
+      "url": "guides"
     },
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Applications",
+      "url": "applications"
     }
   ],
   "navigation": [
@@ -84,8 +79,7 @@
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction"],
-      "version": "v2.0 - Beta"
+      "pages": ["guides/introduction"]
     },
     {
       "group": "Start building",
@@ -107,17 +101,16 @@
     {
       "group": "Projects",
       "pages": ["api-reference/v2/projects/create-a-project"],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Wallets",
       "pages": [
         "api-reference/v2/wallets/create-a-wallet",
         "api-reference/v2/wallets/read-a-wallet",
-        "api-reference/v2/wallets/read-all-wallets",
-        "api-reference/v2/wallets/sign-a-message"
+        "api-reference/v2/wallets/read-all-wallets"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Contracts",
@@ -132,7 +125,7 @@
         "api-reference/v2/contracts/read-a-token-type",
         "api-reference/v2/contracts/read-all-token-types"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Transactions",
@@ -143,7 +136,7 @@
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Account",
@@ -187,6 +180,27 @@
         "api-reference/v1/transactions/read-a-transaction"
       ],
       "version": "v1.0"
+    },
+    {
+      "group": "Applications",
+      "pages": ["applications/introduction"]
+    },
+    {
+      "group": "Boilerplate",
+      "pages": [
+        "applications/boilerplate/overview",
+        "applications/boilerplate/get-started",
+        "applications/boilerplate/architecture"
+      ]
+    },
+    {
+      "group": "Embedded Wallet",
+      "pages": [
+        "applications/embedded-wallet/overview",
+        "applications/embedded-wallet/get-started",
+        "applications/embedded-wallet/properties",
+        "applications/embedded-wallet/customization"
+      ]
     }
   ],
   "footerSocials": {

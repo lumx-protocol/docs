@@ -6,64 +6,82 @@ openapi: protocol-v2 get /transactions/{transactionId}
 ```json 200 - Mint
 {
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "mint",
-  "status": "pending",
+  "status": "pending | success | failed",
   "transactionHash": "<string>",
-  "scanUrl": "<string>",
+  "request": {
+    "contractId": "<string>",
+    "uriNumber": "<string>",
+    "quantity": 123
+  },
+  "result": {},
   "createdAt": "2023-11-07T05:31:56Z",
   "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z",
-  "metadata": {
-    "uriNumber": "<string>",
-    "quantity": 123,
-    "from": "<string>",
-    "to": "<string>",
-    "nftIds": []
-  }
+  "completedAt": "2023-11-07T05:31:56Z"
 }
 ```
 
-```json 200 - Transfer
+```json 200 - Transfer (fungible)
 {
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "transfer",
-  "status": "pending",
+  "status": "pending | success | failed",
   "transactionHash": "<string>",
-  "scanUrl": "<string>",
-  "createdAt": "2023-11-07T05:31:56Z",
-  "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z",
-  "metadata": {
-    "uriNumber": "<string>",
+  "request": {
+    "contractId": "<string>",
     "quantity": 123,
     "from": "<string>",
     "to": "<string>"
-  }
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
+}
+```
+
+```json 200 - Transfer (non-fungible)
+{
+  "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "type": "transfer",
+  "status": "pending | success | failed",
+  "transactionHash": "<string>",
+  "request": {
+    "contractId": "<string>",
+    "tokenId": "<string>",
+    "from": "<string>",
+    "to": "<string>"
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
 }
 ```
 
 ```json 200 - Custom
 {
   "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-  "contractId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
   "type": "custom",
-  "status": "pending",
+  "status": "pending | success | failed",
   "transactionHash": "<string>",
-  "scanUrl": "<string>",
-  "createdAt": "2023-11-07T05:31:56Z",
-  "updatedAt": "2023-11-07T05:31:56Z",
-  "completedAt": "2023-11-07T05:31:56Z",
-  "metadata": {
+  "request": {
     "operations": [
       {
         "functionSignature": "<string>",
-        "functionParams": [],
-        "nativeTokensAmount": 123
+        "argumentsValues": [],
+        "messageValue": 123
       }
     ]
-  }
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
 }
 ```
 
