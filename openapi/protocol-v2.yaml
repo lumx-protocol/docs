@@ -4,7 +4,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v2
+  - url: https://protocol-staging.int.lumx.io/v2
 paths:
   /projects/auth:
     post:
@@ -40,17 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WalletResponse"
-        "500":
-          description: A Error ocurred trying to create wallet
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: A Error ocurred trying to create wallet
+                $ref: "#/components/schemas/BaseWalletResponse"
       security:
         - apiKey: []
     get:
@@ -309,17 +299,6 @@ paths:
                   error:
                     type: string
                     example: This contract is already deployed
-
-        "500":
-          description: Error while trying to deploy contract.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Error while trying to deploy contract
       security:
         - apiKey: []
   "/contracts/{contractId}/token-types":
@@ -363,16 +342,6 @@ paths:
                   error:
                     type: string
                     example: This contract does not belong to this project
-        "500":
-          description: Failed while trying to export metadata.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Failed while trying to export metadata.
       security:
         - apiKey: []
     get:
