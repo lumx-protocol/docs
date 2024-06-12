@@ -4,7 +4,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v2
+  - url: https://protocol-staging.int.lumx.io/v2
 paths:
   /projects/auth:
     post:
