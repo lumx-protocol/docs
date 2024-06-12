@@ -899,8 +899,9 @@ components:
         baseUri:
           type: string
           nullable: true
+          format: url
           description: >-
-            The baseUri of this contract.
+            The base URI where this contract's tokens' metadata files are located.
         blockExplorerUrl:
           type: string
           nullable: true
