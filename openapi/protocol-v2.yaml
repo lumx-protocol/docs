@@ -896,6 +896,12 @@ components:
         blockchainName:
           description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
+        baseUri:
+          type: string
+          nullable: true
+          format: url
+          description: >-
+            The base URI where this contract's tokens' metadata files are located.
         blockExplorerUrl:
           type: string
           nullable: true
