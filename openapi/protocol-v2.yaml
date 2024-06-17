@@ -40,7 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BaseWalletResponse"
+                $ref: "#/components/schemas/WalletResponse"
       security:
         - apiKey: []
     get:
