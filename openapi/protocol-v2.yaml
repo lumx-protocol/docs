@@ -450,6 +450,27 @@ paths:
                     example: This contract does not belong to this project
       security:
         - apiKey: []
+  "/contracts/read-contract-function":
+    post:
+      tags:
+        - Contracts
+      summary: Read a contract function
+      description: Read any function of a smart contract.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReadContractFunctionRequest"
+              required:
+                - read_operations
+        "200":
+          description: The response of the contract function.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContractFunctionResponse"
+        security:
+          - apiKey: []
   /transactions/mints:
     post:
       tags:
@@ -998,6 +1019,50 @@ components:
           description: >-
             The image URL of the token type. Supported formats are PNG, JPEG,
             GIF or MP4.
+    ReadContractFunctionResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              chain_id:
+                type: integer
+                description: The chain ID of the blockchain.
+              operation_id:
+                type: integer
+                description: The ID of the operation.
+              returned_values:
+                type: array
+                items:
+                  type: number
+                description: The returned values from the operation.
+    ReadContractFunctionRequest:
+      type: object
+      properties:
+        read_operations:
+          type: array
+          items:
+            type: object
+            properties:
+              chain_id:
+                type: integer
+                description: The chain ID of the blockchain.
+              contract:
+                type: string
+                description: The contract address.
+              func_signature:
+                type: string
+                description: The function signature.
+              func_params:
+                type: array
+                items:
+                  type: string
+                description: The function parameters.
+              return_signature:
+                type: string
+                description: The return signature.
     TransactionMintRequest:
       properties:
         contractId:
