@@ -457,20 +457,20 @@ paths:
       summary: Read a contract function
       description: Read any function of a smart contract.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/ReadContractFunctionRequest"
-              required:
-                - read_operations
+      responses:
         "200":
           description: The response of the contract function.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ReadContractFunctionResponse"
-        security:
-          - apiKey: []
+      security:
+        - apiKey: []
   /transactions/mints:
     post:
       tags:

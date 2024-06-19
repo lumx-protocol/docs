@@ -11,8 +11,14 @@
   "feedback": {
     "thumbsRating": true
   },
-  "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0 - Beta", "v1.0"],
+  "openapi": [
+    "openapi/protocol-v2.yaml",
+    "openapi/protocol-v1.yaml"
+  ],
+  "versions": [
+    "v2.0 - Beta",
+    "v1.0"
+  ],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -76,7 +82,9 @@
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction"],
+      "pages": [
+        "guides/introduction"
+      ],
       "version": "v2.0 - Beta"
     },
     {
@@ -98,7 +106,9 @@
     },
     {
       "group": "Projects",
-      "pages": ["api-reference/v2/projects/create-a-project"],
+      "pages": [
+        "api-reference/v2/projects/create-a-project"
+      ],
       "version": "v2.0 - Beta"
     },
     {
@@ -122,7 +132,8 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types"
+        "api-reference/v2/contracts/read-all-token-types",
+        "api-reference/v2/contracts/read-contract-function"
       ],
       "version": "v2.0 - Beta"
     },
