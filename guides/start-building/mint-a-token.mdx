@@ -8,8 +8,8 @@ Minting is the action to create a new token on the blockchain and send it to a s
 <Steps>
   <Step title="Mint a token">
 
-Firstly, we need to mint the token. This route is used to mint both fungible and non-fungible tokens.
-However, for fungible tokens, the uriNumber should always be 0, regardless of the value sent.
+First, we need to mint the token. This route is used to mint both fungible and non-fungible tokens.
+For non-fungible tokens, the uriNumber is required.
 
   <Info>Remember to switch `<CONTRACT_ID>` and `<WALLET_ID>`.</Info>
 
@@ -23,8 +23,8 @@ curl --request POST \
   --data '{
   "contractId": "<CONTRACT_ID>",
   "walletId": "<WALLET_ID>",
-  "quantity": 1,
-  "uriNumber: 1
+  "quantity": <number of tokens to mint>,
+  "uriNumber: <required for non-fungible tokens>
 }'
 ```
 
