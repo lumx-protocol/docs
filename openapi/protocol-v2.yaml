@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   version: 2.0.0
   title: Lumx Protocol
@@ -41,16 +41,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WalletResponse"
-        "500":
-          description: A Error ocurred trying to create wallet
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: A Error ocurred trying to create wallet
       security:
         - apiKey: []
     get:
@@ -111,6 +101,38 @@ paths:
                   error:
                     type: string
                     example: Wallet not found!
+      security:
+        - apiKey: []
+  "/wallets/sign-message":
+    post:
+      summary: Sign a message
+      description: Use this endpoint to sign a message to prove wallet ownership.
+      tags:
+        - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignMessageRequest"
+              required:
+                - message
+      responses:
+        "201":
+          description: Successfully signed a message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignMessageResponse"
+        "500":
+          description: A Error ocurred trying to sign a message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: A Error ocurred trying to sign a message
       security:
         - apiKey: []
   /contracts:
@@ -277,17 +299,6 @@ paths:
                   error:
                     type: string
                     example: This contract is already deployed
-
-        "500":
-          description: Error while trying to deploy contract.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Error while trying to deploy contract
       security:
         - apiKey: []
   "/contracts/{contractId}/token-types":
@@ -331,16 +342,6 @@ paths:
                   error:
                     type: string
                     example: This contract does not belong to this project
-        "500":
-          description: Failed while trying to export metadata.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Failed while trying to export metadata.
       security:
         - apiKey: []
     get:
@@ -698,11 +699,13 @@ components:
   schemas:
     Blockchains:
       type: string
+      description: The name of the blockchain.
       enum:
         - Ethereum
         - Polygon
         - Chiliz
-      description: The name of the blockchain.
+        - Optimism
+        - Linea
     ProjectRequest:
       type: object
       properties:
@@ -735,11 +738,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp when the project was created.
+          description: The timestamp from when the project was created.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp when the project was last updated.
+          description: The timestamp from when the project was last updated.
         apiKey:
           description: The API key associated with the project.
           type: string
@@ -753,10 +756,6 @@ components:
         address:
           description: The blockchain address of the wallet.
           type: string
-        projectId:
-          description: The id of the project to which the wallet belongs.
-          type: string
-          format: uuid
         blockExplorerUrl:
           type: string
           nullable: true
@@ -764,11 +763,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp when the wallet was created.
+          description: The timestamp from when the wallet was created.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp when the wallet was last updated.
+          description: The timestamp from when the wallet was last updated.
     TokenResponse:
       type: object
       properties:
@@ -815,6 +814,16 @@ components:
         quantity:
           type: number
           description: The quantity of this token present in the wallet.
+        rawBalance:
+          type: string
+          description: >-
+            The unformatted balance of the token, representing the quantity of the
+            token present at this wallet.
+        floatBalance:
+          type: string
+          description: >-
+            The formatted balance of the token, representing the quantity of the
+            token present at this wallet with proper formatting for display purposes.
     ContractRequest:
       type: object
       properties:
@@ -856,6 +865,12 @@ components:
         blockchainName:
           description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
+        baseUri:
+          type: string
+          nullable: true
+          format: url
+          description: >-
+            The base URI where this contract's tokens' metadata files are located.
         blockExplorerUrl:
           type: string
           nullable: true
@@ -863,16 +878,16 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp when the contract was created.
+          description: The timestamp from when the contract was created.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp when the contract was last updated.
+          description: The timestamp from when the contract was last updated.
         deployedAt:
           type: string
           format: date-time
           nullable: true
-          description: The timestamp when the contract was deployed to the blockchain.
+          description: The timestamp from when the contract was deployed to the blockchain.
     TokenTypeRequest:
       type: object
       properties:
@@ -943,11 +958,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp when the token type was created.
+          description: The timestamp from when the token type was created.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp when the token type was last updated.
+          description: The timestamp from when the token type was last updated.
     TokenTypeUpdateRequest:
       type: object
       properties:
@@ -999,8 +1014,10 @@ components:
           description: The id of the wallet that is transferring the tokens.
         to:
           type: string
-          description: The address of the wallet that will receive the tokens. It can be any address, not limited to wallets created through the API.
-          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+          description: The address or ID of the wallet receiving the tokens. Can be any address, not limited to wallets created through the API.
+          examples:
+            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+            - "123e4567-e89b-12d3-a456-426614174000"
     TransactionCustomRequest:
       allOf:
         - type: object
@@ -1198,8 +1215,24 @@ components:
                 type: number
                 description: Optional. The amount of native tokens (ETH, MATIC, etc.) to be sent along with the operation.
                 default: 0
-          required:
-            - functionSignature
+            required:
+              - functionSignature
+    SignMessageRequest:
+      type: object
+      properties:
+        message:
+          type: string
+      description: >-
+        The message that will be signed.
+      required:
+        - message
+    SignMessageResponse:
+      type: object
+      properties:
+        signedMessage:
+          type: string
+          description: >-
+            The signature of the message in hexadecimal format.
   securitySchemes:
     apiKey:
       type: http
