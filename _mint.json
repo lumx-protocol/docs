@@ -11,8 +11,14 @@
   "feedback": {
     "thumbsRating": true
   },
-  "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0", "v1.0"],
+  "openapi": [
+    "openapi/protocol-v2.yaml",
+    "openapi/protocol-v1.yaml"
+  ],
+  "versions": [
+    "v2.0",
+    "v1.0"
+  ],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -74,12 +80,15 @@
         "concepts/protocol",
         "concepts/wallets",
         "concepts/contracts",
-        "concepts/transactions"
+        "concepts/transactions",
+        "concepts/webhook"
       ]
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction"]
+      "pages": [
+        "guides/introduction"
+      ]
     },
     {
       "group": "Start building",
@@ -95,12 +104,15 @@
       "group": "Recipes",
       "pages": [
         "guides/recipes/transfer-a-token",
-        "guides/recipes/invoke-a-custom-transaction"
+        "guides/recipes/invoke-a-custom-transaction",
+        "guides/recipes/register-a-webhook"
       ]
     },
     {
       "group": "Projects",
-      "pages": ["api-reference/v2/projects/create-a-project"],
+      "pages": [
+        "api-reference/v2/projects/create-a-project"
+      ],
       "version": "v2.0"
     },
     {
@@ -183,7 +195,9 @@
     },
     {
       "group": "Applications",
-      "pages": ["applications/introduction"]
+      "pages": [
+        "applications/introduction"
+      ]
     },
     {
       "group": "Boilerplate",
