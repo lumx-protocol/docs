@@ -49,15 +49,27 @@ paths:
       summary: Read all wallets
       description: >-
         This endpoint reads all wallets
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: The cursor for pagination
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: The number of wallets to return
       responses:
         "200":
           description: The list of wallets was retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/WalletResponse"
+                type: object
+                $ref: "#/components/schemas/WalletPaginationResponse"
       security:
         - apiKey: []
   "/wallets/{walletId}":
@@ -195,15 +207,27 @@ paths:
         - Contracts
       summary: Read all contracts
       description: This endpoint reads all your contracts
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: The cursor for pagination
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: The number of wallets to return
       responses:
         "200":
           description: The list of contracts was retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ContractResponse"
+                type: object
+                $ref: "#/components/schemas/ContractPaginationResponse"
       security:
         - apiKey: []
   "/contracts/{contractId}":
@@ -357,15 +381,26 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: cursor
+          schema:
+            type: integer
+          required: false
+          description: The cursor for pagination
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: The number of wallets to return
       responses:
         "200":
           description: The list of token types for this contract was retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TokenTypeResponse"
+                type: object
+                $ref: "#/components/schemas/TokenTypePaginationResponse"
       security:
         - apiKey: []
   "/contracts/{contractId}/token-types/{uriNumber}":
@@ -614,35 +649,56 @@ paths:
         - Transactions
       summary: Read all transactions
       description: This endpoint reads all transactions made with your API key.
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: The cursor for pagination
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: The number of wallets to return
       responses:
         "200":
           description: The list of transactions was retrieved successfully
           content:
             application/json:
               schema:
-                description: An array containing all transactions made by wallets of this project.
-                anyOf:
-                  - type: array
-                    title: Mints
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: An array containing all transactions made by wallets of this project.
                     items:
-                      allOf:
-                        - $ref: "#/components/schemas/TransactionResponse"
-                        - $ref: "#/components/schemas/TransactionMintResponse"
-                        - $ref: "#/components/schemas/TransactionTimeStamps"
-                  - type: array
-                    title: Transfers
-                    items:
-                      allOf:
-                        - $ref: "#/components/schemas/TransactionResponse"
-                        - $ref: "#/components/schemas/TransactionTransferResponse"
-                        - $ref: "#/components/schemas/TransactionTimeStamps"
-                  - type: array
-                    title: Custom
-                    items:
-                      allOf:
-                        - $ref: "#/components/schemas/TransactionResponse"
-                        - $ref: "#/components/schemas/TransactionCustomResponse"
-                        - $ref: "#/components/schemas/TransactionTimeStamps"
+                      oneOf:
+                        - type: object
+                          title: Mints
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionResponse"
+                            - $ref: "#/components/schemas/TransactionMintResponse"
+                            - $ref: "#/components/schemas/TransactionTimeStamps"
+                        - type: object
+                          title: Transfers
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionResponse"
+                            - $ref: "#/components/schemas/TransactionTransferResponse"
+                            - $ref: "#/components/schemas/TransactionTimeStamps"
+                        - type: object
+                          title: Custom
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionResponse"
+                            - $ref: "#/components/schemas/TransactionCustomResponse"
+                            - $ref: "#/components/schemas/TransactionTimeStamps"
+                  pagination:
+                    type: object
+                    properties:
+                      cursor:
+                        type: string
+                        description: The cursor for the next page.
       security:
         - apiKey: []
   "/transactions/{transactionId}":
@@ -746,6 +802,19 @@ components:
         apiKey:
           description: The API key associated with the project.
           type: string
+    WalletPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/WalletResponse"
+        pagination:
+          type: object
+          properties:
+            cursor:
+              type: string
+              description: The cursor for the next page.
     WalletResponse:
       type: object
       properties:
@@ -768,6 +837,19 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the wallet was last updated.
+    TokenTypePaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TokenResponse"
+        pagination:
+          type: object
+          properties:
+            cursor:
+              type: string
+              description: The cursor for the next page.
     TokenResponse:
       type: object
       properties:
@@ -837,6 +919,19 @@ components:
         description:
           type: string
           description: A brief description of the contract.
+    ContractPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractResponse"
+        pagination:
+          type: object
+          properties:
+            cursor:
+              type: string
+              description: The cursor for the next page.
     ContractResponse:
       type: object
       properties:
