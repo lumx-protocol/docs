@@ -62,6 +62,20 @@ paths:
             type: integer
           required: false
           description: The number of wallets to return
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The start date and time for filtering the results
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The end date and time for filtering the results
       responses:
         "200":
           description: The list of wallets was retrieved successfully
@@ -219,7 +233,30 @@ paths:
           schema:
             type: integer
           required: false
-          description: The number of wallets to return
+          description: The number of contracts to return
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - fungible
+              - non_fungible
+          required: false
+          description: The type of the contract
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The start date and time for filtering the results
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The end date and time for filtering the results
       responses:
         "200":
           description: The list of contracts was retrieved successfully
@@ -392,7 +429,21 @@ paths:
           schema:
             type: integer
           required: false
-          description: The number of wallets to return
+          description: The number of tokens to return
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The start date and time for filtering the results
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The end date and time for filtering the results
       responses:
         "200":
           description: The list of token types for this contract was retrieved successfully
@@ -661,7 +712,46 @@ paths:
           schema:
             type: integer
           required: false
-          description: The number of wallets to return
+          description: The number of transactions to return
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The start date and time for filtering the results
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: The end date and time for filtering the results
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - mint
+              - transfer
+              - custom
+          required: false
+          description: The type of the transaction
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - success
+              - failed
+              - created
+          required: false
+          description: The status of the transaction
+        - in: query
+          name: contractId
+          schema:
+            type: string
+          description: The id of the contract
       responses:
         "200":
           description: The list of transactions was retrieved successfully
