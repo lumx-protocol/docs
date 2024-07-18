@@ -699,6 +699,9 @@ paths:
                       cursor:
                         type: string
                         description: The cursor for the next page.
+                      pageSize:
+                        type: number
+                        description: The size of the page.
       security:
         - apiKey: []
   "/transactions/{transactionId}":
@@ -815,6 +818,9 @@ components:
             cursor:
               type: string
               description: The cursor for the next page.
+            pageSize:
+              type: number
+              description: The size of the page.
     WalletResponse:
       type: object
       properties:
@@ -850,6 +856,9 @@ components:
             cursor:
               type: string
               description: The cursor for the next page.
+            pageSize:
+              type: number
+              description: The size of the page.
     TokenResponse:
       type: object
       properties:
@@ -932,6 +941,9 @@ components:
             cursor:
               type: string
               description: The cursor for the next page.
+            pageSize:
+              type: number
+              description: The size of the page.
     ContractResponse:
       type: object
       properties:
