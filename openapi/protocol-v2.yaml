@@ -1059,6 +1059,7 @@ components:
           nullable: true
           description: The URL of the block explorer where the details of this transaction can be read.
         result:
+          description: "Contains detailed information about the transaction receipts, including cost, messages, and operation results."
           type: object
     TransactionTimeStamps:
       type: object
