@@ -1022,47 +1022,32 @@ components:
     ReadContractFunctionResponse:
       type: object
       properties:
-        result:
+        chainId:
+          type: integer
+          description: The chain ID of the blockchain.
+        response:
           type: array
-          items:
-            type: object
-            properties:
-              chain_id:
-                type: integer
-                description: The chain ID of the blockchain.
-              operation_id:
-                type: integer
-                description: The ID of the operation.
-              returned_values:
-                type: array
-                items:
-                  type: number
-                description: The returned values from the operation.
+          description: The returned values from the operation.
     ReadContractFunctionRequest:
       type: object
       properties:
-        read_operations:
+        chainId:
+          type: integer
+          description: The chain ID of the blockchain.
+        contractAddress:
+          type: string
+          description: The contract address.
+        functionSignature:
+          type: string
+          description: The function signature.
+        params:
           type: array
           items:
-            type: object
-            properties:
-              chain_id:
-                type: integer
-                description: The chain ID of the blockchain.
-              contract:
-                type: string
-                description: The contract address.
-              func_signature:
-                type: string
-                description: The function signature.
-              func_params:
-                type: array
-                items:
-                  type: string
-                description: The function parameters.
-              return_signature:
-                type: string
-                description: The return signature.
+            type: string
+          description: The function parameters.
+        returnType:
+          type: string
+          description: The return signature.
     TransactionMintRequest:
       properties:
         contractId:
