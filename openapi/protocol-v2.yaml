@@ -536,6 +536,27 @@ paths:
                     example: This contract does not belong to this project
       security:
         - apiKey: []
+  "/contracts/read-contract-function":
+    post:
+      tags:
+        - Contracts
+      summary: Read a contract function
+      description: Read any function of a smart contract.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReadContractFunctionRequest"
+      responses:
+        "200":
+          description: The response of the contract function.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContractFunctionResponse"
+      security:
+        - apiKey: []
   /transactions/mints:
     post:
       tags:
@@ -1184,6 +1205,35 @@ components:
           description: >-
             The image URL of the token type. Supported formats are PNG, JPEG,
             GIF or MP4.
+    ReadContractFunctionResponse:
+      type: object
+      properties:
+        chainId:
+          type: integer
+          description: The chain ID of the blockchain.
+        response:
+          type: array
+          description: The returned values from the operation.
+    ReadContractFunctionRequest:
+      type: object
+      properties:
+        chainId:
+          type: integer
+          description: The chain ID of the blockchain.
+        contractAddress:
+          type: string
+          description: The contract address.
+        functionSignature:
+          type: string
+          description: The function signature.
+        params:
+          type: array
+          items:
+            type: string
+          description: The function parameters.
+        returnType:
+          type: string
+          description: The return signature.
     TransactionMintRequest:
       properties:
         contractId:
