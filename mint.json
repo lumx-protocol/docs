@@ -77,7 +77,8 @@
         "concepts/protocol",
         "concepts/wallets",
         "concepts/contracts",
-        "concepts/transactions"
+        "concepts/transactions",
+        "concepts/webhook"
       ]
     },
     {
@@ -101,7 +102,8 @@
       "group": "Recipes",
       "pages": [
         "guides/recipes/transfer-a-token",
-        "guides/recipes/invoke-a-custom-transaction"
+        "guides/recipes/invoke-a-custom-transaction",
+        "guides/recipes/register-a-webhook"
       ]
     },
     {
