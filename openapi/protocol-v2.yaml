@@ -1011,18 +1011,15 @@ components:
     ReadContractFunctionResponse:
       type: object
       properties:
-        chainId:
-          type: integer
-          description: The chain ID of the blockchain.
-        response:
+        results:
           type: array
           description: The returned values from the operation.
     ReadContractFunctionRequest:
       type: object
       properties:
-        chainId:
-          type: integer
-          description: The chain ID of the blockchain.
+        walletAddress:
+          type: string
+          description: A wallet address is required to read a contract function.
         contractAddress:
           type: string
           description: The contract address.
