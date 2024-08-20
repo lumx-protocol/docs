@@ -1225,9 +1225,19 @@ components:
           description: The function signature.
         params:
           type: array
+          description: An array containing the values to be passed to the function, in the order they appear in the function signature.
+          default: []
           items:
-            type: string
-          description: The function parameters.
+            anyOf:
+              - type: string
+              - type: number
+              - type: boolean
+              - type: array
+                items:
+                  anyOf:
+                    - type: string
+                    - type: number
+                    - type: boolean
         returnType:
           type: string
           description: The return signature.
