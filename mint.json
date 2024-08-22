@@ -11,14 +11,16 @@
   "feedback": {
     "thumbsRating": true
   },
-  "openapi": [
-    "openapi/protocol-v2.yaml",
-    "openapi/protocol-v1.yaml"
-  ],
-  "versions": [
-    "v2.0 - Beta",
-    "v1.0"
-  ],
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-0MVRGD699K"
+    },
+    "mixpanel": {
+      "projectToken": "87f5c334d0c77d5e7585a110f542f9ed"
+    }
+  },
+  "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
+  "versions": ["v2.0 - Beta", "v1.0"],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
