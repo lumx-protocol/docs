@@ -1,0 +1,53 @@
+---
+title: 'Register a Webhook'
+description: 'Learn how to register a webhook on the Lumx dashboard'
+---
+
+Registering a webhook allows your application to receive real-time updates about specific events occurring within the Lumx Protocol.
+This guide will walk you through the process of creating a webhook using the Lumx dashboard.
+
+### Create a webhook
+
+To create a webhook, follow these steps:
+
+1. **Navigate to the Webhooks Page**:
+
+   - Log in to your Lumx account.
+   - From the left sidebar, select Settings.
+   - Under the Settings tab, select Webhooks.
+
+2. **Open the Create Webhook Dialog**:
+
+   - Click the Create webhook button.
+
+3. **Fill in the Webhook Details**:
+   - In the Create webhook dialog box, enter your endpoint URL in the Webhook field.
+   - Under Called when, select the events for which you want the webhook to be triggered:
+     - **Mint a token**
+     - **Transfer a token**
+     - **Invoke a custom transaction**
+   - Click the Create button to save your webhook.
+
+### Example Configuration
+
+Below is an example of how you might fill out the webhook details:
+
+- **Webhook**: `https://your-webhook-url.com`
+- **Called when**:
+  - Enable **Mint a token** if you want the webhook to be triggered when a token is minted.
+  - Enable **Transfer a token** if you want the webhook to be triggered when a token is transferred.
+  - Enable **Invoke a custom transaction** if you want the webhook to be triggered for custom transactions.
+
+### Verify the Webhook
+
+To ensure the webhook is set up correctly, you can verify its details by following these steps:
+
+1. **Navigate to the Webhooks Page**:
+
+   - Go to the Settings tab.
+   - Select Webhooks to see the list of configured webhooks.
+
+2. **Check the Details**:
+   - Verify that your newly created webhook appears in the list with the correct endpoint and selected events.
+
+By following these steps, you have successfully set up a webhook in your Lumx environment using the dashboard. This ensures that your application can automatically receive and process real-time updates about specific events, streamlining your workflow and keeping your systems synchronized with minimal manual intervention.

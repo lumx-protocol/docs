@@ -79,12 +79,15 @@
         "concepts/protocol",
         "concepts/wallets",
         "concepts/contracts",
-        "concepts/transactions"
+        "concepts/transactions",
+        "concepts/webhook"
       ]
     },
     {
       "group": "Guides",
-      "pages": ["guides/introduction"],
+      "pages": [
+        "guides/introduction"
+      ],
       "version": "v2.0 - Beta"
     },
     {
@@ -101,12 +104,15 @@
       "group": "Recipes",
       "pages": [
         "guides/recipes/transfer-a-token",
-        "guides/recipes/invoke-a-custom-transaction"
+        "guides/recipes/invoke-a-custom-transaction",
+        "guides/recipes/register-a-webhook"
       ]
     },
     {
       "group": "Projects",
-      "pages": ["api-reference/v2/projects/create-a-project"],
+      "pages": [
+        "api-reference/v2/projects/create-a-project"
+      ],
       "version": "v2.0 - Beta"
     },
     {
@@ -130,7 +136,8 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types"
+        "api-reference/v2/contracts/read-all-token-types",
+        "api-reference/v2/contracts/read-contract-function"
       ],
       "version": "v2.0 - Beta"
     },
