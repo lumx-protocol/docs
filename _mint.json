@@ -135,7 +135,8 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types"
+        "api-reference/v2/contracts/read-all-token-types",
+        "api-reference/v2/contracts/read-contract-function"
       ],
       "version": "v2.0"
     },
