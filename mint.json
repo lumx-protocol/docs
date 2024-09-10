@@ -11,16 +11,14 @@
   "feedback": {
     "thumbsRating": true
   },
-  "analytics": {
-    "ga4": {
-      "measurementId": "G-0MVRGD699K"
-    },
-    "mixpanel": {
-      "projectToken": "87f5c334d0c77d5e7585a110f542f9ed"
-    }
-  },
-  "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0 - Beta", "v1.0"],
+  "openapi": [
+    "openapi/protocol-v2.yaml",
+    "openapi/protocol-v1.yaml"
+  ],
+  "versions": [
+    "v2.0 - Beta",
+    "v1.0"
+  ],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -136,8 +134,7 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types",
-        "api-reference/v2/contracts/read-contract-function"
+        "api-reference/v2/contracts/read-all-token-types"
       ],
       "version": "v2.0 - Beta"
     },
@@ -146,9 +143,16 @@
       "pages": [
         "api-reference/v2/transactions/mint-tokens",
         "api-reference/v2/transactions/transactions-transfer",
-        "api-reference/v2/transactions/invoke-a-custom-transaction",
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
+      ],
+      "version": "v2.0 - Beta"
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "api-reference/v2/advanced/read-information",
+        "api-reference/v2/advanced/invoke-a-custom-transaction"
       ],
       "version": "v2.0 - Beta"
     },

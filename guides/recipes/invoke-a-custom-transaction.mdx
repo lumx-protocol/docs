@@ -25,13 +25,16 @@ Now, its time to invoke the custom transaction.
 
 <Info>Remember to switch `<WALLET_ID>` and `<EXTERNAL_WALLET_ADDRESS>`.</Info>
 
-<Info>This example transaction is for a contract that was deployed on Polygon Amoy testnet.</Info>
+<Info>
+  This example transaction is for a contract that was deployed on Polygon Amoy
+  testnet.
+</Info>
 
 <CodeGroup>
 
 ```bash cURL
     curl --request POST \
-    --url https://protocol-sandbox.lumx.io/v2/transactions/custom \
+    --url https://protocol-sandbox.lumx.io/v2/advanced/custom \
     --header 'Authorization: Bearer <API_KEY>' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -57,7 +60,7 @@ Now, its time to invoke the custom transaction.
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/v2/transactions/custom", {
+  .post("https://protocol-sandbox.lumx.io/v2/advanced/custom", {
     contractAddress: "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08",
     walletId: "<WALLET_ID>",
     operations: [

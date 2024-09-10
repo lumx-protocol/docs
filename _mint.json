@@ -135,8 +135,7 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types",
-        "api-reference/v2/contracts/read-contract-function"
+        "api-reference/v2/contracts/read-all-token-types"
       ],
       "version": "v2.0"
     },
@@ -145,11 +144,18 @@
       "pages": [
         "api-reference/v2/transactions/mint-tokens",
         "api-reference/v2/transactions/transactions-transfer",
-        "api-reference/v2/transactions/invoke-a-custom-transaction",
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
       "version": "v2.0"
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "api-reference/v2/advanced/read-information",
+        "api-reference/v2/advanced/invoke-a-custom-transaction"
+      ],
+      "version": "v2.0 - Beta"
     },
     {
       "group": "Account",
