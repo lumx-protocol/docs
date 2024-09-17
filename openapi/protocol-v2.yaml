@@ -725,7 +725,6 @@ components:
         - Ethereum
         - Polygon
         - Chiliz
-        - Optimism
         - Linea
     ProjectRequest:
       type: object
