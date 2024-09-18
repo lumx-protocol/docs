@@ -20,7 +20,7 @@
     }
   },
   "openapi": ["openapi/protocol-v2.yaml", "openapi/protocol-v1.yaml"],
-  "versions": ["v2.0 - Beta", "v1.0"],
+  "versions": ["v2.0", "v1.0 (deprecated)"],
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#6E05FF",
@@ -55,7 +55,7 @@
     {
       "name": "Guides",
       "url": "guides",
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "name": "API Reference",
@@ -88,7 +88,7 @@
       "pages": [
         "guides/introduction"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Start building",
@@ -113,7 +113,7 @@
       "pages": [
         "api-reference/v2/projects/create-a-project"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Wallets",
@@ -123,7 +123,7 @@
         "api-reference/v2/wallets/read-all-wallets",
         "api-reference/v2/wallets/sign-a-message"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Contracts",
@@ -139,7 +139,7 @@
         "api-reference/v2/contracts/read-all-token-types",
         "api-reference/v2/contracts/read-contract-function"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Transactions",
@@ -150,7 +150,7 @@
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
       ],
-      "version": "v2.0 - Beta"
+      "version": "v2.0"
     },
     {
       "group": "Account",
@@ -158,7 +158,7 @@
         "api-reference/v1/account/get-an-api-key",
         "api-reference/v1/account/get-account"
       ],
-      "version": "v1.0"
+      "version": "v1.0 (deprecated)"
     },
     {
       "group": "Wallets",
@@ -167,7 +167,7 @@
         "api-reference/v1/wallets/create-a-wallet",
         "api-reference/v1/wallets/read-a-wallet"
       ],
-      "version": "v1.0"
+      "version": "v1.0 (deprecated)"
     },
     {
       "group": "Contracts",
@@ -182,7 +182,7 @@
         "api-reference/v1/contracts/read-an-item-type-from-a-contract",
         "api-reference/v1/contracts/update-an-item-type-of-a-contract"
       ],
-      "version": "v1.0"
+      "version": "v1.0 (deprecated)"
     },
     {
       "group": "Transactions",
@@ -193,7 +193,7 @@
         "api-reference/v1/transactions/read-all-transactions",
         "api-reference/v1/transactions/read-a-transaction"
       ],
-      "version": "v1.0"
+      "version": "v1.0 (deprecated)"
     }
   ],
   "footerSocials": {
