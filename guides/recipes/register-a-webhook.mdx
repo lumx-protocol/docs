@@ -1,6 +1,6 @@
 ---
-title: "Register a Webhook"
-description: "Learn how to register a webhook on the Lumx dashboard"
+title: 'Register a Webhook'
+description: 'Learn how to register a webhook on the Lumx dashboard'
 ---
 
 Registering a webhook allows your application to receive real-time updates about specific events occurring within the Lumx Protocol.
@@ -21,7 +21,7 @@ To create a webhook, follow these steps:
    - Click the Create webhook button.
 
 3. **Fill in the Webhook Details**:
-   - In the \*\*Create webhook dialog box, enter your endpoint URL in the Webhook field.
+   - In the Create webhook dialog box, enter your endpoint URL in the Webhook field.
    - Under Called when, select the events for which you want the webhook to be triggered:
      - **Mint a token**
      - **Transfer a token**
@@ -38,21 +38,6 @@ Below is an example of how you might fill out the webhook details:
   - Enable **Transfer a token** if you want the webhook to be triggered when a token is transferred.
   - Enable **Invoke a custom transaction** if you want the webhook to be triggered for custom transactions.
 
-You will receive a status 200 with an object containing the details of the created webhook.
-
-<Info>The available event types are mint, transfer, and custom.</Info>
-```json
-[
-  {
-    "id": 1,
-    "url": "https://your-webhook-url.com",
-    "event": "mint",
-    "projectId": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
-    "createdAt": "2023-11-07T05:31:56Z",
-    "updatedAt": "2023-11-07T05:31:56Z"
-  }
-]
-```
 ### Verify the Webhook
 
 To ensure the webhook is set up correctly, you can verify its details by following these steps:
