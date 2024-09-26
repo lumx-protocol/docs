@@ -5,7 +5,7 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v1
+  - url: https://protocol-staging.int.lumx.io/v1
 paths:
   # v1.0 (deprecated)
   "/mints/airdrop":
