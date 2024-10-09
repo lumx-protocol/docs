@@ -76,6 +76,13 @@ paths:
             format: date-time
           required: false
           description: The end date and time for filtering the results
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+          required: false
+          description: Filter wallets by status. Use 'active' to return active wallets with the `activatedAt` field filled, and 'inactive' to return inactive wallets.
       responses:
         "200":
           description: The list of wallets was retrieved successfully
@@ -953,6 +960,10 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the wallet was last updated.
+        activatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the wallet was activated.
     TokenTypePaginationResponse:
       type: object
       properties:
