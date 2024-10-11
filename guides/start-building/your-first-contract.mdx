@@ -13,12 +13,12 @@ Every token needs a smart contract on the blockchain but you don't need to know 
 
 ```bash cURL
 curl --request POST \
---url https://protocol-sandbox.lumx.io/contracts \
---header 'Bearer: $API_KEY' \
+--url https://protocol-sandbox.lumx.io/v2/contracts \
+--header 'Authorization: Bearer $API_KEY' \
 --header 'Content-Type: application/json' \
 --data '
 {
-  "type": "non-fungible",
+  "type": "non_fungible",
   "name": "First contract",
   "description": "My first non-fungible contract"
 }
@@ -27,8 +27,8 @@ curl --request POST \
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/contracts", {
-    type: "non-fungible",
+  .post("https://protocol-sandbox.lumx.io/v2/contracts", {
+    type: "non_fungible",
     name: "First contract",
     description: "My first non-fungible contract"
   })
@@ -52,8 +52,8 @@ You will receive a status 201 with an object containing the ID of the contract.
 
 ```bash cURL
 curl --request POST \
---url https://protocol-sandbox.lumx.io/contracts/<CONTRACT_ID>/token-types \
---header 'Bearer: $API_KEY' \
+--url https://protocol-sandbox.lumx.io/v2/contracts/<CONTRACT_ID>/token-types \
+--header 'Authorization: Bearer $API_KEY' \
 --header 'Content-Type: application/json' \
 --data '
 {
@@ -67,7 +67,7 @@ curl --request POST \
 ```javascript JavaScript
 axios
   .post(
-    "https://protocol-sandbox.lumx.io/contracts/<CONTRACT_ID>/token-types",
+    "https://protocol-sandbox.lumx.io/v2/contracts/<CONTRACT_ID>/token-types",
     {
       name: "First item type",
       description: "My first item type",
@@ -94,13 +94,13 @@ You will receive a status 201 with an object containing the ID of the token type
 
     ```bash cURL
     curl --request POST \
-    --url https://protocol-sandbox.lumx.io/contracts/<CONTRACT_ID>/deploy \
-    --header 'Bearer: $API_KEY'
+    --url https://protocol-sandbox.lumx.io/v2/contracts/<CONTRACT_ID>/deploy \
+    --header 'Authorization: Bearer $API_KEY'
     ```
 
     ```javascript JavaScript
     axios
-      .post("https://protocol-sandbox.lumx.io/contracts/<CONTRACT_ID>/deploy")
+      .post("https://protocol-sandbox.lumx.io/v2/contracts/<CONTRACT_ID>/deploy")
       .then((response) => {
         // Handle Success
         console.log(response);
