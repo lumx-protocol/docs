@@ -11,12 +11,12 @@ Now, it's time to create a wallet that we will be using.
 
 ```bash cURL
 curl --request POST \
-  --url https://protocol-sandbox.lumx.io/wallets \
+  --url https://protocol-sandbox.lumx.io/v2/wallets \
   --header 'Authorization: Bearer $API_KEY'
 ```
 
 ```javascript JavaScript
-axios.post("https://protocol-sandbox.lumx.io/wallets").then((response) => {
+axios.post("https://protocol-sandbox.lumx.io/v2/wallets").then((response) => {
   // Handle Success
   console.log(response);
 });

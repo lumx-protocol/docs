@@ -14,7 +14,7 @@ Firstly, we need to create a project to receive an API key and start interacting
 
 ```bash cURL
 curl --request POST \
-  --url https://protocol-sandbox.lumx.io/projects/auth \
+  --url https://protocol-sandbox.lumx.io/projects/v2/auth \
   --header 'Content-Type: application/json' \
   --data '{
   "name": "My first project",
@@ -25,7 +25,7 @@ curl --request POST \
 
 ```javascript JavaScript
 axios
-  .post("https://protocol-sandbox.lumx.io/projects/auth", {
+  .post("https://protocol-sandbox.lumx.io/projects/v2/auth", {
     name: "My first project",
     blockchainName: "Polygon"
   })
@@ -40,9 +40,9 @@ axios
 You will receive a status 201 with an object containing the API key.
 
 </Step>
-<Step title="Add your API key to all request headers">
+<Step title="Add your API key to the Authorization header in all requests">
 
-Now, make sure to insert your key to the headers of all following requests.
+Now, make sure to include your API key in the Authorization header of all requests.
 
 <Info>Remember to switch `<API_KEY>`.</Info>
 
