@@ -55,6 +55,11 @@
       "name": "Github",
       "icon": "Github",
       "url": "https://github.com/lumx-protocol"
+    },
+    {
+      "name": "Get an API key",
+      "icon": "key",
+      "url": "https://dashboard.lumx.io/login"
     }
   ],
   "tabs": [
@@ -66,6 +71,18 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Open API",
+      "url": "openapi"
+    },
+    {
+      "name": "Get an API key 🔑",
+      "url": "https://dashboard.lumx.io/login"
+    },
+    {
+      "name": "Postman 🔗",
+      "url": "https://www.postman.com/lumx-studios/teste-igor/documentation/uzu4d0y/lumx-protocol-multichain"
     }
   ],
   "navigation": [
@@ -115,9 +132,16 @@
       ]
     },
     {
-      "group": "Projects",
+      "group": "Get the docs",
       "pages": [
-        "api-reference/v2/projects/create-a-project"
+        "api-reference/v2/openapi"
+      ],
+      "version": "v2.0"
+    },
+    {
+      "group": "Get the docs",
+      "pages": [
+        "openapi/openapi"
       ],
       "version": "v2.0"
     },
@@ -142,8 +166,7 @@
         "api-reference/v2/contracts/create-a-token-type",
         "api-reference/v2/contracts/update-a-token-type",
         "api-reference/v2/contracts/read-a-token-type",
-        "api-reference/v2/contracts/read-all-token-types",
-        "api-reference/v2/contracts/read-contract-function"
+        "api-reference/v2/contracts/read-all-token-types"
       ],
       "version": "v2.0"
     },
@@ -152,9 +175,16 @@
       "pages": [
         "api-reference/v2/transactions/mint-tokens",
         "api-reference/v2/transactions/transactions-transfer",
-        "api-reference/v2/transactions/invoke-a-custom-transaction",
         "api-reference/v2/transactions/read-a-transaction",
         "api-reference/v2/transactions/read-all-transactions"
+      ],
+      "version": "v2.0"
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "api-reference/v2/transactions/invoke-a-custom-transaction",
+        "api-reference/v2/contracts/read-contract-function"
       ],
       "version": "v2.0"
     },
