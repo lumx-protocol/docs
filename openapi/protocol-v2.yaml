@@ -20,7 +20,6 @@ paths:
               "$ref": "#/components/schemas/ProjectRequest"
               required:
                 - name
-                - blockchainName
       responses:
         "201":
           description: Created
@@ -40,7 +39,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WalletResponse"
+                allOf:
+                  - $ref: "#/components/schemas/WalletResponse"
+                  - type: object
+                    properties: 
+                      blockchains: 
+                        $ref: "#/components/schemas/WalletBlockchains"
+                        example: 
+                          - name: Polygon
+                            address: "0x09f6b4f487ee3e78194ba886af0035f6af0035f6"
+                            blockExplorerUrl: "https://polygonscan.com/address/0x09f6b4f487ee3e78194ba886af0035f6af0035f6"
+                            deployedAt: null
+                          - name: Ethereum
+                            address: "0x871a2644bdc0c843283351f026d9d19826d9d198"
+                            blockExplorerUrl: "https://etherscan.io/address/0x871a2644bdc0c843283351f026d9d19826d9d198"
+                            deployedAt: null
       security:
         - apiKey: []
     get:
@@ -100,6 +113,12 @@ paths:
             type: string
             format: uuid
           description: The ID of the wallet.
+        - name: blockchains 
+          in: query
+          schema:
+            type: string
+            example: polygon,ethereum
+          description: Optional. A case-insensitive, comma-separated list of the blockchains from which to retrieve the wallet's tokens. By default, it will return tokens from all our supported [blockchains.](https://docs.lumx.io/get-started/blockchains)
       responses:
         "200":
           description: >-
@@ -110,13 +129,14 @@ paths:
               schema:
                 allOf:
                   - $ref: "#/components/schemas/WalletResponse"
-                  - type: object
+                  - type: object 
                     properties:
-                      tokens:
-                        description: The tokens owned by this wallet.
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/TokenResponse"
+                      blockchains: 
+                        type: array 
+                        items: 
+                          allOf:
+                            - $ref: "#/components/schemas/WalletBlockchain"
+                            - $ref: "#/components/schemas/TokensArray"
         "404":
           description: Wallet not found!
           content:
@@ -257,6 +277,13 @@ paths:
             format: date-time
           required: false
           description: The end date and time for filtering the results
+        - in: query
+          name: blockchain
+          schema: 
+            $ref: "#/components/schemas/Blockchains"
+            example: Polygon 
+            description: The contract's blockchain (case insensitive)
+          required: false 
       responses:
         "200":
           description: The list of contracts was retrieved successfully
@@ -539,7 +566,7 @@ paths:
   "/contracts/read-contract-function":
     post:
       tags:
-        - Contracts
+        - Advanced
       summary: Read a contract function
       description: Read any function of a smart contract.
       requestBody:
@@ -688,7 +715,7 @@ paths:
   /transactions/custom:
     post:
       tags:
-        - Transactions
+        - Advanced
       summary: Invoke a custom transaction
       description: Invoke any function of a smart contract
       requestBody:
@@ -699,6 +726,7 @@ paths:
               required:
                 - walletId
                 - contractAddress
+                - blockchain
                 - functionSignature
                 - operations
       responses:
@@ -871,8 +899,8 @@ components:
       type: string
       description: The name of the blockchain.
       enum:
-        - Ethereum
         - Polygon
+        - Ethereum
         - Chiliz
         - Linea
     ProjectRequest:
@@ -881,9 +909,6 @@ components:
         name:
           description: The name of the project.
           type: string
-        blockchainName:
-          description: The blockchain used by the project.
-          $ref: "#/components/schemas/Blockchains"
     ProjectResponse:
       type: object
       properties:
@@ -894,16 +919,6 @@ components:
         name:
           description: The name of the project.
           type: string
-        blockchain:
-          type: object
-          description: Details of the blockchain used by the project.
-          properties:
-            name:
-              $ref: "#/components/schemas/Blockchains"
-              description: The name of the blockchain.
-            decimalChainId:
-              type: number
-              description: The decimal chain ID of the blockchain.
         createdAt:
           type: string
           format: date-time
@@ -921,7 +936,12 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/WalletResponse"
+            allOf:
+              - $ref: "#/components/schemas/WalletResponse"
+              - type: object
+                properties:
+                  blockchains: 
+                    $ref: "#/components/schemas/WalletBlockchain"
         pagination:
           type: object
           properties:
@@ -931,20 +951,13 @@ components:
             pageSize:
               type: number
               description: The size of the page.
-    WalletResponse:
+    WalletResponse: 
       type: object
       properties:
         id:
           type: string
           description: The id of the wallet.
           format: uuid
-        address:
-          description: The blockchain address of the wallet.
-          type: string
-        blockExplorerUrl:
-          type: string
-          nullable: true
-          description: The URL of the block explorer for this wallet.
         createdAt:
           type: string
           format: date-time
@@ -953,6 +966,30 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the wallet was last updated.
+    WalletBlockchain: 
+      type: object
+      properties:
+        name: 
+          type: string
+          description: The name of the blockchain
+          example: Polygon
+        address:
+          description: The blockchain address of the wallet.
+          type: string
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: The URL of the block explorer for this wallet.
+        deployedAt: 
+          type: string
+          format: date-time
+          description: The timestamp from when the wallet was deployed on this network.
+          nullable: true
+    WalletBlockchains:
+      type: array 
+      description: The list of blockchains to which this wallet belongs and their corresponding addresses.
+      items:
+        $ref: "#/components/schemas/WalletBlockchain"
     TokenTypePaginationResponse:
       type: object
       properties:
@@ -969,6 +1006,14 @@ components:
             pageSize:
               type: number
               description: The size of the page.
+    TokensArray:
+      type: object 
+      properties: 
+        tokens:
+          description: The tokens owned by this wallet.
+          type: array
+          items:
+            $ref: "#/components/schemas/TokenResponse"
     TokenResponse:
       type: object
       properties:
@@ -981,7 +1026,7 @@ components:
           type: number
           nullable: true
           description: The URI number of the token type used for minting, if the token is part of a contract created through the Lumx Protocol.
-        blockchainName:
+        blockchain:
           description: The name of the blockchain where this token is located.
           $ref: "#/components/schemas/Blockchains"
         contractAddress:
@@ -1038,6 +1083,11 @@ components:
         description:
           type: string
           description: A brief description of the contract.
+        blockchain: 
+          $ref: "#/components/schemas/Blockchains"
+          description: The network where the contract will be created.
+          example: Polygon
+          default: Polygon
     ContractPaginationResponse:
       type: object
       properties:
@@ -1079,9 +1129,10 @@ components:
           type: string
           nullable: true
           description: A brief description of the contract.
-        blockchainName:
+        blockchain:
           description: The blockchain name of the contract.
           $ref: "#/components/schemas/Blockchains"
+          example: Polygon
         baseUri:
           type: string
           nullable: true
@@ -1213,12 +1264,13 @@ components:
     ReadContractFunctionRequest:
       type: object
       properties:
-        walletAddress:
-          type: string
-          description: A wallet address is required to read a contract function.
         contractAddress:
           type: string
           description: The contract address.
+        blockchain: 
+          $ref: "#/components/schemas/Blockchains"
+          example: Polygon
+          description: The contract's blockchain.
         functionSignature:
           type: string
           description: The function signature.
@@ -1282,8 +1334,11 @@ components:
               description: The id of the wallet that will be used to perform the transaction.
             contractAddress:
               type: string
-              description: The address of the contract where the transaction will occur. It can be any contract, as long as it is deployed on the same blockchain used for the current project.
+              description: The address of the contract where the transaction will occur.
               example: "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08"
+            blockchain: 
+              $ref: "#/components/schemas/Blockchains"
+              example: Polygon
         - $ref: "#/components/schemas/TransactionCustomMetadata"
     TransactionResponse:
       type: object
