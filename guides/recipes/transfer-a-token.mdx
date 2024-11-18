@@ -1,0 +1,86 @@
+---
+title: "Transfer a token"
+description: "Learn how to transfer a token"
+---
+
+Transfer is the action of sending a token from the owner’s wallet to another wallet on the blockchain.
+
+<Steps>
+  <Step title="Transfer a token">
+
+First, we need to transfer the token.
+
+Please use the [read a wallet endpoint](/api-reference/wallets/read-a-wallet) to find the ID of the token that you wan't to transfer.
+
+<Info>Remember to switch `<CONTRACT_ID>`, `<WALLET_ID>`, `<EXTERNAL_WALLET_ADDRESS>` and `<TOKEN_ID>`.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request POST \
+  --url https://protocol-sandbox.lumx.io/v2/transactions/transfers \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "contractId": <CONTRACT_ID>,
+  "from": "<WALLET_ID>",
+  "to": "<EXTERNAL_WALLET_ADDRESS>",
+  "tokenId": "<TOKEN_ID"
+}'
+```
+
+```javascript JavaScript
+axios
+  .post("https://protocol-sandbox.lumx.io/v2/transactions/mints", {
+    itemTypeId: "<ITEM_TYPE_ID>",
+    walletId: "<WALLET_ID>",
+    amount: 1,
+  })
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 202 with an object containing the ID of the transaction.
+
+</Step>
+<Step title="Read a transaction">
+
+Every new transfer is queued up to mitigate the possibility of a transaction failing.
+
+Now, let's check the transaction's status on the blockchain.
+
+  <Info>Remember to switch `<TRANSACTION_ID>`.</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl --request GET \
+  --url https://protocol-sandbox.lumx.io/v2/transactions/<TRANSACTION_ID> \
+  --header 'Authorization: Bearer $API_KEY'
+```
+
+```javascript JavaScript
+axios
+  .get(
+    "https://protocol-sandbox.lumx.io/v2/transactions/<id_received_on_step_1>"
+  )
+  .then((response) => {
+    // Handle Success
+    console.log(response);
+  });
+```
+
+</CodeGroup>
+
+You will receive a status 200 with an object containing the transaction status and transaction hash.
+
+**Congratulations!** You can check your transaction on the [block explorer](https://amoy.polygonscan.com).
+
+</Step>
+</Steps>
+
+<Snippet file="troubleshooting.mdx" />

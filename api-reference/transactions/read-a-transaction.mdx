@@ -1,0 +1,89 @@
+---
+openapi: protocol get /transactions/{transactionId}
+---
+
+<ResponseExample>
+
+```json 200 - Mint
+{
+  "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "type": "mint",
+  "status": "pending | success | failed",
+  "transactionHash": "<string>",
+  "request": {
+    "contractId": "<string>",
+    "uriNumber": "<string>",
+    "quantity": 123
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
+}
+```
+
+```json 200 - Transfer (fungible)
+{
+  "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "type": "transfer",
+  "status": "pending | success | failed",
+  "transactionHash": "<string>",
+  "request": {
+    "contractId": "<string>",
+    "quantity": 123,
+    "from": "<string>",
+    "to": "<string>"
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
+}
+```
+
+```json 200 - Transfer (non-fungible)
+{
+  "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "type": "transfer",
+  "status": "pending | success | failed",
+  "transactionHash": "<string>",
+  "request": {
+    "contractId": "<string>",
+    "tokenId": "<string>",
+    "from": "<string>",
+    "to": "<string>"
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
+}
+```
+
+```json 200 - Custom
+{
+  "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "walletId": "047312f3-8355-4120-ae61-84e79470b10e",
+  "type": "custom",
+  "status": "pending | success | failed",
+  "transactionHash": "<string>",
+  "request": {
+    "operations": [
+      {
+        "functionSignature": "<string>",
+        "argumentsValues": [],
+        "messageValue": 123
+      }
+    ]
+  },
+  "result": {},
+  "createdAt": "2023-11-07T05:31:56Z",
+  "updatedAt": "2023-11-07T05:31:56Z",
+  "completedAt": "2023-11-07T05:31:56Z"
+}
+```
+
+</ResponseExample>

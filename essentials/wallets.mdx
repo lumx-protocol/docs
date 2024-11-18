@@ -1,0 +1,39 @@
+---
+title: Wallets
+description: "Learn about the wallets module"
+---
+
+The Wallet module is a core component of our Web3 infrastructure, designed to streamline interactions with blockchain technologies. It offers a comprehensive suite of functionalities aimed at enhancing user experience and security while minimizing the complexity for developers and end-users.
+
+The module gives developers all the infrastructure they need with abstracted complexity, in just a few lines of code: key management, nonce management, indexers, bundlers, paymasters, account factory, and managed RPCs, eliminating the need to deal with multiple providers and spend months building scalable infrastructure.
+
+Below are the key features of the Wallet module.
+
+### Programmable Wallets
+
+Leveraging Account Abstraction, our wallets provide flexible and powerful control over blockchain transactions and wallet logic. Programmable wallets are ideal for applications requiring conditional transfers, complex multi-step blockchain interactions, special filters, or account recovery mechanisms, turning them into a key component that helps make blockchain accessible to regular “non-crypto-native” users.
+
+### Multi Key Management Providers
+
+Security and accessibility are paramount in blockchain operations. Our Wallet module supports multiple key management providers such as Fireblocks for MPC (multi-party computation) or Google for HSM (hardware security modules), ensuring enterprise-grade security and compliance while giving flexibility to developers to choose a preferred key management system. You can also bring your own key management provider.
+
+### Gas Management
+
+To address the UX challenges of users needing to possess cryptocurrencies to cover transaction fees on blockchain networks, our Wallet module includes an innovative gas management feature utilizing a “gas sponsorship” system. This approach enables more predictable cost management and can be especially beneficial during periods of network congestion. You can choose to sponsor gas fees to your users (or let them pay) with fiat or tokens in a given blockchain.
+
+### Wallet Connect Integration
+
+<Snippet file="beta.mdx" />
+
+Integration with Wallet Connect allows our Wallet module to maintain a high degree
+of interoperability with other platforms and services. This feature enables users
+to sign transactions and connect securely without transferring private keys over
+the internet to any Wallet Connect-compatible application.
+
+### Passkey Protection
+
+<Snippet file="beta.mdx" />
+
+Enhancing security further, our Wallet module incorporates passkey protection, leveraging the latest innovations in authentication technology to secure access to wallets. This feature offers an option to traditional password systems with a more robust authentication mechanism, giving users the ability to use Face ID and fingerprints to access their wallets and make transactions.
+
+Next, let's learn more about our [contracts module](/essentials/contracts).
