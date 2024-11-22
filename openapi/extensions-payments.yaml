@@ -289,7 +289,6 @@ components:
           description: Token type for the transaction
       required:
         - type
-        - paymentMethod
         - amount
         - token
     CreateQuotesResponseDto:

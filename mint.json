@@ -168,11 +168,17 @@
         },
         {
           "group": "Payins",
-          "pages": ["extensions/payments/payins/create-a-payin"]
+          "pages": [
+            "extensions/payments/payins/create-a-payin",
+            "extensions/payments/payins/read-all-payins"
+          ]
         },
         {
           "group": "Payouts",
-          "pages": ["extensions/payments/payouts/create-a-payout"]
+          "pages": [
+            "extensions/payments/payouts/create-a-payout",
+            "extensions/payments/payouts/read-all-payouts"
+          ]
         },
         {
           "group": "Receivers",
