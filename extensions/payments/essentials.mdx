@@ -1,0 +1,55 @@
+---
+title: "Essentials"
+description: "Enhance your protocol capabilities with third-party integrations"
+---
+
+### Quotes
+
+Quotes provide exchange rate information and fee calculations before executing a payment. Before creating a payin or payout transaction, you must first obtain a quote which locks in the exchange rate and fees for a short period, ensuring transparency in the final amounts for both sender and receiver.
+
+### Payins
+
+Payins enable the acceptance of incoming payments from various sources into your protocol. Before processing a payin transaction, you'll need to obtain a quote first to lock in the exchange rate and fees. This ensures that both the sender and receiver have clear visibility into the exact amounts being transferred, including any applicable conversion rates and processing fees.
+
+| Payment Method | Description                      | Supported Regions |
+| -------------- | -------------------------------- | ----------------- |
+| PIX            | Brazilian instant payment system | BR                |
+| Other Methods  | Coming soon                      | -                 |
+
+### Payouts
+
+Payouts enable you to send payments from your protocol to external recipients. Like payins, you'll need to obtain a quote first to lock in the exchange rate and fees. This ensures transparency for both the sender and receiver regarding the exact amounts being transferred, including any applicable conversion rates and processing fees.
+
+| Payment Method | Description                             | Supported Regions |
+| -------------- | --------------------------------------- | ----------------- |
+| PIX            | Brazilian instant payment system        | BR                |
+| ACH            | Automated Clearing House bank transfers | US                |
+| Wire           | International bank wire transfers       | US                |
+
+### Receivers
+
+Receivers are individuals or businesses designated to receive payins and payouts. All receivers must complete a compliance process.
+
+The requirements vary based on the receiver type (individual or business) and level (light or standard):
+
+| KYC Light (Individual)            | KYB Light (Business)       | KYC/KYB Standard                  |
+| --------------------------------- | -------------------------- | --------------------------------- |
+| First & Last Name                 | Legal Name                 | All Light requirements, plus:     |
+| Date of Birth                     | Tax ID                     | Tax ID (for individuals)          |
+| Email                             | Formation Date             | Additional verification documents |
+| Country & Address                 | Email & Address            |                                   |
+| Phone Number (optional)           | Website (optional)         |                                   |
+| ID Document (with country & type) | Company Formation Document |                                   |
+| Proof of Address (optional)       | Proof of Ownership         |                                   |
+
+Note: KYC Light and KYB Light are not available for payouts in the US.
+
+### Blockchain Accounts
+
+Blockchain accounts are cryptocurrency wallets associated with receivers that enable them to receive crypto payments. Each blockchain account is linked to a receiver and can be used for payins.
+
+When creating a blockchain account, you can either provide an existing `walletId` from your [Wallets API](/api-reference/wallets/create-a-wallet). If not provided, the system will automatically generate one and link it to the receiver.
+
+### Bank Accounts
+
+Bank accounts are external financial accounts associated with receivers that enable them to receive fiat payments. Each bank account is linked to a receiver and can be used for payouts.

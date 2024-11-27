@@ -5,7 +5,7 @@ info:
   title: Lumx Extensions Payments
   description: Lumx Extensions Payments API
 servers:
-  - url: https://applications-extensions-payments-362265641631.us-east1.run.app
+  - url: https://applications-extensions-payments-sandbox-362265641631.us-east1.run.app
 paths:
   "/quotes":
     post:
@@ -40,7 +40,7 @@ paths:
             schema:
               "$ref": "#/components/schemas/CreatePayinsDto"
       responses:
-        "201":
+        "202":
           description: ""
           content:
             application/json:
@@ -52,7 +52,7 @@ paths:
       tags:
         - Payins
     get:
-      operationId: PayinsController_readAllBankAccounts
+      operationId: PayinsController_readAll
       parameters: []
       responses:
         "200":
@@ -62,10 +62,31 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/ReadAllPayinsResponseDto"
+                  "$ref": "#/components/schemas/ReadPayinsResponseDto"
       security:
         - bearer: []
       summary: Read all payins
+      tags:
+        - Payins
+  "/payins/{id}":
+    get:
+      operationId: PayinsController_read
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReadPayinsResponseDto"
+      security:
+        - bearer: []
+      summary: Read a payin
       tags:
         - Payins
   "/payouts":
@@ -79,7 +100,7 @@ paths:
             schema:
               "$ref": "#/components/schemas/CreatePayoutsDto"
       responses:
-        "201":
+        "202":
           description: ""
           content:
             application/json:
@@ -101,10 +122,31 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/ReadAllPayoutsResponseDto"
+                  "$ref": "#/components/schemas/ReadPayoutsResponseDto"
       security:
         - bearer: []
       summary: Read all payouts
+      tags:
+        - Payouts
+  "/payouts/{id}":
+    get:
+      operationId: PayoutsController_read
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReadPayoutsResponseDto"
+      security:
+        - bearer: []
+      summary: Read a payout
       tags:
         - Payouts
   "/receivers":
@@ -144,6 +186,22 @@ paths:
       security:
         - bearer: []
       summary: Read all receivers
+      tags:
+        - Receivers
+  "/receivers/{receiverId}":
+    get:
+      operationId: ReceiversController_read
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReadReceiversResponseDto"
+      security:
+        - bearer: []
+      summary: Read a receivers
       tags:
         - Receivers
   "/receivers/{receiverId}/blockchain-accounts":
@@ -371,7 +429,7 @@ components:
         - id
         - status
         - pixCode
-    ReadAllPayinsResponseDto:
+    ReadPayinsResponseDto:
       type: object
       properties:
         id:
@@ -424,7 +482,7 @@ components:
       required:
         - id
         - status
-    ReadAllPayoutsResponseDto:
+    ReadPayoutsResponseDto:
       type: object
       properties:
         id:
@@ -1029,19 +1087,19 @@ components:
             - DRIVERS
           example: PASSPORT
           description: Type of identification document
-        idDocumentFrontFile:
+        idDocumentFrontUrl:
           type: string
           example: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           description: URL to the front of the identification document
-        idDocumentBackFile:
+        idDocumentBackUrl:
           type: string
           example: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           description: URL to the back of the identification document
-        formationDocumentFile:
+        formationDocumentUrl:
           type: string
           example: https://example.com/image.png
           description: URL to the business formation document
-        proofOfOwnershipDocumentFile:
+        proofOfOwnershipDocumentUrl:
           type: string
           example: https://example.com/image.png
           description: URL to the proof of ownership document
@@ -1061,8 +1119,8 @@ components:
               postalCode: "10001"
               idDocumentCountry: US
               idDocumentType: PASSPORT
-              idDocumentFrontFile: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
-              idDocumentBackFile: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
+              idDocumentFrontUrl: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
+              idDocumentBackUrl: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           type: array
           items:
             type: string
@@ -1676,15 +1734,15 @@ components:
           type: string
           example: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           description: URL to the front of the identification document
-        idDocumentBackFile:
+        idDocumentBackUrl:
           type: string
           example: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           description: URL to the back of the identification document
-        formationDocumentFile:
+        formationDocumentUrl:
           type: string
           example: https://example.com/image.png
           description: URL to the business formation document
-        proofOfOwnershipDocumentFile:
+        proofOfOwnershipDocumentUrl:
           type: string
           example: https://example.com/image.png
           description: URL to the proof of ownership document
@@ -1704,8 +1762,8 @@ components:
               postalCode: "10001"
               idDocumentCountry: US
               idDocumentType: PASSPORT
-              idDocumentFrontFile: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
-              idDocumentBackFile: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
+              idDocumentFrontUrl: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
+              idDocumentBackUrl: https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg
           type: array
           items:
             type: string
@@ -1726,12 +1784,13 @@ components:
           maxLength: 100
         walletId:
           type: string
-          description: Wallet identifier
+          description:
+            Wallet identifier. If not provided, a new wallet will be created
+            and linked to this blockchain account
           example: 7d413181-6c8c-427e-9d7b-6b07ba6ad5fb
           format: string
       required:
         - name
-        - walletId
     CreateBlockchainAccountsResponseDto:
       type: object
       properties:
@@ -1836,6 +1895,7 @@ components:
             - MX
             - CO
             - AR
+          example: BR
         postalCode:
           type: string
           example: Postal code
@@ -1900,6 +1960,10 @@ components:
           enum:
             - BR
             - US
+            - MX
+            - CO
+            - AR
+          example: BR
         city:
           type: string
           example: Marshfield
