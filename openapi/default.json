@@ -242,7 +242,14 @@
     "/receivers/{receiverId}": {
       "get": {
         "operationId": "ReceiversController_read",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "receiverId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -256,7 +263,7 @@
           }
         },
         "security": [{ "bearer": [] }],
-        "summary": "Read a receivers",
+        "summary": "Read a receiver",
         "tags": ["Receivers"]
       }
     },
@@ -413,35 +420,35 @@
             "type": "string",
             "example": "payin",
             "enum": ["payin", "payout"],
-            "description": "Type of quote to create"
+            "description": "Type of quote to create."
           },
           "blockchainAccountId": {
             "type": "string",
             "example": "ba_000000000000",
-            "description": "Blockchain account identifier"
+            "description": "The ID of the blockchain account."
           },
           "bankAccountId": {
             "type": "string",
             "example": "ba_000000000000",
-            "description": "Bank account identifier"
+            "description": "The ID of the bank account."
           },
           "paymentMethod": {
             "type": "string",
             "example": "pix",
             "enum": ["pix"],
-            "description": "Payment method"
+            "description": "Payment method for the transaction."
           },
           "amount": {
             "type": "number",
             "minimum": 100,
             "example": 1000,
-            "description": "100 represents 1.00, 1000 represents 10.00"
+            "description": "100 represents 1.00, 1000 represents 10.00."
           },
           "token": {
             "type": "string",
             "example": "USDX",
             "enum": ["USDC", "USDX"],
-            "description": "Token type for the transaction"
+            "description": "Token to be used in the transaction."
           }
         },
         "required": ["type", "amount", "token"]
@@ -452,38 +459,38 @@
           "id": {
             "type": "string",
             "example": "qu_000000000000",
-            "description": "Quote identifier"
+            "description": "Quote identifier."
           },
           "type": {
             "type": "string",
             "example": "payin",
             "enum": ["payin", "payout"],
-            "description": "Type of quote"
+            "description": "Type of quote."
           },
           "expiresAt": {
             "type": "number",
             "example": 1712958191,
-            "description": "Unix timestamp when the quote expires"
+            "description": "Unix timestamp when the quote expires."
           },
           "commercialQuotation": {
             "type": "number",
             "example": 595,
-            "description": "1 USD = 5.95 BRL"
+            "description": "1 USD = 5.95 BRL."
           },
           "providerQuotation": {
             "type": "number",
             "example": 585,
-            "description": "1 USD = 5.85 BRL (commercial quotation - provider taxes)"
+            "description": "1 USD = 5.85 BRL (commercial quotation - provider taxes)."
           },
           "receiverAmount": {
             "type": "number",
             "example": 5240,
-            "description": "52.40 BRL"
+            "description": "52.40 BRL."
           },
           "senderAmount": {
             "type": "number",
             "example": 1010,
-            "description": "10.10 USDX needs to be sent to bank account blockchain address"
+            "description": "10.10 USDX needs to be sent to bank account blockchain address."
           },
           "flatFee": {
             "type": "number",
@@ -507,8 +514,8 @@
         "properties": {
           "quoteId": {
             "type": "string",
-            "description": "Unique identifier for the quote",
-            "example": "pa_000000000000"
+            "example": "qu_000000000000",
+            "description": "The ID of the quote."
           }
         },
         "required": ["quoteId"]
@@ -518,19 +525,19 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier for the payin",
-            "example": "pa_000000000000"
+            "example": "pa_000000000000",
+            "description": "The ID of the payin."
           },
           "status": {
             "type": "string",
             "enum": ["processing", "failed", "refunded", "completed"],
-            "description": "Current status of the payin",
-            "example": "processing"
+            "example": "processing",
+            "description": "The current status of the payin."
           },
           "pixCode": {
             "type": "string",
-            "description": "Pix code for the payin",
-            "example": "12345678"
+            "example": "12345678",
+            "description": "Pix code for the payin."
           }
         },
         "required": ["id", "status", "pixCode"]
@@ -540,19 +547,19 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier for the payin",
-            "example": "pa_000000000000"
+            "example": "pa_000000000000",
+            "description": "The ID of the payin."
           },
           "status": {
             "type": "string",
             "enum": ["processing", "failed", "refunded", "completed"],
-            "description": "Current status of the payin",
-            "example": "processing"
+            "example": "processing",
+            "description": "The current status of the payin."
           },
           "pixCode": {
             "type": "string",
-            "description": "Pix code for the payin",
-            "example": "12345678"
+            "example": "12345678",
+            "description": "Pix code for the payin."
           }
         },
         "required": ["id", "status", "pixCode"]
@@ -560,10 +567,15 @@
       "CreatePayoutsDto": {
         "type": "object",
         "properties": {
-          "quoteId": { "type": "string", "example": "qu_000000000000" },
+          "quoteId": {
+            "type": "string",
+            "example": "qu_000000000000",
+            "description": "The ID of the quote."
+          },
           "walletId": {
             "type": "string",
-            "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb"
+            "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb",
+            "description": "The ID of the wallet that will send the funds."
           }
         },
         "required": ["quoteId", "walletId"]
@@ -571,11 +583,16 @@
       "CreatePayoutsResponseDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "example": "pa_000000000000" },
+          "id": {
+            "type": "string",
+            "example": "pa_000000000000",
+            "description": "The ID of the payout."
+          },
           "status": {
             "type": "string",
             "enum": ["processing", "failed", "refunded", "completed"],
-            "example": "processing"
+            "example": "processing",
+            "description": "The current status of the payout."
           }
         },
         "required": ["id", "status"]
@@ -583,11 +600,16 @@
       "ReadPayoutsResponseDto": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "example": "pa_000000000000" },
+          "id": {
+            "type": "string",
+            "example": "pa_000000000000",
+            "description": "The ID of the payout."
+          },
           "status": {
             "type": "string",
             "enum": ["processing", "failed", "refunded", "completed"],
-            "example": "processing"
+            "example": "processing",
+            "description": "The current status of the payout."
           }
         },
         "required": ["id", "status"]
@@ -599,38 +621,38 @@
             "type": "string",
             "enum": ["individual", "business"],
             "example": "individual",
-            "description": "Type of receiver, either an individual person or a business entity"
+            "description": "Type of receiver, either an individual person or a business entity."
           },
-          "kycLevel": {
+          "complianceLevel": {
             "type": "string",
             "enum": ["light", "standard"],
             "example": "standard",
-            "description": "KYC verification level required for the receiver"
+            "description": "Compliance verification level required for the receiver."
           },
           "firstName": {
             "type": "string",
             "example": "John",
-            "description": "First name of the individual receiver"
+            "description": "First name of the individual receiver."
           },
           "lastName": {
             "type": "string",
             "example": "Doe",
-            "description": "Last name of the individual receiver"
+            "description": "Last name of the individual receiver."
           },
           "legalName": {
             "type": "string",
             "example": "Company Name Inc.",
-            "description": "Legal business name of the receiver"
+            "description": "Legal business name of the receiver."
           },
           "taxId": {
             "type": "string",
             "example": "10210274029",
-            "description": "Tax identification number of the receiver"
+            "description": "Tax identification number of the receiver."
           },
           "email": {
             "type": "string",
             "example": "email@example.com",
-            "description": "Email address of the receiver"
+            "description": "Email address of the receiver."
           },
           "country": {
             "type": "string",
@@ -886,48 +908,48 @@
               "AX"
             ],
             "example": "BR",
-            "description": "Two-letter ISO country code of the receiver"
+            "description": "Two-letter ISO country code of the receiver."
           },
           "dateOfBirth": {
             "type": "string",
             "example": "1998-01-01T00:00:00Z",
-            "description": "Date of birth for individual receivers",
+            "description": "Date of birth for individual receivers.",
             "nullable": true
           },
           "dateOfFormation": {
             "type": "string",
             "example": "1998-01-01T00:00:00Z",
-            "description": "Date when the business was founded"
+            "description": "Date when the business was founded."
           },
           "city": {
             "type": "string",
             "example": "Marshfield",
-            "description": "City name"
+            "description": "City name."
           },
           "stateProvinceRegion": {
             "type": "string",
             "example": "MA",
-            "description": "State, province or region"
+            "description": "State, province or region."
           },
           "addressLine1": {
             "type": "string",
             "example": "738 Plain St",
-            "description": "First line of the address"
+            "description": "First line of the address."
           },
           "addressLine2": {
             "type": "string",
             "example": "Building 22",
-            "description": "Second line of the address"
+            "description": "Second line of the address."
           },
           "postalCode": {
             "type": "string",
             "example": "02050",
-            "description": "Postal or ZIP code"
+            "description": "Postal or ZIP code."
           },
           "ipAddress": {
             "type": "string",
             "example": "127.0.0.1",
-            "description": "IP address of the receiver"
+            "description": "IP address of the receiver."
           },
           "idDocumentCountry": {
             "type": "string",
@@ -1183,36 +1205,36 @@
               "AX"
             ],
             "example": "BR",
-            "description": "Country of the identification document"
+            "description": "Country of the identification document."
           },
           "idDocumentType": {
             "type": "string",
             "enum": ["PASSPORT", "ID_CARD", "DRIVERS"],
             "example": "PASSPORT",
-            "description": "Type of identification document"
+            "description": "Type of identification document."
           },
           "idDocumentFrontUrl": {
             "type": "string",
             "example": "https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg",
-            "description": "URL to the front of the identification document"
+            "description": "URL to the front of the identification document."
           },
           "idDocumentBackUrl": {
             "type": "string",
             "example": "https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg",
-            "description": "URL to the back of the identification document"
+            "description": "URL to the back of the identification document."
           },
           "formationDocumentUrl": {
             "type": "string",
             "example": "https://example.com/image.png",
-            "description": "URL to the business formation document"
+            "description": "URL to the business formation document."
           },
           "proofOfOwnershipDocumentUrl": {
             "type": "string",
             "example": "https://example.com/image.png",
-            "description": "URL to the proof of ownership document"
+            "description": "URL to the proof of ownership document."
           },
           "shareholders": {
-            "description": "List of business owners and their details",
+            "description": "List of business owners and their details.",
             "example": [
               {
                 "role": "beneficialOwner",
@@ -1236,7 +1258,7 @@
             "items": { "type": "string" }
           }
         },
-        "required": ["type", "kycLevel", "email", "country"]
+        "required": ["type", "complianceLevel", "email", "country"]
       },
       "CreateReceiversResponseDto": {
         "type": "object",
@@ -1244,7 +1266,7 @@
           "id": {
             "type": "string",
             "example": "re_000000000000",
-            "description": "Unique identifier of the receiver"
+            "description": "The ID of the receiver."
           }
         },
         "required": ["id"]
@@ -1255,44 +1277,50 @@
           "id": {
             "type": "string",
             "example": "re_000000000000",
-            "description": "Unique identifier of the receiver"
+            "description": "The ID of the receiver."
           },
           "type": {
             "type": "string",
             "enum": ["individual", "business"],
             "example": "individual",
-            "description": "Type of receiver, either an individual person or a business entity"
+            "description": "Type of receiver, either an individual person or a business entity."
           },
-          "kycLevel": {
+          "complianceLevel": {
             "type": "string",
             "enum": ["light", "standard"],
             "example": "standard",
-            "description": "KYC verification level required for the receiver"
+            "description": "Compliance verification level required for the receiver."
+          },
+          "complianceStatus": {
+            "type": "string",
+            "enum": ["verifying", "approved", "rejected", "deprecated"],
+            "example": "approved",
+            "description": "Current compliance verification status of the receiver."
           },
           "firstName": {
             "type": "string",
             "example": "John",
-            "description": "First name of the individual receiver"
+            "description": "First name of the individual receiver."
           },
           "lastName": {
             "type": "string",
             "example": "Doe",
-            "description": "Last name of the individual receiver"
+            "description": "Last name of the individual receiver."
           },
           "legalName": {
             "type": "string",
             "example": "Company Name Inc.",
-            "description": "Legal business name of the receiver"
+            "description": "Legal business name of the receiver."
           },
           "taxId": {
             "type": "string",
             "example": "10210274029",
-            "description": "Tax identification number of the receiver"
+            "description": "Tax identification number of the receiver."
           },
           "email": {
             "type": "string",
             "example": "email@example.com",
-            "description": "Email address of the receiver"
+            "description": "Email address of the receiver."
           },
           "country": {
             "type": "string",
@@ -1548,48 +1576,48 @@
               "AX"
             ],
             "example": "BR",
-            "description": "Two-letter ISO country code of the receiver"
+            "description": "Two-letter ISO country code of the receiver."
           },
           "dateOfBirth": {
             "type": "string",
             "example": "1998-01-01T00:00:00Z",
-            "description": "Date of birth for individual receivers",
+            "description": "Date of birth for individual receivers.",
             "nullable": true
           },
           "dateOfFormation": {
             "type": "string",
             "example": "1998-01-01T00:00:00Z",
-            "description": "Date when the business was founded"
+            "description": "Date when the business was founded."
           },
           "city": {
             "type": "string",
             "example": "Marshfield",
-            "description": "City name"
+            "description": "City name."
           },
           "stateProvinceRegion": {
             "type": "string",
             "example": "MA",
-            "description": "State, province or region"
+            "description": "State, province or region."
           },
           "addressLine1": {
             "type": "string",
             "example": "738 Plain St",
-            "description": "First line of the address"
+            "description": "First line of the address."
           },
           "addressLine2": {
             "type": "string",
             "example": "Building 22",
-            "description": "Second line of the address"
+            "description": "Second line of the address."
           },
           "postalCode": {
             "type": "string",
             "example": "02050",
-            "description": "Postal or ZIP code"
+            "description": "Postal or ZIP code."
           },
           "ipAddress": {
             "type": "string",
             "example": "127.0.0.1",
-            "description": "IP address of the receiver"
+            "description": "IP address of the receiver."
           },
           "idDocumentCountry": {
             "type": "string",
@@ -1845,36 +1873,36 @@
               "AX"
             ],
             "example": "BR",
-            "description": "Country of the identification document"
+            "description": "Country of the identification document."
           },
           "idDocumentType": {
             "type": "string",
             "enum": ["PASSPORT", "ID_CARD", "DRIVERS"],
             "example": "PASSPORT",
-            "description": "Type of identification document"
+            "description": "Type of identification document."
           },
           "idDocumentFrontFile": {
             "type": "string",
             "example": "https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg",
-            "description": "URL to the front of the identification document"
+            "description": "URL to the front of the identification document."
           },
           "idDocumentBackUrl": {
             "type": "string",
             "example": "https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/v4-460px-Get-Proof-of-Address-Step-3-Version-2.jpg.jpeg",
-            "description": "URL to the back of the identification document"
+            "description": "URL to the back of the identification document."
           },
           "formationDocumentUrl": {
             "type": "string",
             "example": "https://example.com/image.png",
-            "description": "URL to the business formation document"
+            "description": "URL to the business formation document."
           },
           "proofOfOwnershipDocumentUrl": {
             "type": "string",
             "example": "https://example.com/image.png",
-            "description": "URL to the proof of ownership document"
+            "description": "URL to the proof of ownership document."
           },
           "shareholders": {
-            "description": "List of business owners and their details",
+            "description": "List of business owners and their details.",
             "example": [
               {
                 "role": "beneficialOwner",
@@ -1898,33 +1926,40 @@
             "items": { "type": "string" }
           }
         },
-        "required": ["id", "type", "kycLevel", "email", "country"]
+        "required": [
+          "id",
+          "type",
+          "complianceLevel",
+          "complianceStatus",
+          "email",
+          "country"
+        ]
       },
       "CreateBlockchainAccountsDto": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "Display name for the wallet",
+            "description": "Display name for the wallet.",
             "example": "Blockchain Account",
             "minLength": 1,
             "maxLength": 100
           },
           "walletId": {
             "type": "string",
-            "description": "Wallet identifier. If not provided, a new wallet will be created and linked to this blockchain account",
+            "description": "Wallet identifier. If not provided, a new wallet will be created and linked to this blockchain account.",
             "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb",
             "format": "string"
           }
         },
-        "required": ["name"]
+        "required": ["name", "walletId"]
       },
       "CreateBlockchainAccountsResponseDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Blockchain account identifier",
+            "description": "The ID of blockchain account.",
             "example": "wa_000000000000",
             "format": "string"
           }
@@ -1936,20 +1971,20 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Blockchain account identifier",
+            "description": "The ID of blockchain account.",
             "example": "wa_000000000000",
             "format": "string"
           },
           "name": {
             "type": "string",
-            "description": "Display name of the blockchain account",
+            "description": "Display name of the blockchain account.",
             "example": "Blockchain Account",
             "minLength": 1,
             "maxLength": 100
           },
           "network": {
             "type": "number",
-            "description": "Blockchain network",
+            "description": "Blockchain network.",
             "example": "Base",
             "enum": [
               { "mainnet": "ethereum", "testnet": "sepolia" },
@@ -1960,7 +1995,7 @@
           },
           "address": {
             "type": "string",
-            "description": "Wallet public address",
+            "description": "Wallet public address.",
             "example": "0x5E74A480F330705640ED07E870F893e72238c8d0"
           }
         },
@@ -1972,43 +2007,75 @@
           "name": {
             "type": "string",
             "example": "Default Account",
-            "description": "Display name for the bank account"
+            "description": "Display name for the bank account."
           },
           "type": {
             "type": "string",
             "example": "pix",
             "enum": ["ach", "wire", "pix"],
-            "description": "Type of bank account"
+            "description": "Type of bank account."
           },
           "pixKey": {
             "type": "string",
             "example": "14947677768",
-            "description": "pix key identifier"
+            "description": "Pix key identifier."
           },
           "beneficiaryName": {
             "type": "string",
-            "example": "Individual full name or business name"
+            "example": "Individual full name or business name",
+            "description": "Name of the account holder or business entity."
           },
-          "routingNumber": { "type": "string", "example": "012345678" },
-          "accountNumber": { "type": "string", "example": "1001001234" },
-          "accountType": { "type": "string", "enum": ["checking", "saving"] },
+          "routingNumber": {
+            "type": "string",
+            "example": "012345678",
+            "description": "Bank routing number for ACH transfers."
+          },
+          "accountNumber": {
+            "type": "string",
+            "example": "1001001234",
+            "description": "Bank account number."
+          },
+          "accountType": {
+            "type": "string",
+            "enum": ["checking", "saving"],
+            "description": "Type of bank account (checking or savings)."
+          },
           "accountClass": {
             "type": "string",
-            "enum": ["individual", "business"]
+            "enum": ["individual", "business"],
+            "description": "Classification of the account holder."
           },
-          "addressLine1": { "type": "string", "example": "Address line 1" },
-          "addressLine2": { "type": "string", "example": "Address line 2" },
-          "city": { "type": "string", "example": "City" },
+          "addressLine1": {
+            "type": "string",
+            "example": "Address line 1",
+            "description": "Primary street address."
+          },
+          "addressLine2": {
+            "type": "string",
+            "example": "Address line 2",
+            "description": "Secondary address information (apt, suite, etc)."
+          },
+          "city": {
+            "type": "string",
+            "example": "City",
+            "description": "City name."
+          },
           "stateProvinceRegion": {
             "type": "string",
-            "example": "State/Province/Region"
+            "example": "State/Province/Region",
+            "description": "State, province, or region name."
           },
           "country": {
             "type": "string",
             "enum": ["BR", "US", "MX", "CO", "AR"],
-            "example": "BR"
+            "example": "BR",
+            "description": "Two-letter country code."
           },
-          "postalCode": { "type": "string", "example": "Postal code" }
+          "postalCode": {
+            "type": "string",
+            "example": "Postal code",
+            "description": "ZIP or postal code."
+          }
         },
         "required": ["name", "type"]
       },
@@ -2018,7 +2085,7 @@
           "id": {
             "type": "string",
             "example": "ba_000000000000",
-            "description": "Unique identifier for the bank account"
+            "description": "The ID of the bank account."
           }
         },
         "required": ["id"]
@@ -2029,18 +2096,18 @@
           "id": {
             "type": "string",
             "example": "ba_000000000000",
-            "description": "Unique identifier for the bank account"
+            "description": "The ID of the bank account."
           },
           "name": {
             "type": "string",
             "example": "Default Account",
-            "description": "Display name for the bank account"
+            "description": "Display name for the bank account."
           },
           "type": {
             "type": "string",
             "example": "pix",
             "enum": ["ach", "wire", "pix"],
-            "description": "Type of bank account"
+            "description": "Type of bank account."
           },
           "pixKey": {
             "type": "string",
@@ -2049,30 +2116,62 @@
           },
           "beneficiaryName": {
             "type": "string",
-            "example": "Individual full name or business name"
+            "example": "Individual full name or business name",
+            "description": "Name of the account holder or business entity."
           },
-          "routingNumber": { "type": "string", "example": "012345678" },
-          "accountNumber": { "type": "string", "example": "1001001234" },
+          "routingNumber": {
+            "type": "string",
+            "example": "012345678",
+            "description": "Bank routing number for ACH transfers."
+          },
+          "accountNumber": {
+            "type": "string",
+            "example": "1001001234",
+            "description": "Bank account number."
+          },
           "accountType": {
             "type": "string",
             "example": "checking",
-            "enum": ["checking", "saving"]
+            "enum": ["checking", "saving"],
+            "description": "Type of bank account (checking or savings)."
           },
           "accountClass": {
             "type": "string",
             "example": "individual",
-            "enum": ["individual", "business"]
+            "enum": ["individual", "business"],
+            "description": "Classification of the account holder."
           },
           "country": {
             "type": "string",
             "enum": ["BR", "US", "MX", "CO", "AR"],
-            "example": "BR"
+            "example": "BR",
+            "description": "Two-letter country code."
           },
-          "city": { "type": "string", "example": "Marshfield" },
-          "stateProvinceRegion": { "type": "string", "example": "MA" },
-          "addressLine1": { "type": "string", "example": "738 Plain St" },
-          "addressLine2": { "type": "string", "example": "Building 22" },
-          "postalCode": { "type": "string", "example": "02050" }
+          "city": {
+            "type": "string",
+            "example": "Marshfield",
+            "description": "City name."
+          },
+          "stateProvinceRegion": {
+            "type": "string",
+            "example": "MA",
+            "description": "State, province, or region name."
+          },
+          "addressLine1": {
+            "type": "string",
+            "example": "738 Plain St",
+            "description": "Primary street address."
+          },
+          "addressLine2": {
+            "type": "string",
+            "example": "Building 22",
+            "description": "Secondary address information (apt, suite, etc)."
+          },
+          "postalCode": {
+            "type": "string",
+            "example": "02050",
+            "description": "ZIP or postal code."
+          }
         },
         "required": ["id", "name", "type"]
       }
