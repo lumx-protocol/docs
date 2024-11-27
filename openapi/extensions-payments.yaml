@@ -68,11 +68,11 @@ paths:
       summary: Read all payins
       tags:
         - Payins
-  "/payins/{id}":
+  "/payins/{payinId}":
     get:
       operationId: PayinsController_read
       parameters:
-        - name: id
+        - name: payinId
           required: true
           in: path
           schema:
@@ -128,11 +128,11 @@ paths:
       summary: Read all payouts
       tags:
         - Payouts
-  "/payouts/{id}":
+  "/payouts/{payoutId}":
     get:
       operationId: PayoutsController_read
       parameters:
-        - name: id
+        - name: payoutId
           required: true
           in: path
           schema:
