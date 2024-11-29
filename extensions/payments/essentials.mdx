@@ -32,15 +32,20 @@ Receivers are individuals or businesses designated to receive payins and payouts
 
 The requirements vary based on the receiver type (individual or business) and level (light or standard):
 
-| KYC Light (Individual)            | KYB Light (Business)       | KYC/KYB Standard                  |
-| --------------------------------- | -------------------------- | --------------------------------- |
-| First & Last Name                 | Legal Name                 | All Light requirements, plus:     |
-| Date of Birth                     | Tax ID                     | Tax ID (for individuals)          |
-| Email                             | Formation Date             | Additional verification documents |
-| Country & Address                 | Email & Address            |                                   |
-| Phone Number (optional)           | Website (optional)         |                                   |
-| ID Document (with country & type) | Company Formation Document |                                   |
-| Proof of Address (optional)       | Proof of Ownership         |                                   |
+| KYC Light (Individual) | KYB Light (Business) | KYC Standard                        | KYB Standard                    |
+| ---------------------- | -------------------- | ----------------------------------- | ------------------------------- |
+| First Name             | Legal Name           | All Light requirements, plus:       | All Light requirements, plus:   |
+| Last Name              | Tax ID               | Tax ID                              | IP Address                      |
+| Date of Birth          | Date of Formation    | IP Address                          | IP Address                      |
+| Email                  | Email                | Address Line 1                      | Address Line 1                  |
+| Country                | Country              | City                                | City                            |
+|                        |                      | State, Province, Region             | State, Province, Region         |
+|                        |                      | Postal Code                         | Postal Code                     |
+|                        |                      | ID Document Country                 | Formation Document Url          |
+|                        |                      | ID Document Type                    | Proof of Ownership Document Url |
+|                        |                      | ID Document Front Url               | Shareholders                    |
+|                        |                      | ID Document Front Back (_Optional_) | Address Line 2 (_Optional_)     |
+|                        |                      | Address Line 2 (_Optional_)         |
 
 Note: KYC Light and KYB Light are not available for payouts in the US.
 
@@ -48,7 +53,7 @@ Note: KYC Light and KYB Light are not available for payouts in the US.
 
 Blockchain accounts are cryptocurrency wallets associated with receivers that enable them to receive crypto payments. Each blockchain account is linked to a receiver and can be used for payins.
 
-When creating a blockchain account, you can either provide an existing `walletId` from your [Wallets API](/api-reference/wallets/create-a-wallet). If not provided, the system will automatically generate one and link it to the receiver.
+When creating a blockchain account, you can either provide an existing `walletId` from [Wallets API](/api-reference/wallets/create-a-wallet). If not provided, the system will automatically generate one and link it to the receiver.
 
 ### Bank Accounts
 
