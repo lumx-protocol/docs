@@ -55,6 +55,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Extensions",
+      "url": "extensions"
     }
   ],
   "anchors": [
@@ -149,6 +153,49 @@
         "api-reference/transactions/invoke-a-custom-transaction",
         "api-reference/transactions/read-a-transaction",
         "api-reference/transactions/read-all-transactions"
+      ]
+    },
+    {
+      "group": "Extensions",
+      "pages": ["extensions/introduction"]
+    },
+    {
+      "group": "Payments",
+      "pages": [
+        "extensions/payments/overview",
+        "extensions/payments/essentials",
+        {
+          "group": "Receivers",
+          "pages": [
+            "extensions/payments/receivers/create-a-receiver",
+            "extensions/payments/receivers/read-a-receiver",
+            "extensions/payments/receivers/read-all-receivers",
+            "extensions/payments/receivers/create-a-blockchain-account",
+            "extensions/payments/receivers/read-all-blockchain-accounts",
+            "extensions/payments/receivers/create-a-bank-account",
+            "extensions/payments/receivers/read-all-bank-accounts"
+          ]
+        },
+        {
+          "group": "Quotes",
+          "pages": ["extensions/payments/quotes/create-a-quote"]
+        },
+        {
+          "group": "Payins",
+          "pages": [
+            "extensions/payments/payins/create-a-payin",
+            "extensions/payments/payins/read-a-payin",
+            "extensions/payments/payins/read-all-payins"
+          ]
+        },
+        {
+          "group": "Payouts",
+          "pages": [
+            "extensions/payments/payouts/create-a-payout",
+            "extensions/payments/payouts/read-a-payout",
+            "extensions/payments/payouts/read-all-payouts"
+          ]
+        }
       ]
     }
   ],
