@@ -5,7 +5,7 @@ info:
   title: Lumx Extensions Payments
   description: Lumx Extensions Payments API
 servers:
-  - url: https://extensions-sandbox.int.lumx.io/payments
+  - url: https://extensions-sandbox.lumx.io/payments
   - url: https://extensions.lumx.io/payments
 paths:
   "/":
