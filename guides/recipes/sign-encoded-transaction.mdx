@@ -1,0 +1,133 @@
+---
+title: "Sign encoded transaction"
+description: "Learn how to use your own private key to sign transactions"
+---
+
+When using the custodial model, you have the freedom to use your own signing provider, including options like Fireblocks MPC, Google HSM, and others. This recipe explains how to encode a transaction using Lumx Protocol, sign it with your own provider, and submit it back to the Protocol to be executed on the blockchain.
+
+<Warning>
+  This recipe only applies for projects that use external signers.
+</Warning>
+
+<Steps>
+  <Step title="Create a custodial project">
+    To create a custodial project, access the [dashboard](https://dashboard.lumx.io/) and choose the following options: 
+
+    <img alt="Dashboard: create custodial project" className="block" src="https://placehold.co/600x400/EEE/31343C" />
+    
+  </Step>
+  <Step title="Encode a transaction">
+
+    Now, let's create an encoded transaction using the [custom transaction](/api-reference/transactions/invoke-a-custom-transaction) endpoint. We're using the custom transaction example from the previous guide, but the process for creating mints or transfers would be the same.
+
+    <Info>Remember to switch `<API_KEY>`, `<WALLET_ID>`, `<EXTERNAL_WALLET_ADDRESS>`.</Info>
+    <Info>This example transaction is for a contract on the Polygon Amoy testnet.</Info>
+
+<CodeGroup>
+
+```bash cURL
+    curl --request POST \
+    --url https://protocol-sandbox.lumx.io/v2/transactions/custom \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "contractAddress": "0xa7Cb3EF2e19bCAA7C765370c39d7a06ea5595D08",
+    "walletId": "<WALLET_ID>",
+    "operations": [
+        {
+          "functionSignature": "generateRandomAirdrop(string)",
+          "argumentsValues": [
+              "randomStringValue"
+          ]
+        },
+        {
+          "functionSignature": "transfer(address, uint256)",
+          "argumentsValues": [
+              "<EXTERNAL_WALLET_ADDRESS>",
+              "25644842301077323776"
+          ]
+        }
+    ],
+    }'
+```
+
+</CodeGroup>
+
+    You will receive a status 201 with an object containing the transaction data, including a string under the key "encodedTxHash":
+    
+     ```
+      {
+        "encodedTxHash": string,
+      }
+    ```
+    Save this string to use on the next step.
+
+  </Step>
+  <Step title="Sign the transaction">
+
+  Now, you will need to sign the transaction using Elliptic Curve Digital Signature Algorithm (ECDSA). The exact implementation for this step will depend on which signing provider you're using, but we've included some examples below:
+
+  <Tabs>
+  <Tab title="Google HSM">
+  <CodeGroup>
+```bash cURL
+```
+```js JS
+```
+```python Python
+```
+  </CodeGroup>
+  </Tab>
+  <Tab title="Fireblocks">
+  <CodeGroup>
+```bash cURL
+```
+```js JS
+```
+```python Python
+```
+  </CodeGroup>
+  </Tab>
+  <Tab title="AWS">
+  <CodeGroup>
+```bash cURL
+```
+```js JS
+```
+```python Python
+```
+  </CodeGroup>
+  </Tab>
+  <Tab title="BitGo">
+  <CodeGroup>
+```bash cURL
+```
+```js JS
+```
+```python Python
+```
+  </CodeGroup>
+  </Tab>
+</Tabs>
+
+  (mudar texto)Save this string to use on the next step.
+
+  </Step>
+  <Step title="Execute the signed transaction">
+
+  Now that you have the signed transaction, you're ready to submit it to the blockchain, using our [execute signed transaction](/api-reference/transactions/execute-signed-transaction) endpoint:
+
+  ```bash cURL
+    curl --request POST \
+    --url https://protocol-sandbox.lumx.io/v2/transactions/:transactionId/execute \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{"signedTransaction": "string"}'
+```
+
+  You will receive a status 202 indicating that the transaction has been accepted and will be submitted to the blockchain. This is an async action, meaning you will need to monitor the status of the transaction using the [read a transaction](/api-reference/transactions/read-a-transaction) endpoint. Alternatively, you can [register a webhook](/guides/recipes/register-a-webhook) to receive the transaction's result.
+
+  </Step>
+</Steps>
+
+<Snippet file="troubleshooting.mdx" />
