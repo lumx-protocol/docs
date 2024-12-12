@@ -118,8 +118,7 @@
       "pages": [
         "guides/recipes/transfer-a-token",
         "guides/recipes/invoke-a-custom-transaction",
-        "guides/recipes/register-a-webhook",
-        "guides/recipes/sign-encoded-transaction"
+        "guides/recipes/register-a-webhook"
       ]
     },
     {
