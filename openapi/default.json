@@ -1,112 +1,13 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/quotes": {
-      "post": {
-        "operationId": "QuotesController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreateQuotesDto" }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateQuotesResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [{ "bearer": [] }],
-        "summary": "Create a quote",
-        "tags": ["Quotes"]
-      }
-    },
-    "/payins": {
-      "post": {
-        "operationId": "PayinsController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreatePayinsDto" }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreatePayinsResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [{ "bearer": [] }],
-        "summary": "Create a payin",
-        "tags": ["Payins"]
-      },
+    "/": {
       "get": {
-        "operationId": "PayinsController_readAll",
+        "operationId": "AppController_getHello",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReadPayinsResponseDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [{ "bearer": [] }],
-        "summary": "Read all payins",
-        "tags": ["Payins"]
-      }
-    },
-    "/payins/{payinId}": {
-      "get": {
-        "operationId": "PayinsController_read",
-        "parameters": [
-          {
-            "name": "payinId",
-            "required": true,
-            "in": "path",
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReadPayinsResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [{ "bearer": [] }],
-        "summary": "Read a payin",
-        "tags": ["Payins"]
+        "responses": { "200": { "description": "" } },
+        "summary": "Health check endpoint",
+        "tags": ["Health"]
       }
     },
     "/payouts": {
@@ -186,6 +87,35 @@
         "security": [{ "bearer": [] }],
         "summary": "Read a payout",
         "tags": ["Payouts"]
+      }
+    },
+    "/quotes": {
+      "post": {
+        "operationId": "QuotesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateQuotesDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateQuotesResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Create a quote",
+        "tags": ["Quotes"]
       }
     },
     "/receivers": {
@@ -269,7 +199,7 @@
     },
     "/receivers/{receiverId}/blockchain-accounts": {
       "post": {
-        "operationId": "ReceiversController_createWallets",
+        "operationId": "ReceiversController_registerBlockchainAccount",
         "parameters": [
           {
             "name": "receiverId",
@@ -283,7 +213,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateBlockchainAccountsDto"
+                "$ref": "#/components/schemas/RegisterBlockchainAccountsDto"
               }
             }
           }
@@ -294,18 +224,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateBlockchainAccountsResponseDto"
+                  "$ref": "#/components/schemas/RegisterBlockchainAccountsResponseDto"
                 }
               }
             }
           }
         },
         "security": [{ "bearer": [] }],
-        "summary": "Create a blockchain account",
+        "summary": "Register a blockchain account",
         "tags": ["Receivers"]
       },
       "get": {
-        "operationId": "ReceiversController_readAllWallets",
+        "operationId": "ReceiversController_readAllBlockchainAccounts",
         "parameters": [
           {
             "name": "receiverId",
@@ -322,7 +252,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReadAllBlockchainAccountsResponseDto"
+                    "$ref": "#/components/schemas/ReadBlockchainAccountsResponseDto"
                   }
                 }
               }
@@ -334,9 +264,43 @@
         "tags": ["Receivers"]
       }
     },
+    "/receivers/{receiverId}/blockchain-accounts/{walletId}": {
+      "get": {
+        "operationId": "ReceiversController_readBlockchainAccount",
+        "parameters": [
+          {
+            "name": "receiverId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "walletId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadBlockchainAccountsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Read a blockchain account",
+        "tags": ["Receivers"]
+      }
+    },
     "/receivers/{receiverId}/bank-accounts": {
       "post": {
-        "operationId": "ReceiversController_createBankAccounts",
+        "operationId": "ReceiversController_registerBankAccounts",
         "parameters": [
           {
             "name": "receiverId",
@@ -366,7 +330,7 @@
           }
         },
         "security": [{ "bearer": [] }],
-        "summary": "Create a bank account",
+        "summary": "Register a bank account",
         "tags": ["Receivers"]
       },
       "get": {
@@ -387,7 +351,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReadAllBankAccountsResponseDto"
+                    "$ref": "#/components/schemas/ReadBankAccountsResponseDto"
                   }
                 }
               }
@@ -397,6 +361,119 @@
         "security": [{ "bearer": [] }],
         "summary": "Read all bank accounts",
         "tags": ["Receivers"]
+      }
+    },
+    "/receivers/{receiverId}/bank-accounts/{bankAccountId}": {
+      "get": {
+        "operationId": "ReceiversController_readBankAccount",
+        "parameters": [
+          {
+            "name": "receiverId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "bankAccountId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadBankAccountsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Read a bank account",
+        "tags": ["Receivers"]
+      }
+    },
+    "/payins": {
+      "post": {
+        "operationId": "PayinsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreatePayinsDto" }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePayinsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Create a payin",
+        "tags": ["Payins"]
+      },
+      "get": {
+        "operationId": "PayinsController_readAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReadPayinsResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Read all payins",
+        "tags": ["Payins"]
+      }
+    },
+    "/payins/{payinId}": {
+      "get": {
+        "operationId": "PayinsController_read",
+        "parameters": [
+          {
+            "name": "payinId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadPayinsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }],
+        "summary": "Read a payin",
+        "tags": ["Payins"]
       }
     }
   },
@@ -413,157 +490,6 @@
       "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
     },
     "schemas": {
-      "CreateQuotesDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "example": "payin",
-            "enum": ["payin", "payout"],
-            "description": "Type of quote to create."
-          },
-          "blockchainAccountId": {
-            "type": "string",
-            "example": "ba_000000000000",
-            "description": "The ID of the blockchain account."
-          },
-          "bankAccountId": {
-            "type": "string",
-            "example": "ba_000000000000",
-            "description": "The ID of the bank account."
-          },
-          "paymentMethod": {
-            "type": "string",
-            "example": "pix",
-            "enum": ["pix"],
-            "description": "Payment method for the transaction."
-          },
-          "amount": {
-            "type": "number",
-            "minimum": 100,
-            "example": 1000,
-            "description": "100 represents 1.00, 1000 represents 10.00."
-          },
-          "token": {
-            "type": "string",
-            "example": "USDX",
-            "enum": ["USDC", "USDX"],
-            "description": "Token to be used in the transaction."
-          }
-        },
-        "required": ["type", "amount", "token"]
-      },
-      "CreateQuotesResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "qu_000000000000",
-            "description": "Quote identifier."
-          },
-          "type": {
-            "type": "string",
-            "example": "payin",
-            "enum": ["payin", "payout"],
-            "description": "Type of quote."
-          },
-          "expiresAt": {
-            "type": "number",
-            "example": 1712958191,
-            "description": "Unix timestamp when the quote expires."
-          },
-          "commercialQuotation": {
-            "type": "number",
-            "example": 595,
-            "description": "1 USD = 5.95 BRL."
-          },
-          "providerQuotation": {
-            "type": "number",
-            "example": 585,
-            "description": "1 USD = 5.85 BRL (commercial quotation - provider taxes)."
-          },
-          "receiverAmount": {
-            "type": "number",
-            "example": 5240,
-            "description": "52.40 BRL."
-          },
-          "senderAmount": {
-            "type": "number",
-            "example": 1010,
-            "description": "10.10 USDX needs to be sent to bank account blockchain address."
-          },
-          "flatFee": {
-            "type": "number",
-            "example": 50,
-            "description": "0.50 USDX"
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "expiresAt",
-          "commercialQuotation",
-          "providerQuotation",
-          "receiverAmount",
-          "senderAmount",
-          "flatFee"
-        ]
-      },
-      "CreatePayinsDto": {
-        "type": "object",
-        "properties": {
-          "quoteId": {
-            "type": "string",
-            "example": "qu_000000000000",
-            "description": "The ID of the quote."
-          }
-        },
-        "required": ["quoteId"]
-      },
-      "CreatePayinsResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "pa_000000000000",
-            "description": "The ID of the payin."
-          },
-          "status": {
-            "type": "string",
-            "enum": ["processing", "failed", "refunded", "completed"],
-            "example": "processing",
-            "description": "The current status of the payin."
-          },
-          "pixCode": {
-            "type": "string",
-            "example": "12345678",
-            "description": "Pix code for the payin."
-          }
-        },
-        "required": ["id", "status", "pixCode"]
-      },
-      "ReadPayinsResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "pa_000000000000",
-            "description": "The ID of the payin."
-          },
-          "status": {
-            "type": "string",
-            "enum": ["processing", "failed", "refunded", "completed"],
-            "example": "processing",
-            "description": "The current status of the payin."
-          },
-          "pixCode": {
-            "type": "string",
-            "example": "12345678",
-            "description": "Pix code for the payin."
-          }
-        },
-        "required": ["id", "status", "pixCode"]
-      },
       "CreatePayoutsDto": {
         "type": "object",
         "properties": {
@@ -572,13 +498,13 @@
             "example": "qu_000000000000",
             "description": "The ID of the quote."
           },
-          "walletId": {
+          "wallet": {
             "type": "string",
             "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb",
-            "description": "The ID of the wallet that will send the funds."
+            "description": "The wallet ID or wallet address of the sender."
           }
         },
-        "required": ["quoteId", "walletId"]
+        "required": ["quoteId", "wallet"]
       },
       "CreatePayoutsResponseDto": {
         "type": "object",
@@ -613,6 +539,123 @@
           }
         },
         "required": ["id", "status"]
+      },
+      "CreateQuotesDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "payin",
+            "enum": ["payin", "payout"],
+            "description": "Type of quote to create."
+          },
+          "blockchainAccountId": {
+            "type": "string",
+            "example": "ba_000000000000",
+            "description": "The ID of the blockchain account."
+          },
+          "bankAccountId": {
+            "type": "string",
+            "example": "ba_000000000000",
+            "description": "The ID of the bank account."
+          },
+          "paymentMethod": {
+            "type": "string",
+            "example": "pix",
+            "enum": ["pix"],
+            "description": "Payment method for the transaction."
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 100,
+            "example": 1000,
+            "description": "100 represents 1.00, 1000 represents 10.00."
+          },
+          "token": {
+            "type": "string",
+            "example": "USDX",
+            "enum": ["USDC", "USDT", "USDX"],
+            "description": "Token to be used in the transaction."
+          }
+        },
+        "required": ["type", "amount", "token"]
+      },
+      "ProviderContractDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "0x0000000000000000000000000000000000000000",
+            "description": "The provider contract address to be granted approval for."
+          },
+          "amount": {
+            "type": "string",
+            "example": "1000000000000000000",
+            "description": "The amount of tokens to be granted approval for."
+          }
+        },
+        "required": ["address", "amount"]
+      },
+      "CreateQuotesResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "qu_000000000000",
+            "description": "Quote identifier."
+          },
+          "type": {
+            "type": "string",
+            "example": "payin",
+            "enum": ["payin", "payout"],
+            "description": "Type of quote."
+          },
+          "expiresAt": {
+            "type": "number",
+            "example": 1712958191,
+            "description": "Unix timestamp when the quote expires."
+          },
+          "commercialQuotation": {
+            "type": "number",
+            "example": 595,
+            "description": "1 USD = 5.95 BRL."
+          },
+          "providerQuotation": {
+            "type": "number",
+            "example": 585,
+            "description": "1 USD = 5.85 BRL (commercial quotation - provider taxes)."
+          },
+          "providerContract": {
+            "description": "The provider contract details for approval.",
+            "allOf": [{ "$ref": "#/components/schemas/ProviderContractDto" }]
+          },
+          "receiverAmount": {
+            "type": "number",
+            "example": 5240,
+            "description": "52.40 BRL."
+          },
+          "senderAmount": {
+            "type": "number",
+            "example": 1010,
+            "description": "10.10 USDX needs to be sent to bank account blockchain address."
+          },
+          "flatFee": {
+            "type": "number",
+            "example": 50,
+            "description": "0.50 USDX"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "expiresAt",
+          "commercialQuotation",
+          "providerQuotation",
+          "providerContract",
+          "receiverAmount",
+          "senderAmount",
+          "flatFee"
+        ]
       },
       "CreateReceiversDto": {
         "type": "object",
@@ -1935,7 +1978,7 @@
           "country"
         ]
       },
-      "CreateBlockchainAccountsDto": {
+      "RegisterBlockchainAccountsDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1945,16 +1988,16 @@
             "minLength": 1,
             "maxLength": 100
           },
-          "walletId": {
+          "wallet": {
             "type": "string",
-            "description": "Wallet identifier. If not provided, a new wallet will be created and linked to this blockchain account.",
+            "description": "The wallet ID or wallet address. If not provided, a new smart wallet will be created and linked to this blockchain account.",
             "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb",
             "format": "string"
           }
         },
-        "required": ["name", "walletId"]
+        "required": ["name", "wallet"]
       },
-      "CreateBlockchainAccountsResponseDto": {
+      "RegisterBlockchainAccountsResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1962,11 +2005,17 @@
             "description": "The ID of blockchain account.",
             "example": "wa_000000000000",
             "format": "string"
+          },
+          "wallet": {
+            "type": "string",
+            "description": "The wallet ID or wallet address. If not provided, a new wallet will be created and linked to this blockchain account.",
+            "example": "7d413181-6c8c-427e-9d7b-6b07ba6ad5fb",
+            "format": "string"
           }
         },
-        "required": ["id"]
+        "required": ["id", "wallet"]
       },
-      "ReadAllBlockchainAccountsResponseDto": {
+      "ReadBlockchainAccountsResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1983,15 +2032,10 @@
             "maxLength": 100
           },
           "network": {
-            "type": "number",
+            "type": "string",
             "description": "Blockchain network.",
             "example": "Base",
-            "enum": [
-              { "mainnet": "ethereum", "testnet": "sepolia" },
-              { "mainnet": "base", "testnet": "base_sepolia" },
-              { "mainnet": "arbitrum", "testnet": "arbitrum_sepolia" },
-              { "mainnet": "polygon", "testnet": "polygon_amoy" }
-            ]
+            "enum": ["Ethereum", "Base", "Arbitrum", "Polygon"]
           },
           "address": {
             "type": "string",
@@ -2090,7 +2134,7 @@
         },
         "required": ["id"]
       },
-      "ReadAllBankAccountsResponseDto": {
+      "ReadBankAccountsResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2174,6 +2218,61 @@
           }
         },
         "required": ["id", "name", "type"]
+      },
+      "CreatePayinsDto": {
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "example": "qu_000000000000",
+            "description": "The ID of the quote."
+          }
+        },
+        "required": ["quoteId"]
+      },
+      "CreatePayinsResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "pa_000000000000",
+            "description": "The ID of the payin."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["processing", "failed", "refunded", "completed"],
+            "example": "processing",
+            "description": "The current status of the payin."
+          },
+          "pixCode": {
+            "type": "string",
+            "example": "12345678",
+            "description": "Pix code for the payin."
+          }
+        },
+        "required": ["id", "status", "pixCode"]
+      },
+      "ReadPayinsResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "pa_000000000000",
+            "description": "The ID of the payin."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["processing", "failed", "refunded", "completed"],
+            "example": "processing",
+            "description": "The current status of the payin."
+          },
+          "pixCode": {
+            "type": "string",
+            "example": "12345678",
+            "description": "Pix code for the payin."
+          }
+        },
+        "required": ["id", "status", "pixCode"]
       }
     }
   }

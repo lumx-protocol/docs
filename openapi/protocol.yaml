@@ -1313,7 +1313,7 @@ components:
           type: string
           description: The status of the transaction on the blockchain.
           enum:
-            - pending
+            - created
             - success
             - failed
         transactionHash:
