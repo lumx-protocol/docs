@@ -122,6 +122,12 @@
       ]
     },
     {
+      "group": "Projects",
+      "pages": [
+        "api-reference/projects/create-a-project"
+      ]
+    },
+    {
       "group": "Wallets",
       "pages": [
         "api-reference/wallets/create-a-wallet",

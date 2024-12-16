@@ -893,6 +893,15 @@ components:
         blockchainName:
           description: The blockchain used by the project.
           $ref: "#/components/schemas/Blockchains"
+        custodySettings: 
+          type: object 
+          properties:
+            passkeyEnabled:
+              type: boolean 
+            signers: 
+              type: array 
+              items:
+                type: string
     ProjectResponse:
       type: object
       properties:
