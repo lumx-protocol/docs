@@ -4,8 +4,8 @@ info:
   title: Lumx Protocol
   description: Lumx Protocol API
 servers:
-  - url: https://protocol-sandbox.lumx.io/v2
-  - url: https://protocol.lumx.io/v2
+  # - url: https://protocol-sandbox.lumx.io/v2
+  # - url: https://protocol.lumx.io/v2
   - url: https://protocol-staging.int.lumx.io/v2
 paths:
   /projects/auth:
@@ -874,6 +874,64 @@ paths:
                     example: Transaction not found!
       security:
         - apiKey: []
+  "/transactions/{transactionId}/execute":
+    post: 
+      tags:
+        - Transactions
+      summary: Execute an encoded transaction
+      description: For custodial projects. Execute a transaction previously signed by your signing provider.
+      parameters:
+        - name: transactionId
+          in: path
+          description: The ID of the transaction.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionExecuteEncodedRequest"
+              required:
+                - signedTransaction
+      responses:
+        "202":
+          description: "The transaction was submitted to the blockchain. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    title: Mint
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionMintResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: object
+                    title: Transfer
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionTransferResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - type: object
+                    title: Custom
+                    allOf:
+                      - $ref: "#/components/schemas/TransactionResponse"
+                      - $ref: "#/components/schemas/TransactionCustomResponse"
+                      - $ref: "#/components/schemas/TransactionTimeStamps"
+        "404":
+          description: Transaction not found!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Transaction not found!
+      security:
+        - apiKey: []
+
 components:
   schemas:
     Blockchains:
@@ -1509,6 +1567,12 @@ components:
           type: string
           description: >-
             The signature of the message in hexadecimal format.
+    TransactionExecuteEncodedRequest:
+      type: object
+      properties:
+        signedTransaction: 
+          type: string 
+          description: The signed transaction that was returned by your signing provider.
   securitySchemes:
     apiKey:
       type: http
