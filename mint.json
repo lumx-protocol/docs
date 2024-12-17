@@ -157,6 +157,7 @@
         "api-reference/transactions/mint-tokens",
         "api-reference/transactions/transactions-transfer",
         "api-reference/transactions/invoke-a-custom-transaction",
+        "api-reference/transactions/execute-encoded-transaction",
         "api-reference/transactions/read-a-transaction",
         "api-reference/transactions/read-all-transactions"
       ]
