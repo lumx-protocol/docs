@@ -30,180 +30,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProjectResponse"
-  /customers:
-    post:
-      summary: Create a customer
-      description: This endpoint creates a customer with KYC information
-      tags:
-        - Customers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CustomerRequest"
-      responses:
-        "201":
-          description: Successfully created the customer
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
-      security:
-        - apiKey: []
-    get:
-      tags:
-        - Customers
-      summary: Read all customers
-      description: This endpoint reads all customers
-      parameters:
-        - in: query
-          name: cursor
-          schema:
-            type: string
-          required: false
-          description: The cursor for pagination
-        - in: query
-          name: size
-          schema:
-            type: integer
-          required: false
-          description: The number of customers to return
-        - in: query
-          name: kycType
-          schema:
-            type: string
-            enum: [light, standard]
-          required: false
-          description: Filter customers by KYC type
-      responses:
-        "200":
-          description: The list of customers was retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/CustomerResponse"
-                  pagination:
-                    type: object
-                    properties:
-                      cursor:
-                        type: string
-                      pageSize:
-                        type: number
-      security:
-        - apiKey: []
-  "/customers/{customerId}":
-    get:
-      tags:
-        - Customers
-      summary: Read a customer
-      description: This endpoint reads a customer's details
-      parameters:
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The ID of the customer
-      responses:
-        "200":
-          description: Customer details retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
-        "404":
-          description: Customer not found!
-      security:
-        - apiKey: []
-    patch:
-      tags:
-        - Customers
-      summary: Update a customer
-      description: This endpoint updates a customer's details including KYC level
-      parameters:
-        - name: customerId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The ID of the customer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                  description: Customer's first name
-                lastName:
-                  type: string
-                  description: Customer's last name
-                email:
-                  type: string
-                  format: email
-                  description: Customer's email address
-                kycType:
-                  type: string
-                  enum: [light, standard]
-                  description: Type of KYC verification required
-                phoneNumber:
-                  type: string
-                  description: Customer's phone number (required for standard KYC)
-                dateOfBirth:
-                  type: string
-                  format: date
-                  description: Customer's date of birth (required for standard KYC)
-                address:
-                  type: object
-                  description: Customer's address (required for standard KYC)
-                  properties:
-                    street:
-                      type: string
-                    city:
-                      type: string
-                    state:
-                      type: string
-                    country:
-                      type: string
-                    postalCode:
-                      type: string
-      responses:
-        "200":
-          description: Customer updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
-        "400":
-          description: Invalid request parameters
-        "404":
-          description: Customer not found!
-      security:
-        - apiKey: []
   /wallets:
     post:
       summary: Create a wallet
       description: This endpoint creates a wallet
       tags:
         - Wallets
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                customerId:
-                  type: string
-                  format: uuid
-                  description: The ID of the customer who owns this wallet
       responses:
         "201":
           description: Successfully created the wallet.
@@ -338,54 +170,83 @@ paths:
                     example: A Error ocurred trying to sign a message
       security:
         - apiKey: []
-  /exchange-rates:
-    post:
-      tags:
-        - Exchange Rates
-      summary: Get a exchange rate
-      description: Get a price quotation for converting between fiat (BRL) and stablecoins (USDC/USDT)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - sourceCurrency
-                - targetCurrency
-                - sourceAmount
-              properties:
-                sourceCurrency:
-                  type: string
-                  enum: [BRL, USDC, USDT]
-                  description: The currency to convert from
-                targetCurrency:
-                  type: string
-                  enum: [BRL, USDC, USDT]
-                  description: The currency to convert to
-                sourceAmount:
-                  type: number
-                  format: double
-                  description: The amount in source currency to convert
-                  example: 1000.00
-      responses:
-        "201":
-          description: Exchange rate quote created successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExchangeRateResponse"
-        "400":
-          description: Invalid request parameters
-      security:
-        - apiKey: []
-  /transactions/transfer:
+  /transactions/mints:
     post:
       tags:
         - Transactions
-      summary: Transfer
+      summary: Mint tokens
       description: >-
-        Transfer tokens from a wallet.
+        Mint one or multiple tokens and send them to a wallet. Important: This
+        is an ASYNC route! Use the read transaction route to check the mint's
+        status.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - allOf:
+                    - $ref: "#/components/schemas/TransactionMintRequest"
+                      title: Non-fungible
+                      required:
+                        - contractId
+                        - walletId
+                    - type: object
+                      properties:
+                        uriNumber:
+                          type: number
+                          description: The sequential identifier of the token type within the contract.
+                      required:
+                        - uriNumber
+                - allOf:
+                    - $ref: "#/components/schemas/TransactionMintRequest"
+                      title: Fungible
+                      required:
+                        - contractId
+                        - walletId
+                        - quantity
+      responses:
+        "202":
+          description: >-
+            The mint request was submitted to the blockchain. Important: This is
+            an ASYNC route! Use the read transaction route to check the mint's
+            status.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/TransactionResponse"
+                  - $ref: "#/components/schemas/TransactionMintResponse"
+                  - $ref: "#/components/schemas/TransactionTimeStamps"
+        "409":
+          description: Contract not deployed yet!.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: This contract does not belong to this project
+        "403":
+          description: Minting this amount will surpass the maximum tokens per address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Minting this amount will surpass the maximum tokens per address
+      security:
+        - apiKey: []
+  /transactions/transfers:
+    post:
+      tags:
+        - Transactions
+      summary: Transfer tokens
+      description: >-
+        Transfer tokens from a wallet. Important: This is an ASYNC route! Use
+        the read transaction route to check the transfer's status.
       requestBody:
         content:
           application/json:
@@ -437,73 +298,11 @@ paths:
                   - $ref: "#/components/schemas/TransactionTimeStamps"
       security:
         - apiKey: []
-  /transactions/on-ramp:
-    post:
-      tags:
-        - Transactions
-      summary: On-ramp
-      description: >-
-        Convert BRL (Brazilian Real) to USDC or USDT.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/TransactionRampRequest"
-                - type: object
-      responses:
-        "202":
-          description: On-ramp operation created successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/TransactionRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
-        "400":
-          description: Invalid request parameters
-        "402":
-          description: Insufficient funds
-      security:
-        - apiKey: []
-  /transactions/off-ramp:
-    post:
-      tags:
-        - Transactions
-      summary: Off-ramp
-      description: >-
-        Convert USDC or USDT to BRL (Brazilian Real).
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/TransactionRampRequest"
-                - type: object
-      responses:
-        "202":
-          description: Off-ramp operation created successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/TransactionRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
-        "400":
-          description: Invalid request parameters
-        "402":
-          description: Insufficient funds
-      security:
-        - apiKey: []
   /transactions/custom:
     post:
       tags:
         - Transactions
-      summary: Custom
+      summary: Invoke a custom transaction
       description: Invoke any function of a smart contract
       requestBody:
         content:
@@ -683,7 +482,7 @@ paths:
     post:
       tags:
         - Transactions
-      summary: Execute a transaction
+      summary: Execute an encoded transaction
       description: For custodial projects. Execute a transaction previously signed by your signing provider.
       parameters:
         - name: transactionId
@@ -818,10 +617,6 @@ components:
           type: string
           description: The id of the wallet.
           format: uuid
-        customerId:
-          type: string
-          format: uuid
-          description: The ID of the customer who owns this wallet
         address:
           description: The blockchain address of the wallet.
           type: string
@@ -1381,178 +1176,6 @@ components:
         signedTransaction:
           type: string
           description: The signed transaction that was returned by your signing provider.
-    CustomerRequest:
-      type: object
-      required:
-        - firstName
-        - lastName
-        - email
-        - kycType
-      properties:
-        firstName:
-          type: string
-          description: Customer's first name
-        lastName:
-          type: string
-          description: Customer's last name
-        email:
-          type: string
-          format: email
-          description: Customer's email address
-        kycType:
-          type: string
-          enum: [light, standard]
-          description: Type of KYC verification required
-        phoneNumber:
-          type: string
-          description: Customer's phone number (required for standard KYC)
-        dateOfBirth:
-          type: string
-          format: date
-          description: Customer's date of birth (required for standard KYC)
-        address:
-          type: object
-          description: Customer's address (required for standard KYC)
-          properties:
-            street:
-              type: string
-            city:
-              type: string
-            state:
-              type: string
-            country:
-              type: string
-            postalCode:
-              type: string
-    CustomerResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique identifier for the customer
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        kycType:
-          type: string
-          enum: [light, standard]
-        kycStatus:
-          type: string
-          enum: [pending, approved, rejected]
-        phoneNumber:
-          type: string
-        dateOfBirth:
-          type: string
-          format: date
-        address:
-          type: object
-          properties:
-            street:
-              type: string
-            city:
-              type: string
-            state:
-              type: string
-            country:
-              type: string
-            postalCode:
-              type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    TransactionRampRequest:
-      type: object
-      required:
-        - walletId
-        - paymentMethod
-        - exchangeRateId
-      properties:
-        exchangeRateId:
-          type: string
-          format: uuid
-          description: The ID of a valid exchange rate quote
-        walletId:
-          type: string
-          format: uuid
-          description: The wallet ID involved in the operation
-        paymentMethod:
-          type: string
-          enum: [pix]
-          description: The payment/payout method for BRL
-        pixKey:
-          type: string
-          description: The PIX key that will receive the BRL
-    TransactionRampResponse:
-      type: object
-      properties:
-        request:
-          type: object
-          properties:
-            exchangeRateId:
-              type: string
-              format: uuid
-              description: The ID of the exchange rate
-            walletId:
-              type: string
-              format: uuid
-              description: The ID of the wallet involved in the operation
-            paymentMethod:
-              type: string
-              enum: [pix]
-              description: The payment method used for the operation
-            pixKey:
-              type: string
-              description: The PIX key (required when payment method is pix)
-    ExchangeRateResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique identifier for the exchange rate quote
-        sourceAmount:
-          type: number
-          format: double
-          example: 100
-          description: The amount in source currency to be exchanged
-        targetAmount:
-          type: number
-          format: double
-          example: 625
-          description: The amount in target currency to be received
-        rate:
-          type: number
-          format: double
-          example: 6.15
-          description: The exchange rate between source and target currencies
-        fees:
-          type: object
-          properties:
-            serviceFee:
-              type: number
-              format: double
-              example: 0.05
-              description: The service fee in target currency
-            developerFee:
-              type: number
-              format: double
-              example: 0.05
-              description: The developer fee in target currency
-        expiresAt:
-          type: string
-          format: date-time
-          description: The timestamp when this quote expires
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp when this quote was created
   securitySchemes:
     apiKey:
       type: http

@@ -123,8 +123,15 @@
     },
     {
       "group": "Projects",
+      "pages": ["api-reference/projects/read-a-project"]
+    },
+    {
+      "group": "Customers",
       "pages": [
-        "api-reference/projects/create-a-project"
+        "api-reference/customers/create-a-customer",
+        "api-reference/customers/update-a-customer",
+        "api-reference/customers/read-all-customer",
+        "api-reference/customers/read-a-customer"
       ]
     },
     {
@@ -137,29 +144,19 @@
       ]
     },
     {
-      "group": "Contracts",
-      "pages": [
-        "api-reference/contracts/create-a-contract",
-        "api-reference/contracts/update-a-contract",
-        "api-reference/contracts/deploy-a-contract",
-        "api-reference/contracts/read-a-contract",
-        "api-reference/contracts/read-all-contracts",
-        "api-reference/contracts/create-a-token-type",
-        "api-reference/contracts/update-a-token-type",
-        "api-reference/contracts/read-a-token-type",
-        "api-reference/contracts/read-all-token-types",
-        "api-reference/contracts/read-contract-function"
-      ]
+      "group": "Exchange Rates",
+      "pages": ["api-reference/exchange-rates/get-a-exchange-rate"]
     },
     {
       "group": "Transactions",
       "pages": [
-        "api-reference/transactions/mint-tokens",
-        "api-reference/transactions/transactions-transfer",
-        "api-reference/transactions/invoke-a-custom-transaction",
-        "api-reference/transactions/execute-encoded-transaction",
+        "api-reference/transactions/transfer",
+        "api-reference/transactions/on-ramp",
+        "api-reference/transactions/off-ramp",
+        "api-reference/transactions/custom",
         "api-reference/transactions/read-a-transaction",
-        "api-reference/transactions/read-all-transactions"
+        "api-reference/transactions/read-all-transactions",
+        "api-reference/transactions/execute-a-transaction"
       ]
     },
     {
