@@ -1486,9 +1486,6 @@ components:
           type: string
           enum: [pix]
           description: The payment/payout method for BRL
-        pixKey:
-          type: string
-          description: The PIX key that will receive the BRL
     TransactionRampResponse:
       type: object
       properties:
@@ -1510,6 +1507,10 @@ components:
             pixKey:
               type: string
               description: The PIX key (required when payment method is pix)
+        pixString:
+          type: string
+          description: The PIX string to be used for payment (only present in onramp transactions)
+          example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
     ExchangeRateResponse:
       type: object
       properties:
