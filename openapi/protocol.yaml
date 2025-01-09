@@ -875,7 +875,7 @@ paths:
       security:
         - apiKey: []
   "/transactions/{transactionId}/execute":
-    post: 
+    post:
       tags:
         - Transactions
       summary: Execute an encoded transaction
@@ -951,13 +951,13 @@ components:
         blockchainName:
           description: The blockchain used by the project.
           $ref: "#/components/schemas/Blockchains"
-        custodySettings: 
-          type: object 
+        custodySettings:
+          type: object
           properties:
             passkeyEnabled:
-              type: boolean 
-            signers: 
-              type: array 
+              type: boolean
+            signers:
+              type: array
               items:
                 type: string
     ProjectResponse:
@@ -1569,10 +1569,17 @@ components:
             The signature of the message in hexadecimal format.
     TransactionExecuteEncodedRequest:
       type: object
+      description: For wallets using passkey authentication, both authenticatorData and clientDataJSON fields are required.
       properties:
-        signedTransaction: 
-          type: string 
+        signedTransaction:
+          type: string
           description: The signed transaction that was returned by your signing provider.
+        authenticatorData:
+          type: string
+          description: Authenticator data for passkey authentication. Required when the wallet uses passkey authentication.
+        clientDataJSON:
+          type: string
+          description: Client data JSON for passkey authentication. Required when the wallet uses passkey authentication.
   securitySchemes:
     apiKey:
       type: http
