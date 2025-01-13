@@ -1402,43 +1402,24 @@ components:
         id:
           type: string
           format: uuid
-          description: The unique identifier for the customer
-        firstName:
+          description: Unique customer identifier
+        externalId:
           type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        kycType:
-          type: string
-          enum: [light, standard]
-        kycStatus:
-          type: string
-          enum: [pending, approved, rejected]
-        phoneNumber:
-          type: string
-        dateOfBirth:
-          type: string
-          format: date
-        address:
-          type: object
-          properties:
-            street:
-              type: string
-            city:
-              type: string
-            state:
-              type: string
-            country:
-              type: string
-            postalCode:
-              type: string
+          description: External customer identifier
+        endorsements:
+          type: array
+          items:
+            type: string
+            enum: [base, sepa]
+          description: List of customer endorsements
         createdAt:
           type: string
           format: date-time
+          description: Record creation timestamp
         updatedAt:
           type: string
           format: date-time
+          description: Record last update timestamp
     TransactionRampRequest:
       type: object
       required:
