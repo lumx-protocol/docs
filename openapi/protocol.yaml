@@ -1389,13 +1389,13 @@ components:
       properties:
         externalId:
           type: string
-          description: Identificador externo do cliente
+          description: External customer identifier
         endorsements:
           type: array
           items:
             type: string
             enum: [base, sepa]
-          description: Lista de endossos requeridos
+          description: List of required endorsements
     CustomerResponse:
       type: object
       properties:
