@@ -36,6 +36,11 @@ paths:
       description: This endpoint creates a wallet
       tags:
         - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWalletRequest"
       responses:
         "201":
           description: Successfully created the wallet.
@@ -1007,6 +1012,13 @@ components:
             pageSize:
               type: number
               description: The size of the page.
+    CreateWalletRequest:
+      type: object
+      properties:
+        passkeyPublicKey:
+          type: string
+          description: The passkey public key. Optional. Only used when the project has passkey authentication enabled.
+      required: []
     WalletResponse:
       type: object
       properties:
