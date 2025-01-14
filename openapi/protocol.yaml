@@ -449,9 +449,24 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/TransactionRampRequest"
-                - type: object
+              type: object
+              required:
+                - walletId
+                - paymentMethod
+                - exchangeRateId
+              properties:
+                walletId:
+                  type: string
+                  format: uuid
+                  description: The wallet ID to receive the crypto tokens
+                paymentMethod:
+                  type: string
+                  enum: [pix]
+                  description: The payment/payout method for BRL
+                exchangeRateId:
+                  type: string
+                  format: uuid
+                  description: The ID of a valid exchange rate quote
       responses:
         "202":
           description: On-ramp operation created successfully
@@ -480,16 +495,24 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - type: object
-                  required:
-                    - externalAccountId
-                  properties:
-                    externalAccountId:
-                      type: string
-                      format: uuid
-                      description: The ID of the external account to receive the funds (required)
-                - $ref: "#/components/schemas/TransactionRampRequest"
+              type: object
+              required:
+                - externalAccountId
+                - paymentMethod
+                - exchangeRateId
+              properties:
+                externalAccountId:
+                  type: string
+                  format: uuid
+                  description: The ID of the external account to receive the funds
+                paymentMethod:
+                  type: string
+                  enum: [pix]
+                  description: The payment/payout method for BRL
+                exchangeRateId:
+                  type: string
+                  format: uuid
+                  description: The ID of a valid exchange rate quote
       responses:
         "202":
           description: Off-ramp operation created successfully
@@ -1534,7 +1557,6 @@ components:
     TransactionRampRequest:
       type: object
       required:
-        - walletId
         - paymentMethod
         - exchangeRateId
       properties:
@@ -1545,7 +1567,7 @@ components:
         walletId:
           type: string
           format: uuid
-          description: The wallet ID involved in the operation
+          description: The wallet ID (required for on-ramp operations only)
         paymentMethod:
           type: string
           enum: [pix]
