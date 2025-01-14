@@ -1,0 +1,119 @@
+---
+title: 'List External Accounts'
+api: 'GET /external-accounts'
+description: 'Get all external accounts'
+---
+
+Retrieve a list of all external accounts with pagination support.
+
+### Query Parameters
+
+<ParamField query="cursor" type="string">
+  The cursor for pagination
+</ParamField>
+
+<ParamField query="size" type="integer">
+  The number of accounts to return
+</ParamField>
+
+### Response
+
+<ResponseField name="data" type="array">
+  List of external accounts
+  <Expandable title="Toggle object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the external account
+    </ResponseField>
+
+    <ResponseField name="type" type="string">
+      Type of external account (`pix` or `bank_transfer`)
+    </ResponseField>
+
+    <ResponseField name="pixKey" type="string">
+      PIX key (only for PIX type accounts)
+    </ResponseField>
+
+    <ResponseField name="bankName" type="string">
+      Name of the bank
+    </ResponseField>
+
+    <ResponseField name="bankCode" type="string">
+      Brazilian bank code
+    </ResponseField>
+
+    <ResponseField name="branchNumber" type="string">
+      Bank branch number
+    </ResponseField>
+
+    <ResponseField name="accountNumber" type="string">
+      Bank account number
+    </ResponseField>
+
+    <ResponseField name="accountType" type="string">
+      Type of bank account (`checking` or `savings`)
+    </ResponseField>
+
+    <ResponseField name="holderName" type="string">
+      Name of the account holder
+    </ResponseField>
+
+    <ResponseField name="holderTaxId" type="string">
+      CPF/CNPJ of the account holder
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      When the account was created
+    </ResponseField>
+
+    <ResponseField name="updatedAt" type="string">
+      When the account was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  <Expandable title="Toggle object">
+    <ResponseField name="cursor" type="string">
+      The cursor for the next page
+    </ResponseField>
+
+    <ResponseField name="pageSize" type="number">
+      The size of the page
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash Example Request
+curl --request GET \
+  --url 'https://protocol.lumx.io/v2/external-accounts?cursor=ea_123&size=10' \
+  --header 'Authorization: Bearer <token>'
+```
+</RequestExample>
+
+<ResponseExample>
+```json Response
+{
+  "data": [
+    {
+      "id": "ea_123e4567-e89b-12d3-a456-426614174000",
+      "type": "pix",
+      "pixKey": "14947677768",
+      "bankName": "Nubank",
+      "bankCode": "260",
+      "branchNumber": "0001",
+      "accountNumber": "1234567-8",
+      "accountType": "checking",
+      "holderName": "John Doe",
+      "holderTaxId": "12345678901",
+      "createdAt": "2024-03-13T15:53:00Z",
+      "updatedAt": "2024-03-13T15:53:00Z"
+    }
+  ],
+  "pagination": {
+    "cursor": "ea_456",
+    "pageSize": 10
+  }
+}
+```
+</ResponseExample> 

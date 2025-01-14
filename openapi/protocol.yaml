@@ -481,8 +481,15 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/TransactionRampRequest"
                 - type: object
+                  required:
+                    - externalAccountId
+                  properties:
+                    externalAccountId:
+                      type: string
+                      format: uuid
+                      description: The ID of the external account to receive the funds (required)
+                - $ref: "#/components/schemas/TransactionRampRequest"
       responses:
         "202":
           description: Off-ramp operation created successfully
@@ -734,6 +741,110 @@ paths:
                   error:
                     type: string
                     example: Transaction not found!
+      security:
+        - apiKey: []
+  /external-accounts:
+    post:
+      tags:
+        - External Accounts
+      summary: Create an external account
+      description: Create a new external account for receiving funds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExternalAccountRequest"
+      responses:
+        "201":
+          description: External account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalAccountResponse"
+      security:
+        - apiKey: []
+    get:
+      tags:
+        - External Accounts
+      summary: List external accounts
+      description: Get all external accounts
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
+          description: The cursor for pagination
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: The number of accounts to return
+      responses:
+        "200":
+          description: List of external accounts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ExternalAccountResponse"
+                  pagination:
+                    type: object
+                    properties:
+                      cursor:
+                        type: string
+                      pageSize:
+                        type: number
+      security:
+        - apiKey: []
+
+  "/external-accounts/{accountId}":
+    get:
+      tags:
+        - External Accounts
+      summary: Get an external account
+      description: Get details of a specific external account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: External account details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalAccountResponse"
+        "404":
+          description: External account not found
+      security:
+        - apiKey: []
+    delete:
+      tags:
+        - External Accounts
+      summary: Delete an external account
+      description: Delete a specific external account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: External account deleted successfully
+        "404":
+          description: External account not found
       security:
         - apiKey: []
 components:
@@ -1507,6 +1618,156 @@ components:
           type: string
           format: date-time
           description: The timestamp when this quote was created
+    ExternalAccountRequest:
+      oneOf:
+        - type: object
+          title: PIX Account
+          required:
+            - type
+            - pixKey
+          properties:
+            type:
+              type: string
+              enum: [pix]
+              description: Type of external account (pix)
+            pixKey:
+              type: string
+              description: PIX key for receiving funds
+        - type: object
+          title: Bank Account
+          required:
+            - type
+            - bankName
+            - bankCode
+            - branchNumber
+            - accountNumber
+            - accountType
+            - holderName
+            - holderTaxId
+          properties:
+            type:
+              type: string
+              enum: [bank_transfer]
+              description: Type of external account (bank_transfer)
+            bankName:
+              type: string
+              description: Name of the bank
+            bankCode:
+              type: string
+              description: Brazilian bank code (3 digits)
+              pattern: '^[0-9]{3}$'
+            branchNumber:
+              type: string
+              description: Bank branch number
+            accountNumber:
+              type: string
+              description: Bank account number
+            accountType:
+              type: string
+              enum: [checking, savings]
+              description: Type of bank account
+            holderName:
+              type: string
+              description: Name of the account holder
+            holderTaxId:
+              type: string
+              description: CPF/CNPJ of the account holder
+              pattern: '^[0-9]{11}|[0-9]{14}$'
+      discriminator:
+        propertyName: type
+        mapping:
+          pix: '#/components/schemas/ExternalAccountRequest/oneOf/0'
+          bank_transfer: '#/components/schemas/ExternalAccountRequest/oneOf/1'
+
+    ExternalAccountResponse:
+      oneOf:
+        - type: object
+          title: PIX Account Response
+          required:
+            - id
+            - type
+            - pixKey
+            - createdAt
+            - updatedAt
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier of the external account
+            type:
+              type: string
+              enum: [pix]
+              description: Type of external account (pix)
+            pixKey:
+              type: string
+              description: PIX key for receiving funds
+            createdAt:
+              type: string
+              format: date-time
+              description: When the account was created
+            updatedAt:
+              type: string
+              format: date-time
+              description: When the account was last updated
+        - type: object
+          title: Bank Account Response
+          required:
+            - id
+            - type
+            - bankName
+            - bankCode
+            - branchNumber
+            - accountNumber
+            - accountType
+            - holderName
+            - holderTaxId
+            - createdAt
+            - updatedAt
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier of the external account
+            type:
+              type: string
+              enum: [bank_transfer]
+              description: Type of external account (bank_transfer)
+            bankName:
+              type: string
+              description: Name of the bank
+            bankCode:
+              type: string
+              description: Brazilian bank code
+            branchNumber:
+              type: string
+              description: Bank branch number
+            accountNumber:
+              type: string
+              description: Bank account number
+            accountType:
+              type: string
+              enum: [checking, savings]
+              description: Type of bank account
+            holderName:
+              type: string
+              description: Name of the account holder
+            holderTaxId:
+              type: string
+              description: CPF/CNPJ of the account holder
+            createdAt:
+              type: string
+              format: date-time
+              description: When the account was created
+            updatedAt:
+              type: string
+              format: date-time
+              description: When the account was last updated
+      discriminator:
+        propertyName: type
+        mapping:
+          pix: '#/components/schemas/ExternalAccountResponse/oneOf/0'
+          bank_transfer: '#/components/schemas/ExternalAccountResponse/oneOf/1'
+
   securitySchemes:
     apiKey:
       type: http

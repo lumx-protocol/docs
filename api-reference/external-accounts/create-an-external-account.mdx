@@ -1,0 +1,217 @@
+---
+title: 'Create an External Account'
+api: 'POST /external-accounts'
+description: 'Create a new external account for receiving funds'
+---
+
+Create a new external account that can be used for receiving funds in off-ramp operations. The request payload varies depending on the type of account being created.
+
+<Warning>
+  The returned external account ID (`id`) is **required** when creating an off-ramp operation. You must provide it as `externalAccountId` in the off-ramp request.
+</Warning>
+
+### Request Body
+
+<ParamField body="type" type="string" required>
+  The type of external account. Must be one of:
+  - `"pix"`: For PIX accounts
+  - `"bank_transfer"`: For bank transfer accounts
+</ParamField>
+
+The remaining fields depend on the type of account:
+
+### For PIX accounts (when `type: "pix"`):
+
+Required fields:
+- `pixKey`: the PIX key for receiving funds
+
+<ParamField body="pixKey" type="string">
+  PIX key for receiving funds (required for PIX accounts)
+</ParamField>
+
+<Note>
+  When creating a PIX account, ONLY these two fields should be included. Any other fields will be ignored.
+</Note>
+
+### For bank accounts (when `type: "bank_transfer"`):
+
+Required fields:
+- All bank account fields listed below
+
+<ParamField body="bankName" type="string">
+  Name of the bank (required for bank transfer accounts)
+</ParamField>
+
+<ParamField body="bankCode" type="string">
+  Brazilian bank code (3 digits) (required for bank transfer accounts)
+</ParamField>
+
+<ParamField body="branchNumber" type="string">
+  Bank branch number (required for bank transfer accounts)
+</ParamField>
+
+<ParamField body="accountNumber" type="string">
+  Bank account number (required for bank transfer accounts)
+</ParamField>
+
+<ParamField body="accountType" type="enum">
+  Type of bank account (required for bank transfer accounts)
+  <Enum>
+    <EnumItem value="checking">Checking account</EnumItem>
+    <EnumItem value="savings">Savings account</EnumItem>
+  </Enum>
+</ParamField>
+
+<ParamField body="holderName" type="string">
+  Name of the account holder (required for bank transfer accounts)
+</ParamField>
+
+<ParamField body="holderTaxId" type="string">
+  CPF/CNPJ of the account holder (11 digits for CPF, 14 digits for CNPJ) (required for bank transfer accounts)
+</ParamField>
+
+<Note>
+  When creating a bank account, all bank account fields are required and `pixKey` should not be included.
+</Note>
+
+### Response
+
+The response structure matches the request type. The returned `id` field is required when creating an off-ramp operation as `externalAccountId`.
+
+#### For PIX accounts:
+
+<ResponseField name="id" type="string" required>
+  Unique identifier of the external account. This ID must be used as `externalAccountId` when creating an off-ramp operation.
+</ResponseField>
+
+<ResponseField name="type" type="enum">
+  The type of external account
+  <Enum>
+    <EnumItem value="pix">For PIX accounts</EnumItem>
+    <EnumItem value="bank_transfer">For bank transfer accounts</EnumItem>
+  </Enum>
+</ResponseField>
+
+<ResponseField name="pixKey" type="string">
+  PIX key for receiving funds
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  When the account was created
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string">
+  When the account was last updated
+</ResponseField>
+
+#### For bank accounts:
+
+<ResponseField name="id" type="string" required>
+  Unique identifier of the external account. This ID must be used as `externalAccountId` when creating an off-ramp operation.
+</ResponseField>
+
+<ResponseField name="type" type="enum">
+  The type of external account
+  <Enum>
+    <EnumItem value="pix">For PIX accounts</EnumItem>
+    <EnumItem value="bank_transfer">For bank transfer accounts</EnumItem>
+  </Enum>
+</ResponseField>
+
+<ResponseField name="bankName" type="string">
+  Name of the bank
+</ResponseField>
+
+<ResponseField name="bankCode" type="string">
+  Brazilian bank code
+</ResponseField>
+
+<ResponseField name="branchNumber" type="string">
+  Bank branch number
+</ResponseField>
+
+<ResponseField name="accountNumber" type="string">
+  Bank account number
+</ResponseField>
+
+<ResponseField name="accountType" type="enum">
+  Type of bank account
+  <Enum>
+    <EnumItem value="checking">Checking account</EnumItem>
+    <EnumItem value="savings">Savings account</EnumItem>
+  </Enum>
+</ResponseField>
+
+<ResponseField name="holderName" type="string">
+  Name of the account holder
+</ResponseField>
+
+<ResponseField name="holderTaxId" type="string">
+  CPF/CNPJ of the account holder
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  When the account was created
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string">
+  When the account was last updated
+</ResponseField>
+
+<RequestExample>
+```bash PIX Account Example
+curl --request POST \
+  --url https://protocol.lumx.io/v2/external-accounts \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "type": "pix",
+    "pixKey": "14947677768"
+  }'
+```
+
+```bash Bank Account Example
+curl --request POST \
+  --url https://protocol.lumx.io/v2/external-accounts \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "type": "bank_transfer",
+    "bankName": "Nubank",
+    "bankCode": "260",
+    "branchNumber": "0001",
+    "accountNumber": "1234567-8",
+    "accountType": "checking",
+    "holderName": "John Doe",
+    "holderTaxId": "12345678901"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json PIX Account Response
+{
+  "id": "ea_123e4567-e89b-12d3-a456-426614174000",
+  "type": "pix",
+  "pixKey": "14947677768",
+  "createdAt": "2024-03-13T15:53:00Z",
+  "updatedAt": "2024-03-13T15:53:00Z"
+}
+```
+
+```json Bank Account Response
+{
+  "id": "ea_123e4567-e89b-12d3-a456-426614174000",
+  "type": "bank_transfer",
+  "bankName": "Nubank",
+  "bankCode": "260",
+  "branchNumber": "0001",
+  "accountNumber": "1234567-8",
+  "accountType": "checking",
+  "holderName": "John Doe",
+  "holderTaxId": "12345678901",
+  "createdAt": "2024-03-13T15:53:00Z",
+  "updatedAt": "2024-03-13T15:53:00Z"
+}
+```
+</ResponseExample> 

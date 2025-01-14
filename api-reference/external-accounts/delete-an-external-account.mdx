@@ -1,0 +1,25 @@
+---
+title: 'Delete an External Account'
+api: 'DELETE /external-accounts/{accountId}'
+description: 'Delete a specific external account'
+---
+
+Delete an existing external account. This operation cannot be undone.
+
+### Path Parameters
+
+<ParamField path="accountId" type="string" required>
+  The ID of the external account to delete
+</ParamField>
+
+### Response
+
+Returns a `204 No Content` response on successful deletion.
+
+<RequestExample>
+```bash Example Request
+curl --request DELETE \
+  --url https://protocol.lumx.io/v2/external-accounts/ea_123e4567-e89b-12d3-a456-426614174000 \
+  --header 'Authorization: Bearer <token>'
+```
+</RequestExample> 

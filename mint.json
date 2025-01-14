@@ -160,6 +160,15 @@
       ]
     },
     {
+      "group": "External Accounts",
+      "pages": [
+        "api-reference/external-accounts/create-an-external-account",
+        "api-reference/external-accounts/read-an-external-account",
+        "api-reference/external-accounts/read-all-external-accounts",
+        "api-reference/external-accounts/delete-an-external-account"
+      ]
+    },
+    {
       "group": "Extensions",
       "pages": ["extensions/introduction"]
     },
