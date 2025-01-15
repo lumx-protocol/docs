@@ -1018,7 +1018,6 @@ components:
         passkeyPublicKey:
           type: string
           description: The passkey public key. Optional. Only used when the project has passkey authentication enabled.
-      required: []
     WalletResponse:
       type: object
       properties:
