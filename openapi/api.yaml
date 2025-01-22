@@ -133,6 +133,18 @@ paths:
           description: Invalid request parameters
         "404":
           description: Customer not found!
+        "409":
+          description: An error ocurred trying to create a customer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Another customer with the same document already exists
+                  customer:
+                    $ref: "#/components/schemas/Customer"
       security:
         - apiKey: []
   /wallets:
