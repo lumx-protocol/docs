@@ -26,6 +26,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid request parameters
         "409":
           description: An error ocurred trying to create a customer
           content:
