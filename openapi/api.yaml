@@ -1359,17 +1359,16 @@ components:
       type: object
       required:
         - externalId
-        - endorsements
+        - documents
       properties:
         externalId:
           type: string
           description: External customer identifier
-        endorsements:
+        documents:
           type: array
           items:
-            type: string
-            enum: [base, sepa]
-          description: List of required endorsements
+            $ref: "#/components/schemas/CustomerDocument"
+          description: List of customer documents
     CustomerResponse:
       type: object
       properties:
@@ -1380,12 +1379,11 @@ components:
         externalId:
           type: string
           description: External customer identifier
-        endorsements:
+        documents:
           type: array
           items:
-            type: string
-            enum: [base, sepa]
-          description: List of customer endorsements
+            $ref: "#/components/schemas/CustomerDocument"
+          description: List of customer documents
         createdAt:
           type: string
           format: date-time
@@ -1394,6 +1392,24 @@ components:
           type: string
           format: date-time
           description: Record last update timestamp
+    CustomerDocument:
+      type: object
+      required:
+        - country
+        - type
+        - value
+      properties:
+        issuingCountry:
+          type: string
+          enum: [BRA, USA, PRT]
+          description: The country that issued the document
+        type:
+          type: string
+          enum: [TAX_ID, NATIONAL_ID, DRIVER_LICENSE]
+          description: The type of document
+        value:
+          type: string
+          description: The document value/number
     TransactionRampRequest:
       type: object
       required:
