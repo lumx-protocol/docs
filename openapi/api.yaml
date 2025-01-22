@@ -108,7 +108,7 @@ paths:
       tags:
         - Customers
       summary: Update a customer
-      description: This endpoint updates a customer's details including KYC level
+      description: This endpoint updates a customer's details including documents
       parameters:
         - name: id
           in: path
