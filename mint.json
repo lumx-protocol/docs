@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Lumx Protocol",
+  "name": "Lumx",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -122,84 +122,28 @@
       ]
     },
     {
-      "group": "Projects",
-      "pages": ["api-reference/projects/read-a-project"]
-    },
-    {
       "group": "Customers",
       "pages": [
         "api-reference/customers/create-a-customer",
         "api-reference/customers/update-a-customer",
-        "api-reference/customers/read-all-customer",
-        "api-reference/customers/read-a-customer"
-      ]
-    },
-    {
-      "group": "Wallets",
-      "pages": [
-        "api-reference/wallets/create-a-wallet",
-        "api-reference/wallets/read-a-wallet",
-        "api-reference/wallets/read-all-wallets",
-        "api-reference/wallets/sign-a-message"
+        "api-reference/customers/read-a-customer",
+        "api-reference/customers/read-all-customers"
       ]
     },
     {
       "group": "Exchange Rates",
-      "pages": ["api-reference/exchange-rates/get-a-exchange-rate"]
+      "pages": ["api-reference/exchange-rates/get-an-exchange-rate"]
     },
     {
       "group": "Transactions",
       "pages": [
-        "api-reference/transactions/transfer",
         "api-reference/transactions/on-ramp",
         "api-reference/transactions/off-ramp",
-        "api-reference/transactions/custom",
+        "api-reference/transactions/transfer",
+        "api-reference/transactions/swap",
+        "api-reference/transactions/execute-a-transaction",
         "api-reference/transactions/read-a-transaction",
-        "api-reference/transactions/read-all-transactions",
-        "api-reference/transactions/execute-a-transaction"
-      ]
-    },
-    {
-      "group": "Extensions",
-      "pages": ["extensions/introduction"]
-    },
-    {
-      "group": "Payments",
-      "pages": [
-        "extensions/payments/overview",
-        "extensions/payments/essentials",
-        {
-          "group": "Receivers",
-          "pages": [
-            "extensions/payments/receivers/create-a-receiver",
-            "extensions/payments/receivers/read-a-receiver",
-            "extensions/payments/receivers/read-all-receivers",
-            "extensions/payments/receivers/create-a-blockchain-account",
-            "extensions/payments/receivers/read-all-blockchain-accounts",
-            "extensions/payments/receivers/create-a-bank-account",
-            "extensions/payments/receivers/read-all-bank-accounts"
-          ]
-        },
-        {
-          "group": "Quotes",
-          "pages": ["extensions/payments/quotes/create-a-quote"]
-        },
-        {
-          "group": "Payins",
-          "pages": [
-            "extensions/payments/payins/create-a-payin",
-            "extensions/payments/payins/read-a-payin",
-            "extensions/payments/payins/read-all-payins"
-          ]
-        },
-        {
-          "group": "Payouts",
-          "pages": [
-            "extensions/payments/payouts/create-a-payout",
-            "extensions/payments/payouts/read-a-payout",
-            "extensions/payments/payouts/read-all-payouts"
-          ]
-        }
+        "api-reference/transactions/read-all-transactions"
       ]
     }
   ],
