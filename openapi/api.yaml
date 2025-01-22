@@ -39,7 +39,12 @@ paths:
                     type: string
                     example: Another customer with the same document already exists
                   customer:
-                    $ref: "#/components/schemas/Customer"
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 3d830599-f834-43c9-93f1-3ff6cf84798c
       security:
         - apiKey: []
     get:
@@ -146,7 +151,12 @@ paths:
                     type: string
                     example: Another customer with the same document already exists
                   customer:
-                    $ref: "#/components/schemas/Customer"
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 3d830599-f834-43c9-93f1-3ff6cf84798c
       security:
         - apiKey: []
   /wallets:
