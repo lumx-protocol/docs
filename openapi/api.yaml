@@ -1411,6 +1411,7 @@ components:
         - country
         - type
         - value
+      additionalProperties: false
       properties:
         country:
           type: string
