@@ -1367,6 +1367,10 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/CustomerDocument"
+          example:
+            - country: BRA
+              type: TAX_ID
+              value: 123.456.789-00
     Customer:
       type: object
       properties:
@@ -1389,6 +1393,10 @@ components:
           description: List of customer documents
           items:
             $ref: "#/components/schemas/CustomerDocument"
+          example:
+            - country: BRA
+              type: TAX_ID
+              value: 123.456.789-00
         createdAt:
           type: string
           description: Record creation timestamp
