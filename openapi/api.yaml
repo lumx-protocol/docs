@@ -110,7 +110,7 @@ paths:
       summary: Update a customer
       description: This endpoint updates a customer's details including KYC level
       parameters:
-        - name: customerId
+        - name: id
           in: path
           required: true
           schema:
