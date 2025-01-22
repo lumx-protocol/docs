@@ -90,13 +90,13 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Concepts",
       "pages": [
-        "essentials/protocol",
-        "essentials/wallets",
-        "essentials/contracts",
-        "essentials/transactions",
-        "essentials/webhooks"
+        "concepts/APIs",
+        "concepts/accounts",
+        "concepts/exchangerates",
+        "concepts/onofframp",
+        "concepts/custody"
       ]
     },
     {
