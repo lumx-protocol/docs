@@ -123,7 +123,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Customer"
+              $ref: "#/components/schemas/CustomerPatchRequest"
       responses:
         "200":
           description: Customer updated successfully
@@ -1348,6 +1348,31 @@ components:
         - name
         - birthdate
         - documents
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Customer full name
+        birthdate:
+          type: string
+          description: Customer birth date (yyyy-mm-dd)
+          format: date
+          example: "1970-01-01"
+        passkeyPublicKey:
+          type: string
+          description: Customer's passkey public key
+        documents:
+          type: array
+          description: List of customer documents
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/CustomerDocument"
+          example:
+            - country: BRA
+              type: TAX_ID
+              value: 123.456.789-00
+    CustomerPatchRequest:
+      type: object
       additionalProperties: false
       properties:
         name:
