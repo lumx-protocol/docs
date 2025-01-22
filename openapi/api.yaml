@@ -297,12 +297,20 @@ paths:
                       - $ref: "#/components/schemas/BaseTransactionResponse"
                       - $ref: "#/components/schemas/OffRampResponse"
                       - $ref: "#/components/schemas/TransactionTimestamps"
+                      - type: object 
+                        properties:
+                          status: 
+                            enum: ['processing']
                   - type: object
                     title: Transfer
                     allOf:
                       - $ref: "#/components/schemas/BaseTransactionResponse"
                       - $ref: "#/components/schemas/TransferResponse"
                       - $ref: "#/components/schemas/TransactionTimestamps"
+                      - type: object 
+                        properties:
+                          status: 
+                            enum: ['processing']
       security:
         - apiKey: []
   /transactions:
@@ -555,7 +563,7 @@ components:
         value:
           type: string
           description: The document value/number.
-          example: 000.000.000-00
+          example: 123.456.789-00
     ExchangeRateResponse:
       type: object
       properties:
@@ -747,10 +755,14 @@ components:
           $ref: "#/components/schemas/TransferRequest"
     ExecuteTransactionRequest:
       type: object
+      required: 
+        - transactionSignatures
       properties:
-        signedTransaction:
-          type: string
-          description: The signed transaction that was returned by your signing provider.
+        transactionSignatures:
+          description: All signatures required for this transaction.
+          type: array
+          items: 
+            type: string
   securitySchemes:
     apiKey:
       type: http
