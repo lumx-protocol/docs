@@ -1402,7 +1402,7 @@ components:
         issuingCountry:
           type: string
           enum: [BRA, USA, PRT]
-          description: The country that issued the document
+          description: The country code that issued the document following ISO 3166-1 alpha-2
         type:
           type: string
           enum: [TAX_ID, NATIONAL_ID, DRIVER_LICENSE]
