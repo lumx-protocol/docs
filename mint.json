@@ -49,17 +49,9 @@
   },
   "tabs": [
     {
-      "name": "Guide",
-      "url": "guides"
-    },
-    {
       "name": "API Reference",
       "url": "api-reference",
       "openapi": "/openapi/api.yaml"
-    },
-    {
-      "name": "Extensions",
-      "url": "extensions"
     }
   ],
   "anchors": [
@@ -95,31 +87,8 @@
       "pages": [
         "concepts/APIs",
         "concepts/accounts",
-        "concepts/exchangerates",
         "concepts/onofframp",
         "concepts/custody"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": ["guides/introduction"]
-    },
-    {
-      "group": "Start building",
-      "pages": [
-        "guides/start-building/get-an-api-key",
-        "guides/start-building/your-first-contract",
-        "guides/start-building/create-a-wallet",
-        "guides/start-building/mint-a-token",
-        "guides/start-building/the-road-so-far"
-      ]
-    },
-    {
-      "group": "Recipes",
-      "pages": [
-        "guides/recipes/transfer-a-token",
-        "guides/recipes/invoke-a-custom-transaction",
-        "guides/recipes/register-a-webhook"
       ]
     }
   ],
