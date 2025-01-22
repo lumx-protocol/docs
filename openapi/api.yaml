@@ -11,7 +11,7 @@ paths:
   /customers:
     post:
       summary: Create a customer
-      description: This endpoint creates a customer with KYC information
+      description: This endpoint creates a customer. At least one document is required.
       tags:
         - Customers
       requestBody:
@@ -108,7 +108,7 @@ paths:
       tags:
         - Customers
       summary: Update a customer
-      description: This endpoint updates a customer's details including documents
+      description: This endpoint updates a customer's details including documents. Each field is optional, so you can update only some of the customer's details. If a document is provided, it will be updated or added to the customer's documents list.
       parameters:
         - name: id
           in: path
