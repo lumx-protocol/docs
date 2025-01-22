@@ -1341,7 +1341,7 @@ components:
           description: Customer full name
         birthdate:
           type: string
-          description: Customer birth date
+          description: Customer birth date (yyyy-mm-dd)
           format: date
           example: "1970-01-01"
         passkeyPublicKey:
