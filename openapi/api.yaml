@@ -66,10 +66,7 @@ paths:
                   #     pageSize:
                   #       type: number
       security:
-        api_key:
-          type: apiKey,
-          name: api_key,
-          in: header
+        - apiKey: []
   "/customers/{customerId}":
     get:
       tags:
