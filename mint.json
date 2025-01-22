@@ -54,7 +54,8 @@
     },
     {
       "name": "API Reference",
-      "url": "api-reference"
+      "url": "api-reference",
+      "openapi": "/openapi/api.yaml"
     },
     {
       "name": "Extensions",
@@ -119,31 +120,6 @@
         "guides/recipes/transfer-a-token",
         "guides/recipes/invoke-a-custom-transaction",
         "guides/recipes/register-a-webhook"
-      ]
-    },
-    {
-      "group": "Customers",
-      "pages": [
-        "api-reference/customers/create-a-customer",
-        "api-reference/customers/update-a-customer",
-        "api-reference/customers/read-a-customer",
-        "api-reference/customers/read-all-customers"
-      ]
-    },
-    {
-      "group": "Exchange Rates",
-      "pages": ["api-reference/exchange-rates/get-an-exchange-rate"]
-    },
-    {
-      "group": "Transactions",
-      "pages": [
-        "api-reference/transactions/on-ramp",
-        "api-reference/transactions/off-ramp",
-        "api-reference/transactions/transfer",
-        "api-reference/transactions/swap",
-        "api-reference/transactions/execute-a-transaction",
-        "api-reference/transactions/read-a-transaction",
-        "api-reference/transactions/read-all-transactions"
       ]
     }
   ],
