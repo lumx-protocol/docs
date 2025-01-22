@@ -1358,40 +1358,56 @@ components:
     CustomerRequest:
       type: object
       required:
-        - externalId
+        - name
+        - birthdate
         - documents
       properties:
-        externalId:
+        name:
           type: string
-          description: External customer identifier
+          description: Customer full name
+        birthdate:
+          type: string
+          description: Customer birth date
+          format: date
+        passkeyPublicKey:
+          type: string
+          description: Customer's passkey public key
         documents:
           type: array
+          description: List of customer documents
+          minItems: 1
           items:
             $ref: "#/components/schemas/CustomerDocument"
-          description: List of customer documents
     CustomerResponse:
       type: object
       properties:
         id:
           type: string
-          format: uuid
           description: Unique customer identifier
-        externalId:
+          format: uuid
+        name:
           type: string
-          description: External customer identifier
+          description: Customer full name
+        birthdate:
+          type: string
+          description: Customer birth date
+          format: date
+        passkeyPublicKey:
+          type: string
+          description: Customer's passkey public key
         documents:
           type: array
+          description: List of customer documents
           items:
             $ref: "#/components/schemas/CustomerDocument"
-          description: List of customer documents
         createdAt:
           type: string
-          format: date-time
           description: Record creation timestamp
+          format: date-time
         updatedAt:
           type: string
-          format: date-time
           description: Record last update timestamp
+          format: date-time
     CustomerDocument:
       type: object
       required:
@@ -1401,12 +1417,12 @@ components:
       properties:
         country:
           type: string
-          enum: [BRA, USA, PRT]
           description: The country code that issued the document following ISO 3166-1 alpha-2
+          enum: [BRA, USA, PRT]
         type:
           type: string
-          enum: [TAX_ID, NATIONAL_ID, DRIVER_LICENSE]
           description: The type of document
+          enum: [TAX_ID, NATIONAL_ID, DRIVER_LICENSE]
         value:
           type: string
           description: The document value/number
