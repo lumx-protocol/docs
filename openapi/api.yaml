@@ -4,7 +4,7 @@ info:
   title: Lumx API
   description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
 servers:
-  - url: https://api-staging.int.lumx.io
+  # - url: https://api-staging.int.lumx.io
   - url: https://api-sandbox.lumx.io
   - url: https://api.lumx.io
 paths:
@@ -200,21 +200,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CrossRampRequest"
+              allOf:
+                - $ref: "#/components/schemas/CustomerId"
+                - $ref: "#/components/schemas/CrossRampRequest"
+                - $ref: "#/components/schemas/OnRampRequest"
       responses:
-        "202":
+        "201":
           description: On-ramp operation created successfully.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/CrossRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
-        "400":
-          description: Invalid request parameters.
-        "402":
-          description: Insufficient funds.
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: '#/components/schemas/OnRampResponse'
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   /transactions/off-ramp:
@@ -225,111 +224,44 @@ paths:
       description: >-
         Convert USDC or USDT to BRL (Brazilian Real).
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               allOf:
                 - $ref: "#/components/schemas/CrossRampRequest"
-                - type: object
+                - $ref: "#/components/schemas/OffRampRequest"
       responses:
-        "202":
+        "201":
           description: Off-ramp operation created successfully.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/CrossRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
-        "400":
-          description: Invalid request parameters.
-        "402":
-          description: Insufficient funds.
-      security:
-        - apiKey: []
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/OffRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
   /transactions/transfer:
     post:
       tags:
         - Transactions
       summary: Transfer
       description: >-
-        Transfer tokens from a wallet.
+        Transfer stablecoins between customers or to an external crypto wallet.
       requestBody:
         content:
           application/json:
             schema:
-              oneOf:
-                - allOf:
-                    - $ref: "#/components/schemas/TransactionTransferRequest"
-                      title: Non-fungible token
-                      required:
-                        - contractId
-                        - to
-                        - from
-                    - type: object
-                      properties:
-                        tokenId:
-                          type: string
-                          description: >-
-                            The ID of the token that will be transferred. Not applicable for fungible tokens.
-                      required:
-                        - tokenId
-                - allOf:
-                    - $ref: "#/components/schemas/TransactionTransferRequest"
-                      title: Fungible token
-                      required:
-                        - contractId
-                        - to
-                        - from
-                    - type: object
-                      properties:
-                        quantity:
-                          type: number
-                          description: >-
-                            The quantity of tokens to transfer. Not applicable for non-fungible.
-                            tokens.
-                      required:
-                        - quantity
+              $ref: "#/components/schemas/TransferRequest"
       responses:
-        "202":
-          description: >-
-            The transfer operation was submitted to the blockchain. Important:.
-            This is an ASYNC route! Use the read transaction route to check the
-            transfer's status.
+        "201":
+          description: Transfer transaction created successfully.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/TransactionTransferResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
-      security:
-        - apiKey: []
-  /transactions/swap:
-    post:
-      tags:
-        - Transactions
-      summary: Swap
-      description: Perform a swap between two stablecoins.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SwapRequest"
-              required:
-                - customerId
-      responses:
-        "202":
-          description: >-
-            The transaction was submitted to the blockchain. Important: This is.
-            an ASYNC route! Use the read transaction route to check its status.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/TransactionResponse"
-                  - $ref: "#/components/schemas/TransactionTimeStamps"
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/TransferResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   "/transactions/{transactionId}/execute":
@@ -337,7 +269,7 @@ paths:
       tags:
         - Transactions
       summary: Execute a transaction
-      description: For custodial projects. Execute a transaction previously signed by your signing provider.
+      description: "Execute a transaction that you previously signed using your signing provider. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
       parameters:
         - name: transactionId
           in: path
@@ -349,37 +281,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TransactionExecuteEncodedRequest"
+              $ref: "#/components/schemas/ExecuteTransactionRequest"
               required:
                 - signedTransaction
       responses:
         "202":
-          description: "The transaction was submitted to the blockchain. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
+          description: The transaction was validated and will be submitted to the blockchain.
           content:
             application/json:
               schema:
                 oneOf:
                   - type: object
+                    title: Off-ramp
+                    allOf:
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/OffRampResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
+                  - type: object
                     title: Transfer
                     allOf:
-                      - $ref: "#/components/schemas/TransactionResponse"
-                      - $ref: "#/components/schemas/TransactionTransferResponse"
-                      - $ref: "#/components/schemas/TransactionTimeStamps"
-                  - type: object
-                    title: Swap
-                    allOf:
-                      - $ref: "#/components/schemas/TransactionResponse"
-                      - $ref: "#/components/schemas/TransactionTimeStamps"
-        "404":
-          description: Transaction not found!.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Transaction not found!
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/TransferResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   /transactions:
@@ -388,58 +311,58 @@ paths:
         - Transactions
       summary: Read all transactions
       description: This endpoint reads all transactions made with your API key.
-      parameters:
-        - in: query
-          name: cursor
-          schema:
-            type: string
-          required: false
-          description: The cursor for pagination.
-        - in: query
-          name: size
-          schema:
-            type: integer
-          required: false
-          description: The number of transactions to return.
-        - in: query
-          name: startDate
-          schema:
-            type: string
-            format: date-time
-          required: false
-          description: The start date and time for filtering the results.
-        - in: query
-          name: endDate
-          schema:
-            type: string
-            format: date-time
-          required: false
-          description: The end date and time for filtering the results.
-        - in: query
-          name: type
-          schema:
-            type: string
-            enum:
-              - mint
-              - transfer
-              - custom
-          required: false
-          description: The type of the transaction.
-        - in: query
-          name: status
-          schema:
-            type: string
-            enum:
-              - success
-              - failed
-              - created
-          required: false
-          description: The status of the transaction.
-        - in: query
-          name: contractId
-          schema:
-            type: string
-          description: The id of the contract.
+      # parameters:
+      #   - in: query
+      #     name: cursor
+      #     schema:
+      #       type: string
+      #     required: false
+      #     description: The cursor for pagination.
+      #   - in: query
+      #     name: size
+      #     schema:
+      #       type: integer
+      #     required: false
+      #     description: The number of transactions to return.
+      #   - in: query
+      #     name: startDate
+      #     schema:
+      #       type: string
+      #       format: date-time
+      #     required: false
+      #     description: The start date and time for filtering the results.
+      #   - in: query
+      #     name: endDate
+      #     schema:
+      #       type: string
+      #       format: date-time
+      #     required: false
+      #     description: The end date and time for filtering the results.
+      #   - in: query
+      #     name: type
+      #     schema:
+      #       type: string
+      #       enum:
+      #         - mint
+      #         - transfer
+      #         - custom
+      #     required: false
+      #     description: The type of the transaction.
+      #   - in: query
+      #     name: status
+      #     schema:
+      #       type: string
+      #       enum:
+      #         - success
+      #         - failed
+      #         - created
+      #     required: false
+      #     description: The status of the transaction.
+      #   - in: query
+      #     name: contractId
+      #     schema:
+      #       type: string
+      #     description: The id of the contract.
       responses:
         "200":
           description: The list of transactions was retrieved successfully.
@@ -454,30 +377,32 @@ paths:
                     items:
                       oneOf:
                         - type: object
-                          title: Mints
+                          title: On-ramps
                           allOf:
-                            - $ref: "#/components/schemas/TransactionResponse"
-                            - $ref: "#/components/schemas/TransactionTimeStamps"
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
+                            - $ref: "#/components/schemas/OnRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Off-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
+                            - $ref: "#/components/schemas/OffRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
                         - type: object
                           title: Transfers
                           allOf:
-                            - $ref: "#/components/schemas/TransactionResponse"
-                            - $ref: "#/components/schemas/TransactionTransferResponse"
-                            - $ref: "#/components/schemas/TransactionTimeStamps"
-                        - type: object
-                          title: Custom
-                          allOf:
-                            - $ref: "#/components/schemas/TransactionResponse"
-                            - $ref: "#/components/schemas/TransactionTimeStamps"
-                  pagination:
-                    type: object
-                    properties:
-                      cursor:
-                        type: string
-                        description: The cursor for the next page.
-                      pageSize:
-                        type: number
-                        description: The size of the page.
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
+                            - $ref: "#/components/schemas/TransferResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                  # pagination:
+                  #   type: object
+                  #   properties:
+                  #     cursor:
+                  #       type: string
+                  #       description: The cursor for the next page.
+                  #     pageSize:
+                  #       type: number
+                  #       description: The size of the page.
       security:
         - apiKey: []
   "/transactions/{transactionId}":
@@ -501,205 +426,28 @@ paths:
               schema:
                 oneOf:
                   - type: object
-                    title: Mint
+                    title: On-ramp
                     allOf:
-                      - $ref: "#/components/schemas/TransactionResponse"
-                      - $ref: "#/components/schemas/TransactionTimeStamps"
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/OnRampResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
+                  - type: object
+                    title: Off-ramp
+                    allOf:
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/OffRampResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
                   - type: object
                     title: Transfer
                     allOf:
-                      - $ref: "#/components/schemas/TransactionResponse"
-                      - $ref: "#/components/schemas/TransactionTransferResponse"
-                      - $ref: "#/components/schemas/TransactionTimeStamps"
-                  - type: object
-                    title: Custom
-                    allOf:
-                      - $ref: "#/components/schemas/TransactionResponse"
-                      - $ref: "#/components/schemas/TransactionTimeStamps"
-        "404":
-          description: Transaction not found!.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Transaction not found!
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/TransferResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-components:
-  schemas:
-    Blockchains:
-      type: string
-      description: The name of the blockchain.
-      enum:
-        - Ethereum
-        - Polygon
-        - Chiliz
-        - Linea
-    WalletPaginationResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: "#/components/schemas/WalletResponse"
-        pagination:
-          type: object
-          properties:
-            cursor:
-              type: string
-              description: The cursor for the next page.
-            pageSize:
-              type: number
-              description: The size of the page.
-    WalletResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the wallet.
-          format: uuid
-        customerId:
-          type: string
-          format: uuid
-          description: The ID of the customer who owns this wallet.
-        address:
-          description: The blockchain address of the wallet.
-          type: string
-        blockExplorerUrl:
-          type: string
-          nullable: true
-          description: The URL of the block explorer for this wallet.
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the wallet was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the wallet was last updated.
-        activatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the wallet was activated.
-    TransactionTransferRequest:
-      type: object
-      properties:
-        contractId:
-          type: string
-          format: uuid
-          description: The id of the contract to which the tokens belong.
-        from:
-          type: string
-          format: uuid
-          description: The id of the wallet that is transferring the tokens.
-        to:
-          type: string
-          description: The address or ID of the wallet receiving the tokens. Can be any address, not limited to wallets created through the API.
-          examples:
-            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
-            - "123e4567-e89b-12d3-a456-426614174000"
-    TransactionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The id of the transaction.
-        walletId:
-          type: string
-          format: uuid
-          description: The id of the wallet that performed the transaction.
-        status:
-          type: string
-          description: The status of the transaction on the blockchain.
-          enum:
-            - created
-            - success
-            - failed
-        transactionHash:
-          type: string
-          description: The identifier of this transaction on the blockchain.
-          nullable: true
-        blockExplorerUrl:
-          type: string
-          nullable: true
-          description: The URL of the block explorer where the details of this transaction can be read.
-        result:
-          description: "Contains detailed information about the transaction receipts, including cost, messages, and operation results."
-          type: object
-    TransactionTimeStamps:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the transaction was submitted.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the transaction was last updated.
-        completedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the transaction was completed.
-          nullable: true
-    TransactionTransferResponse:
-      type: object
-      properties:
-        request:
-          description: An object containing the parameters used for this transaction.
-          $ref: "#/components/schemas/TransferMetadata"
-        type:
-          type: string
-          description: The type of transaction.
-          enum:
-            - transfer
-    TransferMetadata:
-      type: object
-      title: Transfer - fungible
-      description: Parameters for transferring fungible tokens.
-      properties:
-        contractId:
-          type: string
-          format: uuid
-          description: The id of the fungible token contract.
-        quantity:
-          type: number
-          description: Quantity of tokens transferred.
-          minimum: 1
-        from:
-          type: string
-          format: uuid
-          description: The id of the wallet that is transferring the tokens.
-        to:
-          type: string
-          description: The address of the wallet that will receive the tokens. It can be any address, not limited to wallets created through the API.
-          example: "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
-    SignMessageRequest:
-      type: object
-      properties:
-        message:
-          type: string
-      description: >-
-        The message that will be signed.
-      required:
-        - message
-    SignMessageResponse:
-      type: object
-      properties:
-        signedMessage:
-          type: string
-          description: >-
-            The signature of the message in hexadecimal format.
-    TransactionExecuteEncodedRequest:
-      type: object
-      properties:
-        signedTransaction:
-          type: string
-          description: The signed transaction that was returned by your signing provider.
+
+components: 
+  schemas: 
     CustomerRequest:
       type: object
       required:
@@ -808,69 +556,6 @@ components:
           type: string
           description: The document value/number.
           example: 000.000.000-00
-    CrossRampRequest:
-      type: object
-      required:
-        - customerId
-        - paymentMethod
-      properties:
-        customerId:
-          type: string
-          format: uuid
-          description: The customer sending or receiving funds in the operation.
-        paymentMethod:
-          type: string
-          enum: [pix]
-          description: The payment/payout method for BRL.
-    OnRampRequest:
-      type: object 
-      required: 
-        - sourceCurrency
-        - targetCurrency
-      properties:
-        sourceCurrency:
-          type: string
-          enum: [BRL]
-          description: The fiat currency to convert from.
-        targetCurrency:
-          type: string
-          enum: [USDC, USDT]
-          description: The stablecoin to convert to.
-    OffRampRequest:
-      type: object 
-      required: 
-        - sourceCurrency
-        - targetCurrency
-      properties:
-        sourceCurrency:
-          type: string
-          enum: [USDC, USDT]
-          description: The stablecoin to convert from.
-        targetCurrency:
-          type: string
-          enum: [BRL]
-          description: The fiat currency to convert to.
-    CrossRampResponse:
-      type: object
-      properties:
-        request:
-          type: object
-          properties:
-            customerId:
-              type: string
-              format: uuid
-              description: The ID of the wallet involved in the operation.
-            paymentMethod:
-              type: string
-              enum: [pix]
-              description: The payment method used for the operation.
-            pixKey:
-              type: string
-              description: The PIX key (required when payment method is pix).
-        pixString:
-          type: string
-          description: The PIX string to be used for payment (only present in onramp transactions).
-          example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
     ExchangeRateResponse:
       type: object
       properties:
@@ -887,8 +572,204 @@ components:
           format: double
           example: 6.15
           description: The exchange rate between source and target currencies.
+    CustomerId:
+      type: object
+      required:
+        - customerId
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: The customer performing the operation.
+    CrossRampRequest:
+      type: object
+      required:
+        - customerId
+        - paymentMethod
+        - amount
+        - sourceCurrency
+        - targetCurrency
+      properties:
+        paymentMethod:
+          type: string
+          enum: [pix]
+          description: The payment/payout method for BRL.
+        sourceCurrency:
+          type: string
+        targetCurrency:
+          type: string
+        amount:
+          type: string
+          format: number
+    OnRampRequest:
+      type: object 
+      properties:
+        sourceCurrency:
+          enum: [BRL]
+          description: The fiat currency to convert from.
+        targetCurrency:
+          enum: [USDC, USDT]
+          description: The stablecoin to convert to.
+        amount:
+          example: '100.99'
+          description: The amount to be converted from fiat to stablecoin.
+    OffRampRequest:
+      type: object 
+      properties:
+        sourceCurrency:
+          enum: [USDC, USDT]
+          description: The stablecoin to convert from.
+        targetCurrency:
+          enum: [BRL]
+          description: The fiat currency to convert to.
+        amount:
+          example: '100.123456'
+          description: The amount to be converted from stablecoin to fiat.
+        pixKey:
+          type: string
+          description: The PIX key where the funds will be sent after the operation.
+    BaseTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The id of the transaction.
+        customerId:
+          type: string
+          format: uuid
+          description: The customer performing the operation.
+        status:
+          type: string
+          description: The status of the transaction.
+        type: 
+          type: string
+          description: The type of this transaction
+          enum: ['on-ramp','off-ramp','transfer','swap']
+        transactionHash:
+          type: string
+          description: The identifier of this transaction on the blockchain.
+          nullable: true
+        blockExplorerUrl:
+          type: string
+          nullable: true
+          description: The URL of the block explorer where the details of this transaction can be read.
+    TransactionTimestamps:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the transaction was submitted.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the transaction was last updated.
+    OnRampResponse:
+      type: object 
+      properties:
+        type: 
+          enum: ['on-ramp']
+        status:
+          enum:
+            - awaiting_funds
+            - awaiting_signature
+            - processing
+            - success
+            - failed
+        request: 
+          description: An object containing the parameters used for this on-ramp.
+          allOf:
+            - $ref: "#/components/schemas/CrossRampRequest"
+            - $ref: "#/components/schemas/OnRampRequest"
+        brCode:
+          type: string
+          description: The PIX copy-and-paste code to be used for payment.
+          example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"        
+    OffRampResponse:
+      type: object 
+      properties:
+        type: 
+          enum: ['off-ramp']
+        status: 
+          enum: 
+            - awaiting_signature
+            - processing
+            - success
+            - failed
+        request: 
+          description: An object containing the parameters used for this off-ramp.
+          allOf:
+            - $ref: "#/components/schemas/CrossRampRequest"
+            - $ref: "#/components/schemas/OffRampRequest"
+    TransferRequest:
+      type: object
+      required: 
+        - currency
+        - from 
+        - to 
+        - amount
+      properties:
+        currency:
+          type: string
+          enum: ['USDC','USDT']
+          description: The stablecoin to be transferred.
+        from:
+          type: string
+          format: uuid
+          description: The id of the customer who is sending the tokens.
+        to:
+          type: string
+          description: The wallet address or customer ID who will receive the tokens.
+          examples:
+            - "123e4567-e89b-12d3-a456-426614174000"
+            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
+        amount:
+          type: string
+          format: number
+          example: '100.123456'
+          description: The amount to be transferred.
+    TransferResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of this transaction.
+          enum: ['transfer']
+        status: 
+          enum: 
+            - awaiting_signature
+            - processing
+            - success
+            - failed
+        request:
+          description: An object containing the parameters used for this transfer.
+          $ref: "#/components/schemas/TransferRequest"
+    ExecuteTransactionRequest:
+      type: object
+      properties:
+        signedTransaction:
+          type: string
+          description: The signed transaction that was returned by your signing provider.
   securitySchemes:
     apiKey:
       type: http
       scheme: bearer
       description: Bearer authentication header of the form `Bearer <API_KEY>`.
+
+
+
+              #         title: Fungible token
+              #   required:
+              #     - contractId
+              #     - to
+              #     - from
+              # - type: object
+              #   properties:
+              #     quantity:
+              #       type: number
+              #       description: >-
+              #         The quantity of tokens to transfer. Not applicable for non-fungible.
+              #         tokens.
+              #   required:
+              #     - quantity
