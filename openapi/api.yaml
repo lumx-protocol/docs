@@ -1417,12 +1417,12 @@ components:
       properties:
         country:
           type: string
-          description: The country code that issued the document following ISO 3166-1 alpha-2
-          enum: [BRA, USA, PRT]
+          description: The country code that issued the document following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
+          enum: [BRA]
         type:
           type: string
-          description: The type of document
-          enum: [TAX_ID, NATIONAL_ID, DRIVER_LICENSE]
+          description: The type of document (TAX_ID is the only one accepted at the moment)
+          enum: [TAX_ID]
         value:
           type: string
           description: The document value/number
