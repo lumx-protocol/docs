@@ -67,14 +67,14 @@ paths:
                   #       type: number
       security:
         - apiKey: []
-  "/customers/{customerId}":
+  "/customers/{id}":
     get:
       tags:
         - Customers
       summary: Read a customer
       description: This endpoint reads a customer's details
       parameters:
-        - name: customerId
+        - name: id
           in: path
           required: true
           schema:
