@@ -87,8 +87,7 @@
       "pages": [
         "concepts/APIs",
         "concepts/accounts",
-        "concepts/onofframp",
-        "concepts/custody"
+        "concepts/onofframp"
       ]
     }
   ],
