@@ -474,7 +474,7 @@ components:
           example: "1970-01-01"
         passkeyPublicKey:
           type: string
-          description: Customer's passkey public key
+          description: Customer's passkey public key. Only applicable if your project is using self-custody.
         documents:
           type: array
           description: List of customer documents
@@ -499,7 +499,7 @@ components:
           example: "1970-01-01"
         passkeyPublicKey:
           type: string
-          description: Customer's passkey public key
+          description: Customer's passkey public key. Only applicable if your project is using self-custody.
         documents:
           type: array
           description: List of customer documents
@@ -593,27 +593,26 @@ components:
       type: object
       required:
         - customerId
-        - paymentMethod
+        - payment
         - amount
         - sourceCurrency
         - targetCurrency
       properties:
         payment:
           description: The definition of how and where the funds from the off ramp transaction will be sent. 
-          schema:
-            oneOf:
-              - type: object
-                properties:
-                  rail: 
-                    type: string 
-                    enum: ['pix']
-                    description: The payment rail that will be used for this off ramp transaction. 
-                  keyValue:
-                    type: string
-                    description: The PIX key identifying the account where to send funds.
-                  keyType: 
-                    type: string 
-                    enum: ['phone','CPF/CNPJ','email','random']
+          type: object
+          required: rail
+          properties:
+            rail: 
+              type: string 
+              enum: ['pix']
+              description: The payment rail that will be used for this transaction. 
+            keyValue:
+              type: string
+              description: The PIX key identifying the account where to send funds.
+            keyType: 
+              type: string 
+              enum: ['phone','CPF/CNPJ','email','random']
         sourceCurrency:
           type: string
         targetCurrency:
@@ -708,6 +707,10 @@ components:
           type: object 
           description: The payment details to add funds for this on ramp transaction. 
           properties:
+            rail:
+              type: string 
+              enum: ['pix']
+              description: The payment rail that will be used for this transaction.
             brCode:
               type: string
               description: The PIX copy-and-paste code to be used for payment.
@@ -809,20 +812,3 @@ components:
       type: http
       scheme: bearer
       description: Bearer authentication header of the form `Bearer <API_KEY>`.
-
-
-
-              #         title: Fungible token
-              #   required:
-              #     - contractId
-              #     - to
-              #     - from
-              # - type: object
-              #   properties:
-              #     quantity:
-              #       type: number
-              #       description: >-
-              #         The quantity of tokens to transfer. Not applicable for non-fungible.
-              #         tokens.
-              #   required:
-              #     - quantity
