@@ -4,7 +4,7 @@ info:
   title: Lumx API
   description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
 servers:
-  # - url: https://api-staging.int.lumx.io
+  - url: https://api-staging.int.lumx.io
   - url: https://api-sandbox.lumx.io
   - url: https://api.lumx.io
 paths:
@@ -598,10 +598,22 @@ components:
         - sourceCurrency
         - targetCurrency
       properties:
-        paymentMethod:
-          type: string
-          enum: [pix]
-          description: The payment/payout method for BRL.
+        payment:
+          description: The definition of how and where the funds from the off ramp transaction will be sent. 
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  rail: 
+                    type: string 
+                    enum: ['pix']
+                    description: The payment rail that will be used for this off ramp transaction. 
+                  keyValue:
+                    type: string
+                    description: The PIX key identifying the account where to send funds.
+                  keyType: 
+                    type: string 
+                    enum: ['phone','CPF/CNPJ','email','random']
         sourceCurrency:
           type: string
         targetCurrency:
@@ -609,33 +621,6 @@ components:
         amount:
           type: string
           format: number
-    OnRampRequest:
-      type: object 
-      properties:
-        sourceCurrency:
-          enum: [BRL]
-          description: The fiat currency to convert from.
-        targetCurrency:
-          enum: [USDC, USDT]
-          description: The stablecoin to convert to.
-        amount:
-          example: '100.99'
-          description: The amount to be converted from fiat to stablecoin.
-    OffRampRequest:
-      type: object 
-      properties:
-        sourceCurrency:
-          enum: [USDC, USDT]
-          description: The stablecoin to convert from.
-        targetCurrency:
-          enum: [BRL]
-          description: The fiat currency to convert to.
-        amount:
-          example: '100.123456'
-          description: The amount to be converted from stablecoin to fiat.
-        pixKey:
-          type: string
-          description: The PIX key where the funds will be sent after the operation.
     BaseTransactionResponse:
       type: object
       properties:
@@ -647,13 +632,28 @@ components:
           type: string
           format: uuid
           description: The customer performing the operation.
-        status:
-          type: string
-          description: The status of the transaction.
         type: 
           type: string
           description: The type of this transaction
           enum: ['on-ramp','off-ramp','transfer','swap']
+        state: 
+          type: object
+          description: The transactions's results. Each transaction type has an specific result object structure.
+          allOf:
+            - $ref: "#/components/schemas/BaseTransactionState"
+            - oneOf:
+              - $ref: "#/components/schemas/OnRampTransactionState"
+              - $ref: "#/components/schemas/OffRampTransactionState"
+              - $ref: "#/components/schemas/TransferTransactionState"
+        request: 
+          type: object
+          description: The parameters used when creating this transaction.
+    BaseTransactionState: 
+      type: object 
+      properties:
+        status:
+          type: string
+          description: The status of the transaction.
         transactionHash:
           type: string
           description: The identifier of this transaction on the blockchain.
@@ -673,43 +673,84 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the transaction was last updated.
+    OnRampRequest:
+      type: object 
+      properties:
+        sourceCurrency:
+          enum: [BRL]
+          description: The fiat currency to convert from.
+        targetCurrency:
+          enum: [USDC, USDT]
+          description: The stablecoin to convert to.
+        amount:
+          example: '100.99'
+          description: The amount to be converted from fiat to stablecoin.    
     OnRampResponse:
       type: object 
       properties:
         type: 
           enum: ['on-ramp']
-        status:
-          enum:
-            - awaiting_funds
-            - awaiting_signature
-            - processing
-            - success
-            - failed
         request: 
           description: An object containing the parameters used for this on-ramp.
           allOf:
             - $ref: "#/components/schemas/CrossRampRequest"
             - $ref: "#/components/schemas/OnRampRequest"
-        brCode:
-          type: string
-          description: The PIX copy-and-paste code to be used for payment.
-          example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"        
+    OnRampTransactionState: 
+      type: object 
+      properties: 
+        status:
+          enum:
+            - awaiting_funds
+            - processing
+            - success
+            - failed
+        payment: 
+          type: object 
+          description: The payment details to add funds for this on ramp transaction. 
+          properties:
+            brCode:
+              type: string
+              description: The PIX copy-and-paste code to be used for payment.
+              example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+    OffRampRequest:
+      type: object 
+      required: 
+        - sourceCurrency
+        - targetCurrency
+        - amount
+        - payment
+      properties:
+        sourceCurrency:
+          enum: [USDC, USDT]
+          description: The stablecoin to convert from.
+        targetCurrency:
+          enum: [BRL]
+          description: The fiat currency to convert to.
+        amount:
+          example: '100.123456'
+          description: The amount to be converted from stablecoin to fiat.
     OffRampResponse:
       type: object 
       properties:
         type: 
           enum: ['off-ramp']
+        request: 
+          description: An object containing the parameters used for this off-ramp.
+          allOf:
+            - $ref: "#/components/schemas/CrossRampRequest"
+            - $ref: "#/components/schemas/OffRampRequest"
+    OffRampTransactionState:
+      type: object 
+      properties:
         status: 
           enum: 
             - awaiting_signature
             - processing
             - success
             - failed
-        request: 
-          description: An object containing the parameters used for this off-ramp.
-          allOf:
-            - $ref: "#/components/schemas/CrossRampRequest"
-            - $ref: "#/components/schemas/OffRampRequest"
+        encodedData: 
+          type: string 
+          description: The encoded data that needs to be signed in order to submit this transaction to the blockchain.
     TransferRequest:
       type: object
       required: 
