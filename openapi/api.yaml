@@ -637,13 +637,7 @@ components:
           enum: ['on-ramp','off-ramp','transfer','swap']
         state: 
           type: object
-          description: The transactions's results. Each transaction type has an specific result object structure.
-          allOf:
-            - $ref: "#/components/schemas/BaseTransactionState"
-            - oneOf:
-              - $ref: "#/components/schemas/OnRampTransactionState"
-              - $ref: "#/components/schemas/OffRampTransactionState"
-              - $ref: "#/components/schemas/TransferTransactionState"
+          description: The transactions's results.
         request: 
           type: object
           description: The parameters used when creating this transaction.
@@ -694,8 +688,13 @@ components:
           allOf:
             - $ref: "#/components/schemas/CrossRampRequest"
             - $ref: "#/components/schemas/OnRampRequest"
+        state: 
+          allOf:
+            - $ref: "#/components/schemas/BaseTransactionState"
+            - $ref: "#/components/schemas/OnRampTransactionState"
     OnRampTransactionState: 
       type: object 
+      title: On ramp
       properties: 
         status:
           enum:
@@ -742,6 +741,10 @@ components:
           allOf:
             - $ref: "#/components/schemas/CrossRampRequest"
             - $ref: "#/components/schemas/OffRampRequest"
+        state: 
+          allOf:
+            - $ref: "#/components/schemas/BaseTransactionState"
+            - $ref: "#/components/schemas/OffRampTransactionState"
     OffRampTransactionState:
       type: object 
       properties:
@@ -797,6 +800,10 @@ components:
         request:
           description: An object containing the parameters used for this transfer.
           $ref: "#/components/schemas/TransferRequest"
+        state: 
+          allOf:
+            - $ref: "#/components/schemas/BaseTransactionState"
+            - $ref: "#/components/schemas/TransferTransactionState"
     ExecuteTransactionRequest:
       type: object
       required: 
