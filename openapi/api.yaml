@@ -454,27 +454,39 @@ paths:
       security:
         - apiKey: []
 
-components: 
-  schemas: 
+components:
+  schemas:
     CustomerRequest:
       type: object
       required:
-        - name
-        - birthdate
+        - kind
+        - registrationName
+        - registrationDate
+        - address
         - documents
       additionalProperties: false
       properties:
-        name:
+        kind:
           type: string
-          description: Customer full name
-        birthdate:
+          description: Customer kind
+          enum: ["individual", "business"]
+        registrationName:
           type: string
-          description: Customer birth date (yyyy-mm-dd)
+          description: Customer full name if individual, company legal name if business
+        registrationDate:
+          type: string
+          description: Customer date of birth (yyyy-mm-dd) if individual, company incorporation date (yyyy-mm-dd) if business
           format: date
           example: "1970-01-01"
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key. Only applicable if your project is using self-custody.
+        address:
+          type: object
+          description: Customer's address, CustomerIndividualAddress if individual, CustomerBusinessAddress if business
+          oneOf:
+            - $ref: "#/components/schemas/CustomerIndividualAddress"
+            - $ref: "#/components/schemas/CustomerBusinessAddress"
         documents:
           type: array
           description: List of customer documents
@@ -489,17 +501,23 @@ components:
       type: object
       additionalProperties: false
       properties:
-        name:
+        registrationName:
           type: string
-          description: Customer full name
-        birthdate:
+          description: Customer full name if individual, company legal name if business
+        registrationDate:
           type: string
-          description: Customer birth date (yyyy-mm-dd)
+          description: Customer date of birth (yyyy-mm-dd) if individual, company incorporation date (yyyy-mm-dd) if business
           format: date
           example: "1970-01-01"
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key. Only applicable if your project is using self-custody.
+        address:
+          type: object
+          description: Customer's address, CustomerIndividualAddress if individual, CustomerBusinessAddress if business
+          oneOf:
+            - $ref: "#/components/schemas/CustomerIndividualAddress"
+            - $ref: "#/components/schemas/CustomerBusinessAddress"
         documents:
           type: array
           description: List of customer documents
@@ -517,16 +535,22 @@ components:
           type: string
           description: Unique customer identifier
           format: uuid
-        name:
+        registrationName:
           type: string
-          description: Customer full name
-        birthdate:
+          description: Customer full name if individual, company legal name if business
+        registrationDate:
           type: string
-          description: Customer birth date
+          description: Customer date of birth (yyyy-mm-dd) if individual, company incorporation date (yyyy-mm-dd) if business
           format: date
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key
+        address:
+          type: object
+          description: Customer's address, CustomerIndividualAddress if individual, CustomerBusinessAddress if business
+          oneOf:
+            - $ref: "#/components/schemas/CustomerIndividualAddress"
+            - $ref: "#/components/schemas/CustomerBusinessAddress"
         documents:
           type: array
           description: List of customer documents
@@ -544,6 +568,45 @@ components:
           type: string
           description: Record last update timestamp
           format: date-time
+    CustomerIndividualAddress:
+      type: object
+      required:
+        - streetLine1
+        - city
+        - state
+        - country
+        - zipCode
+      additionalProperties: false
+      properties:
+        streetLine1:
+          type: string
+          description: Street and number of the residence of the individual
+        streetLine2:
+          type: string
+          description: Complement of the address of the residence of the individual
+        city:
+          type: string
+          description: City of the residence of the individual
+        state:
+          type: string
+          description: State of the residence of the individual
+        country:
+          type: string
+          description: The country code of the residence of the individual, following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
+          enum: [BRA]
+        zipCode:
+          type: string
+          description: Zip code of the residence of the individual
+    CustomerBusinessAddress:
+      type: object
+      required:
+        - country
+      additionalProperties: false
+      properties:
+        country:
+          type: string
+          description: The country code where the company is located, following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
+          enum: [BRA]
     CustomerDocument:
       type: object
       required:
