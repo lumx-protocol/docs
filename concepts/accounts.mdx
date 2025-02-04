@@ -1,21 +1,21 @@
 ---
 title: "Accounts"
-description: "Learn about how we work with accounts"
+description: "Learn about how accounts work"
 ---
 
-At the accounts level we have the following terms to disclose:
+At the accounts level, we have the following terms to disclose:
 
-* Client: you, our Lumx client, that has accepted to use our APIs
+* Client: you, our Lumx client, that has accepted to use our APIs.
 
-* Customer: Users of your business&#x20;
+* Customer: Users of your business.&#x20;
 
-* Wallet: Leveraging Account Abstraction, our wallets provide flexible and powerful control over blockchain transactions and wallet logic.
+* Wallet: We provide wallets with flexible and powerful control over blockchain transactions and custom logic.
 
 ### Customers
 
 Customers represent users of your business. By creating or updating your customers through our API you can enable seamless transfers of stablecoins or fiat currencies between your customer's wallets or bank accounts.&#x20;
 
-We currently handle a soft KYC (Name, Tax ID and Birth Date) for your users in compliance with legal requirements when using our on/off ramp processes.&#x20;
+We currently handle a soft KYC/KYB (Name, Tax ID, and Birth Date) for your users in compliance with legal requirements when using our on/off ramp processes.&#x20;
 
 Deeper KYC/KYB options will be provided soon.&#x20;
 
@@ -25,14 +25,10 @@ Programmable wallets are ideal for applications requiring conditional transfers,
 
 * Multi Key Management Providers
 
-Security and accessibility are paramount in blockchain operations. We supports multiple key management providers such as Fireblocks for MPC (multi-party computation) or Google for HSM (hardware security modules), ensuring enterprise-grade security and compliance while giving flexibility to developers to choose a preferred key management system. You can also bring your own key management provider.
+We support multiple signing methods. You can either leverage our pre-build signers or bring your own signer depending on your custody model. You can use MPC or HSM for custodial wallet models or Passkeys for self-custodial.
 
 * Gas Management
 
-To address the UX challenges of users needing to possess cryptocurrencies to cover transaction fees on blockchain networks, our Wallet module includes an innovative gas management feature utilizing a “gas sponsorship” system. This approach enables more predictable cost management and can be especially beneficial during periods of network congestion. You can choose to sponsor gas fees to your users (or let them pay) with fiat or tokens in a given blockchain.
+To address the UX challenges of users needing to possess cryptocurrencies to cover transaction fees on blockchain networks, we provide an innovative gas management feature utilizing a “gas sponsorship” system, meaning we cover all gas costs for your transactions.&#x20;
 
-### Passkey Protection
-
-Enhancing security further, our Wallet module incorporates passkey protection, leveraging the latest innovations in authentication technology to secure access to wallets. This feature offers an option to traditional password systems with a more robust authentication mechanism, giving users the ability to use Face ID and fingerprints to access their wallets and make transactions.
-
-Next, let's learn more about [On/Off Ramp processes](/concepts/onofframp).
+Next, let's learn more about [On/Off Ramp processes](/concepts/orchestration).
