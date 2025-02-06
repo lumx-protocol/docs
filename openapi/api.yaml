@@ -4,9 +4,9 @@ info:
   title: Lumx API
   description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
 servers:
-  - url: https://api-staging.int.lumx.io
   - url: https://api-sandbox.lumx.io
-  - url: https://api.lumx.io
+  # - url: https://api-staging.int.lumx.io
+  # - url: https://api.lumx.io
 paths:
   /customers:
     post:
@@ -29,7 +29,7 @@ paths:
         "400":
           description: Invalid request parameters
         "409":
-          description: An error ocurred trying to create a customer
+          description: A conflict error ocurred trying to create a customer
           content:
             application/json:
               schema:
@@ -74,6 +74,7 @@ paths:
                 type: object
                 properties:
                   data:
+                    description: An array containing all customers.
                     type: array
                     items:
                       $ref: "#/components/schemas/Customer"
@@ -115,7 +116,7 @@ paths:
       tags:
         - Customers
       summary: Update a customer
-      description: This endpoint updates a customer's details including documents. Each field is optional, so you can update only some of the customer's details. If a document is provided, it will be updated or added to the customer's documents list.
+      description: Updates a customer's details and documents. All fields are optional and documents will be added or updated if provided.
       parameters:
         - name: id
           in: path
@@ -164,7 +165,7 @@ paths:
       tags:
         - Exchange Rates
       summary: Get an exchange rate
-      description: Get a price quote for converting between currencies.
+      description: Get the current exchange rate between two currencies.
       parameters:
         - name: sourceCurrency
           in: query
@@ -264,55 +265,55 @@ paths:
                   - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-  "/transactions/{transactionId}/execute":
-    post:
-      tags:
-        - Transactions
-      summary: Execute a transaction
-      description: "Execute a transaction that you previously signed using your signing provider. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
-      parameters:
-        - name: transactionId
-          in: path
-          description: The ID of the transaction.
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ExecuteTransactionRequest"
-              required:
-                - signedTransaction
-      responses:
-        "202":
-          description: The transaction was validated and will be submitted to the blockchain.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - type: object
-                    title: Off-ramp
-                    allOf:
-                      - $ref: "#/components/schemas/BaseTransactionResponse"
-                      - $ref: "#/components/schemas/OffRampResponse"
-                      - $ref: "#/components/schemas/TransactionTimestamps"
-                      - type: object 
-                        properties:
-                          status: 
-                            enum: ['processing']
-                  - type: object
-                    title: Transfer
-                    allOf:
-                      - $ref: "#/components/schemas/BaseTransactionResponse"
-                      - $ref: "#/components/schemas/TransferResponse"
-                      - $ref: "#/components/schemas/TransactionTimestamps"
-                      - type: object 
-                        properties:
-                          status: 
-                            enum: ['processing']
-      security:
-        - apiKey: []
+  # "/transactions/{transactionId}/execute":
+  #   post:
+  #     tags:
+  #       - Transactions
+  #     summary: Execute a transaction
+  #     description: "Execute a transaction that you previously signed using your signing provider. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
+  #     parameters:
+  #       - name: transactionId
+  #         in: path
+  #         description: The ID of the transaction.
+  #         required: true
+  #         schema:
+  #           type: string
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/ExecuteTransactionRequest"
+  #             required:
+  #               - signedTransaction
+  #     responses:
+  #       "202":
+  #         description: The transaction was validated and will be submitted to the blockchain.
+  #         content:
+  #           application/json:
+  #             schema:
+  #               oneOf:
+  #                 - type: object
+  #                   title: Off-ramp
+  #                   allOf:
+  #                     - $ref: "#/components/schemas/BaseTransactionResponse"
+  #                     - $ref: "#/components/schemas/OffRampResponse"
+  #                     - $ref: "#/components/schemas/TransactionTimestamps"
+  #                     - type: object 
+  #                       properties:
+  #                         status: 
+  #                           enum: ['processing']
+  #                 - type: object
+  #                   title: Transfer
+  #                   allOf:
+  #                     - $ref: "#/components/schemas/BaseTransactionResponse"
+  #                     - $ref: "#/components/schemas/TransferResponse"
+  #                     - $ref: "#/components/schemas/TransactionTimestamps"
+  #                     - type: object 
+  #                       properties:
+  #                         status: 
+  #                           enum: ['processing']
+  #     security:
+  #       - apiKey: []
   /transactions:
     get:
       tags:
@@ -535,8 +536,8 @@ components:
         address:
           $ref: "#/components/schemas/CustomerAddress"
           example:
-            line1: "123 Main St"
-            line2: "Apt 4B"
+            line1: "Rua dos Bobos, 0"
+            line2: "Apto 101"
             country: "BRA"
             state: "SP"
             city: "São Paulo"
@@ -567,11 +568,11 @@ components:
         line1:
           type: string
           description: The first line of the address
-          example: "123 Main St"
+          example: "Rua dos Bobos, 0"
         line2:
           type: string
           description: The second line of the address
-          example: "Apt 4B"
+          example: "Apto 101"
         country:
           type: string
           description: The country code where the customer is located following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
@@ -644,7 +645,9 @@ components:
     Customer:
       oneOf:
         - $ref: "#/components/schemas/CustomerIndividual"
+          title: Individual
         - $ref: "#/components/schemas/CustomerBusiness"
+          title: Business
       discriminator:
         propertyName: type
         mapping:
@@ -655,11 +658,11 @@ components:
       properties:
         sourceCurrency:
           type: string
-          enum: [BRL, USDC, USDT]
+          enum: [USDC, USDT, BRL]
           description: The currency to convert from.
         targetCurrency:
           type: string
-          enum: [USDC, USDT, BRL]
+          enum: [BRL, USDC, USDT]
           description: The currency to convert to.
         rate:
           type: number
@@ -684,21 +687,6 @@ components:
         - sourceCurrency
         - targetCurrency
       properties:
-        payment:
-          description: The definition of how and where the funds from the off ramp transaction will be sent. 
-          type: object
-          required: rail
-          properties:
-            rail: 
-              type: string 
-              enum: ['pix']
-              description: The payment rail that will be used for this transaction. 
-            keyValue:
-              type: string
-              description: The PIX key identifying the account where to send funds.
-            keyType: 
-              type: string 
-              enum: ['phone','CPF/CNPJ','email','random']
         sourceCurrency:
           type: string
         targetCurrency:
@@ -808,6 +796,21 @@ components:
         - amount
         - payment
       properties:
+        payment:
+          description: The definition of how and where the funds from the off ramp transaction will be sent. 
+          type: object
+          required: rail
+          properties:
+            rail: 
+              type: string 
+              enum: ['pix']
+              description: The payment rail that will be used for this transaction. 
+            keyValue:
+              type: string
+              description: The PIX key identifying the account where to send funds.
+            keyType: 
+              type: string 
+              enum: ['phone','CPF/CNPJ','email','random']
         sourceCurrency:
           enum: [USDC, USDT]
           description: The stablecoin to convert from.
@@ -836,7 +839,7 @@ components:
       properties:
         status: 
           enum: 
-            - awaiting_signature
+            # - awaiting_signature
             - processing
             - success
             - failed
@@ -879,7 +882,7 @@ components:
           enum: ['transfer']
         status: 
           enum: 
-            - awaiting_signature
+            # - awaiting_signature
             - processing
             - success
             - failed
