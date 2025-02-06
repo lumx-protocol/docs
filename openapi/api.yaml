@@ -458,24 +458,28 @@ components:
   schemas:
     CustomerCreateRequest:
       allOf:
-        - type: object
-          required:
-            - type
-            - documents
-            - address
-          oneOf:
+        - oneOf:
             - allOf:
                 - $ref: "#/components/schemas/CustomerIndividual"
+                  description: Individual customer
+                  title: Individual
                 - type: object
                   required:
                     - name
                     - birthdate
             - allOf:
                 - $ref: "#/components/schemas/CustomerBusiness"
+                  description: Business customer
+                  title: Business
                 - type: object
                   required:
                     - legalName
                     - incorporationDate
+          discriminator:
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerCreateRulesRequest"
     CustomerUpdateRequest:
       allOf:
         - type: object
@@ -484,8 +488,24 @@ components:
           oneOf:
             - $ref: "#/components/schemas/CustomerIndividual"
             - $ref: "#/components/schemas/CustomerBusiness"
+    CustomerCreateRulesRequest:
+      type: object
+      required:
+        - type
+        - documents
+        - address
+      properties:
+        address:
+          type: object
+          required:
+            - line1
+            - country
+            - state
+            - city
+            - zipCode
     CustomerBase:
       type: object
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -499,6 +519,15 @@ components:
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key
+        address:
+          $ref: "#/components/schemas/CustomerAddress"
+          example:
+            line1: "123 Main St"
+            line2: "Apt 4B"
+            country: "BRA"
+            state: "SP"
+            city: "São Paulo"
+            zipCode: "01234-567"
         documents:
           type: array
           description: List of customer documents
@@ -582,6 +611,7 @@ components:
               type: string
               description: Customer birth date
               format: date
+              example: "1990-01-01"
     CustomerBusiness:
       type: object
       allOf:
@@ -597,10 +627,15 @@ components:
               type: string
               description: Customer incorporation date
               format: date
+              example: "2020-01-01"
     Customer:
       oneOf:
         - $ref: "#/components/schemas/CustomerIndividual"
         - $ref: "#/components/schemas/CustomerBusiness"
+      discriminator:
+        mapping:
+          individual: "#/components/schemas/CustomerIndividual"
+          business: "#/components/schemas/CustomerBusiness"
     ExchangeRateResponse:
       type: object
       properties:
