@@ -743,6 +743,14 @@ components:
     OnRampRequest:
       type: object 
       properties:
+        payment: 
+          type: object
+          required: rail
+          properties:
+            rail: 
+              type: string 
+              enum: ['pix']
+              description: The payment rail that will be used for this transaction.
         sourceCurrency:
           enum: [BRL]
           description: The fiat currency to convert from.
