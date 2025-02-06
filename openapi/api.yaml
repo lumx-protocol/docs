@@ -476,18 +476,26 @@ components:
                     - legalName
                     - incorporationDate
           discriminator:
+            propertyName: type
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
         - $ref: "#/components/schemas/CustomerCreateRulesRequest"
     CustomerUpdateRequest:
       allOf:
-        - type: object
-          required:
-            - type
-          oneOf:
+        - oneOf:
             - $ref: "#/components/schemas/CustomerIndividual"
+              description: Individual customer
+              title: Individual
             - $ref: "#/components/schemas/CustomerBusiness"
+              description: Business customer
+              title: Business
+          discriminator:
+            propertyName: type
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -503,6 +511,11 @@ components:
             - state
             - city
             - zipCode
+    CustomerUpdateRulesRequest:
+      type: object
+      minProperties: 2
+      required:
+        - type
     CustomerBase:
       type: object
       additionalProperties: false
@@ -633,6 +646,7 @@ components:
         - $ref: "#/components/schemas/CustomerIndividual"
         - $ref: "#/components/schemas/CustomerBusiness"
       discriminator:
+        propertyName: type
         mapping:
           individual: "#/components/schemas/CustomerIndividual"
           business: "#/components/schemas/CustomerBusiness"
