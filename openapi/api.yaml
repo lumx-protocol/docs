@@ -18,7 +18,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CustomerRequest"
+              $ref: "#/components/schemas/CustomerCreateRequest"
       responses:
         "201":
           description: Successfully created the customer.
@@ -128,7 +128,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CustomerPatchRequest"
+              $ref: "#/components/schemas/CustomerUpdateRequest"
       responses:
         "200":
           description: Customer updated successfully.
@@ -454,79 +454,93 @@ paths:
       security:
         - apiKey: []
 
-components: 
-  schemas: 
-    CustomerRequest:
+components:
+  schemas:
+    CustomerCreateRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - $ref: "#/components/schemas/CustomerIndividual"
+                  description: Individual customer
+                  title: Individual
+                - type: object
+                  required:
+                    - name
+                    - birthdate
+            - allOf:
+                - $ref: "#/components/schemas/CustomerBusiness"
+                  description: Business customer
+                  title: Business
+                - type: object
+                  required:
+                    - legalName
+                    - incorporationDate
+          discriminator:
+            propertyName: type
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerCreateRulesRequest"
+    CustomerUpdateRequest:
+      allOf:
+        - oneOf:
+            - $ref: "#/components/schemas/CustomerIndividual"
+              description: Individual customer
+              title: Individual
+            - $ref: "#/components/schemas/CustomerBusiness"
+              description: Business customer
+              title: Business
+          discriminator:
+            propertyName: type
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
+    CustomerCreateRulesRequest:
       type: object
       required:
-        - name
-        - birthdate
+        - type
         - documents
-      additionalProperties: false
+        - address
       properties:
-        name:
-          type: string
-          description: Customer full name
-        birthdate:
-          type: string
-          description: Customer birth date (yyyy-mm-dd)
-          format: date
-          example: "1970-01-01"
-        passkeyPublicKey:
-          type: string
-          description: Customer's passkey public key. Only applicable if your project is using self-custody.
-        documents:
-          type: array
-          description: List of customer documents
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/CustomerDocument"
-          example:
-            - country: BRA
-              type: TAX_ID
-              value: 123.456.789-00
-    CustomerPatchRequest:
+        address:
+          type: object
+          required:
+            - line1
+            - country
+            - state
+            - city
+            - zipCode
+    CustomerUpdateRulesRequest:
+      type: object
+      minProperties: 2
+      required:
+        - type
+    CustomerBase:
       type: object
       additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Customer full name
-        birthdate:
-          type: string
-          description: Customer birth date (yyyy-mm-dd)
-          format: date
-          example: "1970-01-01"
-        passkeyPublicKey:
-          type: string
-          description: Customer's passkey public key. Only applicable if your project is using self-custody.
-        documents:
-          type: array
-          description: List of customer documents
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/CustomerDocument"
-          example:
-            - country: BRA
-              type: TAX_ID
-              value: 123.456.789-00
-    Customer:
-      type: object
       properties:
         id:
           type: string
           description: Unique customer identifier
           format: uuid
-        name:
+          readOnly: true
+        type:
           type: string
-          description: Customer full name
-        birthdate:
-          type: string
-          description: Customer birth date
-          format: date
+          description: The type of this customer.
+          enum: ["individual", "business"]
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key
+        address:
+          $ref: "#/components/schemas/CustomerAddress"
+          example:
+            line1: "123 Main St"
+            line2: "Apt 4B"
+            country: "BRA"
+            state: "SP"
+            city: "São Paulo"
+            zipCode: "01234-567"
         documents:
           type: array
           description: List of customer documents
@@ -540,10 +554,41 @@ components:
           type: string
           description: Record creation timestamp
           format: date-time
+          readOnly: true
         updatedAt:
           type: string
           description: Record last update timestamp
           format: date-time
+          readOnly: true
+    CustomerAddress:
+      type: object
+      additionalProperties: false
+      properties:
+        line1:
+          type: string
+          description: The first line of the address
+          example: "123 Main St"
+        line2:
+          type: string
+          description: The second line of the address
+          example: "Apt 4B"
+        country:
+          type: string
+          description: The country code where the customer is located following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
+          enum: [BRA]
+          example: "BRA"
+        state:
+          type: string
+          description: The state where the customer is located
+          example: "SP"
+        city:
+          type: string
+          description: The city where the customer is located
+          example: "São Paulo"
+        zipCode:
+          type: string
+          description: The postal code where the customer is located
+          example: "01234-567"
     CustomerDocument:
       type: object
       required:
@@ -564,6 +609,47 @@ components:
           type: string
           description: The document value/number.
           example: 123.456.789-00
+    CustomerIndividual:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/CustomerBase"
+        - type: object
+          properties:
+            type:
+              enum: ["individual"]
+            name:
+              type: string
+              description: Customer full name
+            birthdate:
+              type: string
+              description: Customer birth date
+              format: date
+              example: "1990-01-01"
+    CustomerBusiness:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/CustomerBase"
+        - type: object
+          properties:
+            type:
+              enum: ["business"]
+            legalName:
+              type: string
+              description: Customer legal name
+            incorporationDate:
+              type: string
+              description: Customer incorporation date
+              format: date
+              example: "2020-01-01"
+    Customer:
+      oneOf:
+        - $ref: "#/components/schemas/CustomerIndividual"
+        - $ref: "#/components/schemas/CustomerBusiness"
+      discriminator:
+        propertyName: type
+        mapping:
+          individual: "#/components/schemas/CustomerIndividual"
+          business: "#/components/schemas/CustomerBusiness"
     ExchangeRateResponse:
       type: object
       properties:
