@@ -213,7 +213,7 @@ paths:
               schema:
                 allOf:
                   - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: '#/components/schemas/OnRampResponse'
+                  - $ref: "#/components/schemas/OnRampResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
@@ -229,6 +229,7 @@ paths:
           application/json:
             schema:
               allOf:
+                - $ref: "#/components/schemas/CustomerId"
                 - $ref: "#/components/schemas/CrossRampRequest"
                 - $ref: "#/components/schemas/OffRampRequest"
       responses:
@@ -298,9 +299,9 @@ paths:
   #                     - $ref: "#/components/schemas/BaseTransactionResponse"
   #                     - $ref: "#/components/schemas/OffRampResponse"
   #                     - $ref: "#/components/schemas/TransactionTimestamps"
-  #                     - type: object 
+  #                     - type: object
   #                       properties:
-  #                         status: 
+  #                         status:
   #                           enum: ['processing']
   #                 - type: object
   #                   title: Transfer
@@ -308,9 +309,9 @@ paths:
   #                     - $ref: "#/components/schemas/BaseTransactionResponse"
   #                     - $ref: "#/components/schemas/TransferResponse"
   #                     - $ref: "#/components/schemas/TransactionTimestamps"
-  #                     - type: object 
+  #                     - type: object
   #                       properties:
-  #                         status: 
+  #                         status:
   #                           enum: ['processing']
   #     security:
   #       - apiKey: []
@@ -705,18 +706,18 @@ components:
           type: string
           format: uuid
           description: The customer performing the operation.
-        type: 
+        type:
           type: string
           description: The type of this transaction
-          enum: ['on-ramp','off-ramp','transfer','swap']
-        state: 
+          enum: ["on-ramp", "off-ramp", "transfer", "swap"]
+        state:
           type: object
           description: The transactions's results.
-        request: 
+        request:
           type: object
           description: The parameters used when creating this transaction.
-    BaseTransactionState: 
-      type: object 
+    BaseTransactionState:
+      type: object
       properties:
         status:
           type: string
@@ -741,15 +742,15 @@ components:
           format: date-time
           description: The timestamp from when the transaction was last updated.
     OnRampRequest:
-      type: object 
+      type: object
       properties:
-        payment: 
+        payment:
           type: object
           required: rail
           properties:
-            rail: 
-              type: string 
-              enum: ['pix']
+            rail:
+              type: string
+              enum: ["pix"]
               description: The payment rail that will be used for this transaction.
         sourceCurrency:
           enum: [BRL]
@@ -758,67 +759,67 @@ components:
           enum: [USDC, USDT]
           description: The stablecoin to convert to.
         amount:
-          example: '100.99'
-          description: The amount to be converted from fiat to stablecoin.    
+          example: "100.99"
+          description: The amount to be converted from fiat to stablecoin.
     OnRampResponse:
-      type: object 
+      type: object
       properties:
-        type: 
-          enum: ['on-ramp']
-        request: 
+        type:
+          enum: ["on-ramp"]
+        request:
           description: An object containing the parameters used for this on-ramp.
           allOf:
             - $ref: "#/components/schemas/CrossRampRequest"
             - $ref: "#/components/schemas/OnRampRequest"
-        state: 
+        state:
           allOf:
             - $ref: "#/components/schemas/BaseTransactionState"
             - $ref: "#/components/schemas/OnRampTransactionState"
-    OnRampTransactionState: 
-      type: object 
+    OnRampTransactionState:
+      type: object
       title: On ramp
-      properties: 
+      properties:
         status:
           enum:
             - awaiting_funds
             - processing
             - success
             - failed
-        payment: 
-          type: object 
-          description: The payment details to add funds for this on ramp transaction. 
+        payment:
+          type: object
+          description: The payment details to add funds for this on ramp transaction.
           properties:
             rail:
-              type: string 
-              enum: ['pix']
+              type: string
+              enum: ["pix"]
               description: The payment rail that will be used for this transaction.
             brCode:
               type: string
               description: The PIX copy-and-paste code to be used for payment.
               example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
     OffRampRequest:
-      type: object 
-      required: 
+      type: object
+      required:
         - sourceCurrency
         - targetCurrency
         - amount
         - payment
       properties:
         payment:
-          description: The definition of how and where the funds from the off ramp transaction will be sent. 
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
           type: object
           required: rail
           properties:
-            rail: 
-              type: string 
-              enum: ['pix']
-              description: The payment rail that will be used for this transaction. 
+            rail:
+              type: string
+              enum: ["pix"]
+              description: The payment rail that will be used for this transaction.
             keyValue:
               type: string
               description: The PIX key identifying the account where to send funds.
-            keyType: 
-              type: string 
-              enum: ['phone','CPF/CNPJ','email','random']
+            keyType:
+              type: string
+              enum: ["phone", "CPF/CNPJ", "email", "random"]
         sourceCurrency:
           enum: [USDC, USDT]
           description: The stablecoin to convert from.
@@ -826,45 +827,45 @@ components:
           enum: [BRL]
           description: The fiat currency to convert to.
         amount:
-          example: '100.123456'
+          example: "100.123456"
           description: The amount to be converted from stablecoin to fiat.
     OffRampResponse:
-      type: object 
+      type: object
       properties:
-        type: 
-          enum: ['off-ramp']
-        request: 
+        type:
+          enum: ["off-ramp"]
+        request:
           description: An object containing the parameters used for this off-ramp.
           allOf:
             - $ref: "#/components/schemas/CrossRampRequest"
             - $ref: "#/components/schemas/OffRampRequest"
-        state: 
+        state:
           allOf:
             - $ref: "#/components/schemas/BaseTransactionState"
             - $ref: "#/components/schemas/OffRampTransactionState"
     OffRampTransactionState:
-      type: object 
+      type: object
       properties:
-        status: 
-          enum: 
+        status:
+          enum:
             # - awaiting_signature
             - processing
             - success
             - failed
-        encodedData: 
-          type: string 
+        encodedData:
+          type: string
           description: The encoded data that needs to be signed in order to submit this transaction to the blockchain.
     TransferRequest:
       type: object
-      required: 
+      required:
         - currency
-        - from 
-        - to 
+        - from
+        - to
         - amount
       properties:
         currency:
           type: string
-          enum: ['USDC','USDT']
+          enum: ["USDC", "USDT"]
           description: The stablecoin to be transferred.
         from:
           type: string
@@ -879,7 +880,7 @@ components:
         amount:
           type: string
           format: number
-          example: '100.123456'
+          example: "100.123456"
           description: The amount to be transferred.
     TransferResponse:
       type: object
@@ -887,9 +888,9 @@ components:
         type:
           type: string
           description: The type of this transaction.
-          enum: ['transfer']
-        status: 
-          enum: 
+          enum: ["transfer"]
+        status:
+          enum:
             # - awaiting_signature
             - processing
             - success
@@ -897,19 +898,19 @@ components:
         request:
           description: An object containing the parameters used for this transfer.
           $ref: "#/components/schemas/TransferRequest"
-        state: 
+        state:
           allOf:
             - $ref: "#/components/schemas/BaseTransactionState"
             - $ref: "#/components/schemas/TransferTransactionState"
     ExecuteTransactionRequest:
       type: object
-      required: 
+      required:
         - transactionSignatures
       properties:
         transactionSignatures:
           description: All signatures required for this transaction.
           type: array
-          items: 
+          items:
             type: string
   securitySchemes:
     apiKey:
