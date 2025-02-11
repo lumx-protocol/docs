@@ -8,6 +8,28 @@ servers:
   # - url: https://api-staging.int.lumx.io
   # - url: https://api.lumx.io
 paths:
+  /v2/projects/auth:
+    post:
+      summary: Get an API key
+      description: This endpoint creates a project and an API key.
+      security: []
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ProjectRequest"
+              required:
+                - name
+                - blockchainName
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
   /customers:
     post:
       summary: Create a customer
@@ -242,6 +264,8 @@ paths:
                   - $ref: "#/components/schemas/BaseTransactionResponse"
                   - $ref: "#/components/schemas/OffRampResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
   /transactions/transfer:
     post:
       tags:
@@ -458,6 +482,48 @@ paths:
 
 components:
   schemas:
+    ProjectRequest:
+      type: object
+      properties:
+        name:
+          description: The name of the project.
+          type: string
+        blockchainName:
+          description: The blockchain used by the project. More blockchains coming soon.
+          type: string 
+          enum:  ["Polygon"] 
+    ProjectResponse:
+      type: object
+      properties:
+        id:
+          description: The id of the project.
+          type: string
+          format: uuid
+        name:
+          description: The name of the project.
+          type: string
+        blockchain:
+          type: object
+          description: Details of the blockchain used by the project.
+          properties:
+            name:
+              type: string
+              example: "Polygon"
+              description: The name of the blockchain.
+            decimalChainId:
+              type: number
+              description: The decimal chain ID of the blockchain.
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the project was last updated.
+        apiKey:
+          description: The API key associated with the project.
+          type: string
     CustomerCreateRequest:
       allOf:
         - oneOf:
