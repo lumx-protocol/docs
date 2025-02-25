@@ -218,7 +218,7 @@ paths:
         - Transactions
       summary: On-ramp
       description: >-
-        Convert BRL (Brazilian Real) to USDC or USDT.
+        Convert from fiat to stablecoin.
       requestBody:
         content:
           application/json:
@@ -245,7 +245,7 @@ paths:
         - Transactions
       summary: Off-ramp
       description: >-
-        Convert USDC or USDT to BRL (Brazilian Real).
+        Convert from stablecoin to fiat.
       requestBody:
         content:
           application/json:
