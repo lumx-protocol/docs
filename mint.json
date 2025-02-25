@@ -108,16 +108,17 @@
       "pages": [
         "compliance-requirements/terms-of-use",
         "compliance-requirements/KYC-KYB",
+        {
+          "group": "Beneficiaries",
+          "pages":[
+            "compliance-requirements/beneficiaries/beneficiaries",
+            "compliance-requirements/beneficiaries/compliance-KYC",
+            "compliance-requirements/beneficiaries/applicable-types"
+        },
         "compliance-requirements/beneficiaries",
         "compliance-requirements/prohibited-activities",
-        "compliance-requirements/status-progression",
-        {
-          "group": "Grouping Test",
-          "pages":[
-            "compliance-requirements/beneficiaries/applicabletypes"
-          ]
-        }
-      ]
+        "compliance-requirements/status-progression"
+              ]
     }
   ],
   "footerSocials": {
