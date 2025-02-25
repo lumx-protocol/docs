@@ -2,22 +2,104 @@
 openapi: 3.1.0
 info:
   version: 2.0.0
-  title: Lumx Extensions Payments
-  description: Lumx Extensions Payments API
+  title: Lumx API
+  description: Lumx API
 servers:
   - url: https://extensions-sandbox.lumx.io/payments
   - url: https://extensions.lumx.io/payments
 paths:
-  "/":
+  # "/":
+  #   get:
+  #     operationId: AppController_getHello
+  #     parameters: []
+  #     responses:
+  #       "200":
+  #         description: ""
+  #     summary: Health check endpoint
+  #     tags:
+  #       - Health
+  "/quotes":
+    post:
+      operationId: QuotesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateQuotesDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateQuotesResponseDto"
+      security:
+        - bearer: []
+      summary: Create a quote
+      tags:
+        - Quotes
+  "/payins":
+    post:
+      operationId: PayinsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreatePayinsDto"
+      responses:
+        "202":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreatePayinsResponseDto"
+      security:
+        - bearer: []
+      summary: Create a payin
+      tags:
+        - Payins
     get:
-      operationId: AppController_getHello
+      operationId: PayinsController_readAll
       parameters: []
       responses:
         "200":
           description: ""
-      summary: Health check endpoint
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/ReadPayinsResponseDto"
+      security:
+        - bearer: []
+      summary: Read all payins
       tags:
-        - Health
+        - Payins
+  "/payins/{payinId}":
+    get:
+      operationId: PayinsController_read
+      parameters:
+        - name: payinId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReadPayinsResponseDto"
+      security:
+        - bearer: []
+      summary: Read a payin
+      tags:
+        - Payins
   "/payouts":
     post:
       operationId: PayoutsController_create
@@ -78,28 +160,6 @@ paths:
       summary: Read a payout
       tags:
         - Payouts
-  "/quotes":
-    post:
-      operationId: QuotesController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/CreateQuotesDto"
-      responses:
-        "201":
-          description: ""
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/CreateQuotesResponseDto"
-      security:
-        - bearer: []
-      summary: Create a quote
-      tags:
-        - Quotes
   "/receivers":
     post:
       operationId: ReceiversController_create
@@ -310,66 +370,6 @@ paths:
       summary: Read a bank account
       tags:
         - Receivers
-  "/payins":
-    post:
-      operationId: PayinsController_create
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/CreatePayinsDto"
-      responses:
-        "202":
-          description: ""
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/CreatePayinsResponseDto"
-      security:
-        - bearer: []
-      summary: Create a payin
-      tags:
-        - Payins
-    get:
-      operationId: PayinsController_readAll
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/ReadPayinsResponseDto"
-      security:
-        - bearer: []
-      summary: Read all payins
-      tags:
-        - Payins
-  "/payins/{payinId}":
-    get:
-      operationId: PayinsController_read
-      parameters:
-        - name: payinId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ReadPayinsResponseDto"
-      security:
-        - bearer: []
-      summary: Read a payin
-      tags:
-        - Payins
 components:
   securitySchemes:
     bearer:

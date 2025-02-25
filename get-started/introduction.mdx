@@ -1,49 +1,108 @@
 ---
-title: Introduction
-description: "Welcome to the Lumx Protocol"
+title: "Introduction"
+description: "Welcome to the Developer Documentation for Lumx. These docs are intended for developers looking to integrate Lumx API into their platform."
 ---
 
-<img alt="Hero Light" className="block dark:hidden" src="/images/d-light.svg" />
+<Note>Looking for the Protocol API documentation? You can find it [here](https://protocol-docs.lumx.io/).</Note>
 
-<img alt="Hero Dark" className="hidden dark:block" src="/images/d-dark.svg" />
+### What is Lumx?
 
-## Get Started
+Lumx is an enterprise-grade stablecoin banking API allowing businesses and developers to collect, hold, and move money across fiat and stablecoins globally on behalf of their customers. Through our API, developers can:
 
-Your journey with us begins here. Set up everything you need to use our Protocol.
+* Onboard customers compliantly and monitor ongoing transactions
+
+* Create digital asset wallets and virtual bank accounts (soon) for their customers
+
+* Streamline global payments and financial operations with stablecoin-powered solutions
+
+* Boost revenue with embedded stablecoin yield (soon)
+
+### Who can use Lumx?
+
+Lumx was built API-first, making it easy for developers to build out financial use cases and integrate stablecoins into their flow of funds. We serve three main types of developers:
+
+* Payment Service Providers (PSPs) seeking simplified cross-border flows
+
+* Banks and Fintechs seeking stablecoin infrastructure that can enable customers to buy, sell, send, and receive stablecoins without leaving their own platform
+
+* FX Brokers looking to enhance their FX operations with stablecoins
+
+### What products does Lumx offer?
+
+Lumx has three core products:
+
+1. Accounts 
+
+2. Orchestration
+
+3. Yield (soon)
+
+### Accounts
+
+Lumx enables you to set up multi-currency, scalable wallets with unique addresses in a single API call. Transfer funds to bank accounts and external wallets with instant settlement and seamless reconciliation.
+
+* **Stablecoin smart wallets**: Smart wallets with spending limits and gasless transactions, available in multiple blockchains
+
+* **Flexible custody wallet models:** Go fully custodial with MPC/HSM vaults, or self-custodial with Passkeys
+
+* **Instant settlement**: Immediate fund transfers and wallet-to-bank settlements with minimum delays  
+
+* **Virtual Accounts (soon)**: International multi-currency bank accounts with unique vIBANs 
+
+### Orchestration
+
+Integrate stablecoins into payment flows, enabling instant cross-border settlements, low costs, and real-time access to global liquidity.
+
+Transactions are the general term used to describe money movements in Lumx API; they include:
+
+* Fiat to stablecoin
+
+* Stablecoin to fiat
+
+* Stablecoin to stablecoin
+
+### Yield (soon)
+
+Design compliant, scalable stablecoin yield products for next-gen finance. Configure fees for extra revenue, monitor performance, and track yields seamlessly. 
+
+Don't hesitate to contact us at our Slack community if you have any questions. We strive to answer within hours and are happy to schedule a pair programming session with you to facilitate the integration.
+
+## Get started
+
+Your journey with us begins here. Set up everything you need to use our API.
 
 <CardGroup cols={2}>
   <Card title="Authentication" href="/get-started/authentication">
-    Learn how to authenticate yourself on the Protocol
+    Learn how to authenticate yourself on the API
   </Card>
+
   <Card title="Environments" href="/get-started/environments">
     Multiple environments with multiple purposes
   </Card>
+
   <Card title="Blockchains" href="/get-started/blockchains">
-    Choose the best blockchain to fit your project
+    Check out the blockchains we currently support
   </Card>
+
   <Card title="Troubleshooting" href="/get-started/troubleshooting">
     Find out the common extended error messages you may encounter
   </Card>
 </CardGroup>
 
-## Essentials
+## Concepts
 
 Learn more about basic concepts that will be important throughout your journey.
 
 <CardGroup cols={2}>
-  <Card title="Protocol" href="/essentials/protocol">
-    Learn about Lumx Protocol
+  <Card title="APIs" href="/concepts/APIs">
+    Learn more about our APIs
   </Card>
-  <Card title="Wallets" href="/essentials/wallets">
-    Learn about the wallets module
+
+  <Card title="Accounts" href="/concepts/accounts">
+    Learn about our Accounts concepts
   </Card>
-  <Card title="Contracts" href="/essentials/contracts">
-    Learn about the contracts module
-  </Card>
-  <Card title="Transactions" href="/essentials/transactions">
-    Learn about the transactions module
-  </Card>
-  <Card title="Webhooks" href="/essentials/webhooks">
-    Learn about webhooks
+
+  <Card title="Orchestration" href="/concepts/orchestration">
+    Learn about our money movement processes
   </Card>
 </CardGroup>

@@ -1,6 +1,7 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Lumx Protocol",
+  "name": "Lumx",
+  "versions": ["Beta","Current"],
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -44,21 +45,21 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Start now",
-    "url": "https://dashboard.lumx.io"
+    "name": "Request demo",
+    "url": "https://lumx.io/contact"
   },
   "tabs": [
     {
-      "name": "Guide",
-      "url": "guides"
+      "name": "API Reference",
+      "url": "api-reference",
+      "openapi": "/openapi/api.yaml",
+      "version": "Beta"
     },
     {
       "name": "API Reference",
-      "url": "api-reference"
-    },
-    {
-      "name": "Extensions",
-      "url": "extensions"
+      "url": "api-docs",
+      "openapi": "/openapi/payments-extension.yaml",
+      "version": "Current"
     }
   ],
   "anchors": [
@@ -90,112 +91,11 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Concepts",
       "pages": [
-        "essentials/protocol",
-        "essentials/wallets",
-        "essentials/contracts",
-        "essentials/transactions",
-        "essentials/webhooks"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": ["guides/introduction"]
-    },
-    {
-      "group": "Start building",
-      "pages": [
-        "guides/start-building/get-an-api-key",
-        "guides/start-building/your-first-contract",
-        "guides/start-building/create-a-wallet",
-        "guides/start-building/mint-a-token",
-        "guides/start-building/the-road-so-far"
-      ]
-    },
-    {
-      "group": "Recipes",
-      "pages": [
-        "guides/recipes/transfer-a-token",
-        "guides/recipes/invoke-a-custom-transaction",
-        "guides/recipes/register-a-webhook"
-      ]
-    },
-    {
-      "group": "Wallets",
-      "pages": [
-        "api-reference/wallets/create-a-wallet",
-        "api-reference/wallets/read-a-wallet",
-        "api-reference/wallets/read-all-wallets",
-        "api-reference/wallets/sign-a-message"
-      ]
-    },
-    {
-      "group": "Contracts",
-      "pages": [
-        "api-reference/contracts/create-a-contract",
-        "api-reference/contracts/update-a-contract",
-        "api-reference/contracts/deploy-a-contract",
-        "api-reference/contracts/read-a-contract",
-        "api-reference/contracts/read-all-contracts",
-        "api-reference/contracts/create-a-token-type",
-        "api-reference/contracts/update-a-token-type",
-        "api-reference/contracts/read-a-token-type",
-        "api-reference/contracts/read-all-token-types",
-        "api-reference/contracts/read-contract-function"
-      ]
-    },
-    {
-      "group": "Transactions",
-      "pages": [
-        "api-reference/transactions/mint-tokens",
-        "api-reference/transactions/transactions-transfer",
-        "api-reference/transactions/invoke-a-custom-transaction",
-        "api-reference/transactions/read-a-transaction",
-        "api-reference/transactions/read-all-transactions"
-      ]
-    },
-    {
-      "group": "Extensions",
-      "pages": ["extensions/introduction"]
-    },
-    {
-      "group": "Payments",
-      "pages": [
-        "extensions/payments/overview",
-        "extensions/payments/essentials",
-        {
-          "group": "Receivers",
-          "pages": [
-            "extensions/payments/receivers/create-a-receiver",
-            "extensions/payments/receivers/read-a-receiver",
-            "extensions/payments/receivers/read-all-receivers",
-            "extensions/payments/receivers/create-a-blockchain-account",
-            "extensions/payments/receivers/read-all-blockchain-accounts",
-            "extensions/payments/receivers/create-a-bank-account",
-            "extensions/payments/receivers/read-all-bank-accounts"
-          ]
-        },
-        {
-          "group": "Quotes",
-          "pages": ["extensions/payments/quotes/create-a-quote"]
-        },
-        {
-          "group": "Payins",
-          "pages": [
-            "extensions/payments/payins/create-a-payin",
-            "extensions/payments/payins/read-a-payin",
-            "extensions/payments/payins/read-all-payins"
-          ]
-        },
-        {
-          "group": "Payouts",
-          "pages": [
-            "extensions/payments/payouts/create-a-payout",
-            "extensions/payments/payouts/read-a-payout",
-            "extensions/payments/payouts/read-all-payouts"
-          ]
-        }
+        "concepts/APIs",
+        "concepts/accounts",
+        "concepts/orchestration"
       ]
     }
   ],

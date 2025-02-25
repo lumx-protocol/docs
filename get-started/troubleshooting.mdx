@@ -3,7 +3,7 @@ title: "Troubleshooting"
 description: "Find out the common extended error messages you may encounter while using our system"
 ---
 
-Here's a list of common errors on the Protocol. Didn't find the solution? Please, let us know in [our community](https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dI). In some instances, along with these messages, you may receive a unique logId. This logId serves as a distinct identification for the error encountered and can be essential when contacting our technical support for a quick and efficient resolution of the issue.
+Here's a list of common errors on the API. Didn't find the solution? Please, let us know in [our community](https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dI). In some instances, along with these messages, you may receive a unique logId. This logId serves as a distinct identification for the error encountered and can be essential when contacting our technical support for a quick and efficient resolution of the issue.
 
 | Status | Name                   | Description                                                                                                                                                |
 | ------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -11,6 +11,7 @@ Here's a list of common errors on the Protocol. Didn't find the solution? Please
 | 401    | Unauthorized           | API_KEY is invalid or missing.                                                                                                                             |
 | 403    | Forbidden              | API_KEY can't access this resource.                                                                                                                        |
 | 404    | Not Found              | The resource could not be found.                                                                                                                           |
+| 409    | Conflict               | The resource could not created or updated due to a conflicting condition.                                                                                                                           |
 | 415    | Unsupported Media Type | Content-Type doesn't match with the request body.                                                                                                          |
 | 429    | Too Many Requests      | Rate limit exceeded.                                                                                                                                       |
 | 500    | Internal Server Error  | This is an unexpected server error. Please, [contact us](https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dI) for support. |
