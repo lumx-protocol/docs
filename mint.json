@@ -56,6 +56,11 @@
       "version": "Beta"
     },
     {
+      "name": "Open API Spec",
+      "url": "https://github.com/lumx-protocol/docs/blob/main/openapi/api.yaml",
+      "version": "Beta"
+    },
+    {
       "name": "API Reference",
       "url": "api-docs",
       "openapi": "/openapi/payments-extension.yaml",
