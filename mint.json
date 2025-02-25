@@ -102,6 +102,22 @@
         "concepts/accounts",
         "concepts/orchestration"
       ]
+    },
+        {
+      "group": "Compliance Requirements",
+      "pages": [
+        "compliance-requirements/terms-of-use",
+        "compliance-requirements/KYC-KYB",
+        "compliance-requirements/beneficiaries",
+        "compliance-requirements/prohibited-activities",
+        "compliance-requirements/status-progression",
+        {
+          "group": "Grouping Test",
+          "pages":[
+            "compliance-requirements/beneficiaries/applicabletypes"
+          ]
+        }
+      ]
     }
   ],
   "footerSocials": {
