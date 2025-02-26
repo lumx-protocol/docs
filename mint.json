@@ -56,11 +56,6 @@
       "version": "Beta"
     },
     {
-      "name": "🔗 Open API",
-      "url": "https://raw.githubusercontent.com/lumx-protocol/docs/refs/heads/main/openapi/api.yaml",
-      "version": "Beta"
-    },
-    {
       "name": "API Reference",
       "url": "api-docs",
       "openapi": "/openapi/payments-extension.yaml",
@@ -82,7 +77,13 @@
       "name": "Community",
       "icon": "slack",
       "url": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dIG4Mg"
-    }
+    },
+  {
+      "name": "Open API",
+      "icon": "global",
+      "url": "https://raw.githubusercontent.com/lumx-protocol/docs/refs/heads/main/openapi/api.yaml",
+      "version": "Beta"
+    },
   ],
   "navigation": [
     {
