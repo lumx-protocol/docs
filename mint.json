@@ -48,24 +48,6 @@
     "name": "Request demo",
     "url": "https://lumx.io/contact"
   },
-  "tabs": [
-    {
-      "name": "Documentation",
-      "url": "get-started",
-    },
-    {
-      "name": "API Reference",
-      "url": "api-reference",
-      "openapi": "/openapi/api.yaml",
-      "version": "Beta"
-    },
-    {
-      "name": "API Reference",
-      "url": "api-docs",
-      "openapi": "/openapi/payments-extension.yaml",
-      "version": "Current"
-    }
-  ],
   "anchors": [
     {
       "name": "Dashboard",
