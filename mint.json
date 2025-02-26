@@ -80,7 +80,7 @@
     },
     {
       "name": "Open API",
-      "icon": "globe",
+      "icon": "circle",
       "url": "https://raw.githubusercontent.com/lumx-protocol/docs/refs/heads/main/openapi/api.yaml",
       "version": "Beta"
     }
