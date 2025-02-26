@@ -50,6 +50,10 @@
   },
   "tabs": [
     {
+      "name": "Documentation",
+      "url": "get-started",
+    },
+    {
       "name": "API Reference",
       "url": "api-reference",
       "openapi": "/openapi/api.yaml",
