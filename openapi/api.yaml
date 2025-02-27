@@ -216,7 +216,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on-ramp"
+                    type: "on_ramp"
                     request:
                       sourceCurrency: "BRL"
                       targetCurrency: "USDC"
@@ -229,19 +229,19 @@ paths:
                         rail: "pix"
                         brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
                       receipt:
-                        rate: 0.166
-                        sourceAmount: 6000
-                        targetAmount: 986.80
+                        rate: "0.166"
+                        sourceAmount: "6000.00"
+                        targetAmount: "986.80"
                         sourceCurrency: "BRL"
                         targetCurrency: "USDC"
                         fees:
                           currency: "USDC"
                           lumx:
-                            percentage: 9.988916
-                            flat: 1
+                            percentage: "9.988916"
+                            flat: "1"
                           developer:
-                            percentage: 0.998891
-                            flat: 0.1
+                            percentage: "0.998891"
+                            flat: "0.1"
                         blockchain:
                           transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
                           blockExplorerUrl: "https://polygonscan.com/"
@@ -252,7 +252,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on-ramp"
+                    type: "on_ramp"
                     request:
                       sourceCurrency: "BRL"
                       targetCurrency: "USDC"
@@ -271,7 +271,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on-ramp"
+                    type: "on_ramp"
                     request:
                       sourceCurrency: "BRL"
                       targetCurrency: "USDC"
@@ -290,7 +290,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on-ramp"
+                    type: "on_ramp"
                     request:
                       sourceCurrency: "BRL"
                       targetCurrency: "USDC"
@@ -340,7 +340,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off-ramp"
+                    type: "off_ramp"
                     request:
                       sourceCurrency: "USDC"
                       targetCurrency: "BRL"
@@ -354,19 +354,19 @@ paths:
                       payment:
                         rail: "pix"
                       receipt:
-                        rate: 6.0066
-                        sourceAmount: 1000.00
-                        targetAmount: 5925.55
+                        rate: "6.0066"
+                        sourceAmount: "1000.00"
+                        targetAmount: "5925.55"
                         sourceCurrency: "USDC"
                         targetCurrency: "BRL"
                         fees:
                           currency: "USDC"
                           lumx:
-                            percentage: 10.000000
-                            flat: 1
+                            percentage: "10.000000"
+                            flat: "1"
                           developer:
-                            percentage: 1.000000
-                            flat: 0.1
+                            percentage: "1.000000"
+                            flat: "0.1"
                         blockchain:
                           transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
                           blockExplorerUrl: "https://polygonscan.com/"
@@ -377,7 +377,7 @@ paths:
                     value:
                       id: "123e4567-e89b-12d3-a456-426614174002"
                       customerId: "123e4567-e89b-12d3-a456-426614174001"
-                      type: "off-ramp"
+                      type: "off_ramp"
                       request:
                         sourceCurrency: "USDC"
                         targetCurrency: "BRL"
@@ -397,7 +397,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off-ramp"
+                    type: "off_ramp"
                     request:
                       sourceCurrency: "USDC"
                       targetCurrency: "BRL"
@@ -417,7 +417,7 @@ paths:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off-ramp"
+                    type: "off_ramp"
                     request:
                       sourceCurrency: "USDC"
                       targetCurrency: "BRL"
@@ -963,7 +963,7 @@ components:
         type:
           type: string
           description: The type of this transaction
-          enum: ['on-ramp', 'off-ramp', 'transfer', 'swap']
+          enum: ['on_ramp', 'off_ramp', 'transfer', 'swap']
         request:
           type: object
           description: The parameters used when creating this transaction.
@@ -1018,7 +1018,13 @@ components:
       type: object
       properties:
         type:
-          enum: ['on-ramp']
+          enum: ['on_ramp']
+        status:
+          enum:
+            - awaiting_funds
+            - processing
+            - success
+            - failed
         request:
           description: An object containing the parameters used for this on-ramp.
           allOf:
@@ -1112,7 +1118,7 @@ components:
       type: object
       properties:
         type:
-          enum: ['off-ramp']
+          enum: ['off_ramp']
         request:
           description: An object containing the parameters used for this off-ramp.
           allOf:
