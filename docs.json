@@ -4,7 +4,7 @@
   "name": "Lumx",
   "colors": {
     "primary": "#6E05FF",
-    "light": "#6E05FF",
+    "light": "#843BFF",
     "dark": "#030712"
   },
   "favicon": "/favicon.svg",
@@ -27,7 +27,7 @@
           {
             "group": "Concepts",
             "pages": [
-              "concepts/APIs",
+              "concepts/apis",
               "concepts/accounts",
               "concepts/orchestration"
             ]
