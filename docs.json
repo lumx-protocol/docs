@@ -32,19 +32,11 @@
             ]
           },
           {
-            "group": "Compliance Requirements",
+            "group": "Compliance",
             "pages": [
-              "compliance-requirements/terms-and-conditions",
-              "compliance-requirements/KYC-KYB",
-              {
-                "group": "Beneficiaries",
-                "pages": [
-                  "compliance-requirements/beneficiaries/beneficiaries",
-                  "compliance-requirements/beneficiaries/compliance-KYC",
-                  "compliance-requirements/beneficiaries/applicable-types"
-                ]
-              },
-              "compliance-requirements/prohibited-activities"
+              "compliance/beneficiaries",
+              "compliance/compliance-requirements",
+              "compliance/prohibited-activities"
             ]
           }
         ]
