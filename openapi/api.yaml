@@ -210,6 +210,103 @@ paths:
           description: On-ramp operation created successfully.
           content:
             application/json:
+              examples:
+                success:
+                  summary: Successful on-ramp
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on-ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      receipt:
+                        rate: 0.166
+                        sourceAmount: 6000
+                        targetAmount: 986.80
+                        sourceCurrency: "BRL"
+                        targetCurrency: "USDC"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: 9.988916
+                            flat: 1
+                          developer:
+                            percentage: 0.998891
+                            flat: 0.1
+                        blockchain:
+                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
+                          blockExplorerUrl: "https://polygonscan.com/"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:10Z"
+                awaiting_funds:
+                  summary: Awaiting funds
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on-ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "awaiting_funds"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:00Z"
+                processing:
+                  summary: Processing
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on-ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                failed:
+                  summary: Failed
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on-ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "failed"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      error:
+                        code: "INSUFFICIENT_FUNDS"
+                        message: "The payment was rejected due to insufficient funds"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
                   - $ref: '#/components/schemas/BaseTransactionResponse'
@@ -237,6 +334,107 @@ paths:
           description: Off-ramp operation created successfully.
           content:
             application/json:
+              examples:
+                success:
+                  summary: Successful off-ramp
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off-ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                      receipt:
+                        rate: 6.0066
+                        sourceAmount: 1000.00
+                        targetAmount: 5925.55
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: 10.000000
+                            flat: 1
+                          developer:
+                            percentage: 1.000000
+                            flat: 0.1
+                        blockchain:
+                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
+                          blockExplorerUrl: "https://polygonscan.com/"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:10Z"
+                processing:
+                    summary: Processing
+                    value:
+                      id: "123e4567-e89b-12d3-a456-426614174002"
+                      customerId: "123e4567-e89b-12d3-a456-426614174001"
+                      type: "off-ramp"
+                      request:
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        amount: "100.00"
+                        payment:
+                          rail: "pix"
+                          keyValue: "user@email.com"
+                          keyType: "email"
+                      state:
+                        status: "processing"
+                        payment:
+                          rail: "pix"
+                      createdAt: "2024-03-20T15:30:00Z"
+                      updatedAt: "2024-03-20T15:30:05Z"
+                awaiting_funds:
+                  summary: Awaiting funds
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off-ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "awaiting_funds"
+                      payment:
+                        rail: "pix"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:00Z"
+                failed:
+                  summary: Failed
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off-ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "failed"
+                      payment:
+                        rail: "pix"
+                      error:
+                        code: "INVALID_PIX_KEY"
+                        message: "The provided PIX key is invalid or not found"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
                   - $ref: '#/components/schemas/BaseTransactionResponse'
@@ -435,18 +633,18 @@ paths:
           description: The details of the transaction were retrieved successfully.
           content:
             application/json:
-              # examples:
-              #   "on-ramp":
-              #     $ref: "#/components/schemas/BaseTransactionResponse"
-              #   "off-ramp":
-              #     value:
-              #       name:
-              #         description: The name of the project.
-              #         type: string
-              #       blockchainName:
-              #         description: The blockchain used by the project. More blockchains coming soon.
-              #         type: string
-              #         enum:  ["Polygon"]
+              examples:
+                "on-ramp":
+                  $ref: "#/components/schemas/BaseTransactionResponse"
+                "off-ramp":
+                  value:
+                    name:
+                      description: The name of the project.
+                      type: string
+                    blockchainName:
+                      description: The blockchain used by the project. More blockchains coming soon.
+                      type: string
+                      enum:  ["Polygon"]
               schema:
                 oneOf:
                   - type: object
@@ -783,6 +981,18 @@ components:
           type: string
           format: date-time
           description: The timestamp from when the transaction was last updated.
+    BlockchainReceipt:
+          type: object
+          description: Blockchains information regarding this transaction
+          properties:
+            transactionHash:
+                type: string
+                description: Transaction hash recorded on the blockchain
+                example: '0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832'
+            blockExplorerUrl:
+                type: string
+                description: Block explorer from the chain
+                example: 'https://polygonscan.com/'
     OnRampRequest:
       type: object
       properties:
@@ -817,23 +1027,25 @@ components:
         state:
           oneOf:
             - allOf:
-              - $ref: '#/components/schemas/FinishedBaseOnRampTransactionState'
-              - $ref: '#/components/schemas/SuccessOnRampTransactionState'
+                - $ref: '#/components/schemas/OngoingOnRampTransactionState'
             - allOf:
-              - $ref: '#/components/schemas/FinishedBaseOnRampTransactionState'
-              - $ref: '#/components/schemas/FailedOnRampTransactionState'
+                - $ref: '#/components/schemas/FinishedOnRampTransactionState'
+                - $ref: '#/components/schemas/SuccessOnRampTransactionState'
+            - allOf:
+                - $ref: '#/components/schemas/FinishedOnRampTransactionState'
+                - $ref: '#/components/schemas/FailedOnRampTransactionState'
     OngoingOnRampTransactionState:
       type: object
-      title: On ramp
+      title: On ramp processing
       properties:
         status:
           enum:
             - awaiting_funds
             - processing
         payment:
-          $ref: '#/components/schemas/StatePayment'
+          $ref: '#/components/schemas/OnRampStatePayment'
           description: The payment details to add funds for this on ramp transaction.
-    FinishedBaseOnRampTransactionState:
+    FinishedOnRampTransactionState:
       type: object
       properties:
         status:
@@ -841,14 +1053,14 @@ components:
             - success
             - failed
         payment:
-          $ref: '#/components/schemas/StatePayment'
+          $ref: '#/components/schemas/OnRampStatePayment'
           description: The payment details to add funds for this on ramp transaction.
     SuccessOnRampTransactionState:
       type: object
       title: On ramp success
       properties:
         receipt:
-          $ref: '#/components/schemas/SuccessReceipt'
+          $ref: '#/components/schemas/OnRampSuccessReceipt'
           description: The receipt details for this transaction.
     FailedOnRampTransactionState:
       type: object
@@ -907,21 +1119,56 @@ components:
             - $ref: '#/components/schemas/CrossRampRequest'
             - $ref: '#/components/schemas/OffRampRequest'
         state:
-          allOf:
-            # - $ref: "#/components/schemas/BaseTransactionState"
-            - $ref: '#/components/schemas/OffRampTransactionState'
-    OffRampTransactionState:
+          oneOf:
+            - allOf:
+              - $ref: '#/components/schemas/OngoingOffRampTransactionState'
+            - allOf:
+                - $ref: '#/components/schemas/FinishedOffRampTransactionState'
+                - $ref: '#/components/schemas/SuccessOffRampTransactionState'
+            - allOf:
+                - $ref: '#/components/schemas/FinishedOffRampTransactionState'
+                - $ref: '#/components/schemas/FailedOffRampTransactionState'
+    OngoingOffRampTransactionState:
+      type: object
+      title: Off ramp processing
+      properties:
+        status:
+          enum:
+            - awaiting_funds
+            - processing
+        payment:
+          $ref: '#/components/schemas/StatePayment'
+          description: The payment details for this off ramp transaction.
+    SuccessOffRampTransactionState:
+      type: object
+      title: Off ramp success
+      properties:
+        receipt:
+          $ref: '#/components/schemas/OffRampSuccessReceipt'
+          description: The receipt details for this transaction.
+    FinishedOffRampTransactionState:
       type: object
       properties:
         status:
           enum:
-            # - awaiting_signature
-            - processing
             - success
             - failed
-        encodedData:
-          type: string
-          description: The encoded data that needs to be signed in order to submit this transaction to the blockchain.
+        payment:
+          $ref: '#/components/schemas/StatePayment'
+          description: The payment details for this off ramp transaction.
+    FailedOffRampTransactionState:
+      type: object
+      title: Off ramp failure
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Code number
+            message:
+              type: string
+              description: Error message
     TransferRequest:
       type: object
       required:
@@ -947,7 +1194,7 @@ components:
         amount:
           type: string
           format: number
-          example: '100.123456'
+          example: 100.123456
           description: The amount to be transferred.
     TransferResponse:
       type: object
@@ -981,17 +1228,22 @@ components:
             type: string
     StatePayment:
       type: object
-      description: The payment details to add funds for this on ramp transaction.
+      description: The payment details for this transaction.
       properties:
         rail:
           type: string
           enum: ['pix']
           description: The payment rail that will be used for this transaction.
-        brCode:
-          type: string
-          description: The PIX copy-and-paste code to be used for payment.
-          example: '00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234'
-    SuccessReceipt:
+    OnRampStatePayment:
+      allOf:
+        - $ref: '#/components/schemas/StatePayment'
+        - type: object
+          properties:
+            brCode:
+              type: string
+              description: The PIX copy-and-paste code to be used for payment.
+              example: '00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234'
+    OnRampSuccessReceipt:
       type: object
       description: The receipt details for this transaction.
       properties:
@@ -1048,6 +1300,67 @@ components:
                   type: number
                   description: The flat fee which is subtracted from the target amount.
                   example: 0.1
+        blockchain:
+          $ref: '#/components/schemas/BlockchainReceipt'
+    OffRampSuccessReceipt:
+      type: object
+      description: The receipt details for this transaction.
+      properties:
+        rate:
+          type: number
+          description: The exchange rate used for this transaction.
+          example: 6.0066
+        sourceAmount:
+          type: number
+          description: The amount that was converted from the source currency.
+          example: 1000.00
+        targetAmount:
+          type: number
+          description: The converted amount after fees.
+          example: 5925.55
+        sourceCurrency:
+          type: string
+          description: The currency to convert from.
+          example: 'USDC'
+        targetCurrency:
+          type: string
+          description: The currency to convert to.
+          example: 'BRL'
+        fees:
+          type: object
+          description: The fee details for this transaction.
+          properties:
+            currency:
+              type: string
+              description: The currency of the fee.
+              example: 'USDC'
+              enum: ['BRL', 'USDC', 'USDT']
+            lumx:
+              type: object
+              description: The fees charged by Lumx for processing this transaction.
+              properties:
+                percentage:
+                  type: number
+                  description: The percentage fee, calculated as a percentage of the target amount.
+                  example: 10.000000
+                flat:
+                  type: number
+                  description: The flat fee which is subtracted from the target amount.
+                  example: 1
+            developer:
+              type: object
+              description: The fees charged by the developer (you) for processing this transaction.
+              properties:
+                percentage:
+                  type: number
+                  description: The percentage fee, calculated as a percentage of the target amount.
+                  example: 1.000000
+                flat:
+                  type: number
+                  description: The flat fee which is subtracted from the target amount.
+                  example: 0.1
+        blockchain:
+          $ref: '#/components/schemas/BlockchainReceipt'
   securitySchemes:
     apiKey:
       type: http
