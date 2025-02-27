@@ -515,6 +515,244 @@ paths:
   #                           enum: ['processing']
   #     security:
   #       - apiKey: []
+  '/transactions/{transactionId}':
+    get:
+      tags:
+        - Transactions
+      summary: Read a transaction
+      description: This endpoint reads a transaction made with your API key.
+      parameters:
+        - name: transactionId
+          in: path
+          description: The ID of the transaction.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The details of the transaction were retrieved successfully.
+          content:
+            application/json:
+              examples:
+                "off-ramp: processing":
+                    summary: Processing
+                    value:
+                      id: "123e4567-e89b-12d3-a456-426614174002"
+                      customerId: "123e4567-e89b-12d3-a456-426614174001"
+                      type: "off_ramp"
+                      request:
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        amount: "100.00"
+                        payment:
+                          rail: "pix"
+                          keyValue: "user@email.com"
+                          keyType: "email"
+                      state:
+                        status: "processing"
+                        payment:
+                          rail: "pix"
+                      createdAt: "2024-03-20T15:30:00Z"
+                      updatedAt: "2024-03-20T15:30:05Z"
+                "off-ramp: success":
+                  summary: Successful off-ramp
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                      receipt:
+                        rate: "6.0066"
+                        sourceAmount: "1000.00"
+                        targetAmount: "5925.55"
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: "10.000000"
+                            flat: "1"
+                          developer:
+                            percentage: "1.000000"
+                            flat: "0.1"
+                        blockchain:
+                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
+                          blockExplorerUrl: "https://polygonscan.com/"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:10Z"
+                # "off-ramp: awaiting_funds":
+                #   summary: Awaiting funds
+                #   value:
+                #     id: "123e4567-e89b-12d3-a456-426614174002"
+                #     customerId: "123e4567-e89b-12d3-a456-426614174001"
+                #     type: "off_ramp"
+                #     request:
+                #       sourceCurrency: "USDC"
+                #       targetCurrency: "BRL"
+                #       amount: "100.00"
+                #       payment:
+                #         rail: "pix"
+                #         keyValue: "user@email.com"
+                #         keyType: "email"
+                #     state:
+                #       status: "awaiting_funds"
+                #       payment:
+                #         rail: "pix"
+                #     createdAt: "2024-03-20T15:30:00Z"
+                #     updatedAt: "2024-03-20T15:30:00Z"
+                "off-ramp: failed":
+                  summary: Failed
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "failed"
+                      payment:
+                        rail: "pix"
+                      error:
+                        code: "INVALID_PIX_KEY"
+                        message: "The provided PIX key is invalid or not found"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:15Z"
+                "on-ramp: awaiting_funds":
+                  summary: Awaiting funds
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "awaiting_funds"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:00Z"
+                "on-ramp: processing":
+                  summary: Processing
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "on-ramp: success":
+                  summary: Successful on-ramp
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      receipt:
+                        rate: "0.166"
+                        sourceAmount: "6000.00"
+                        targetAmount: "986.80"
+                        sourceCurrency: "BRL"
+                        targetCurrency: "USDC"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: "9.988916"
+                            flat: "1"
+                          developer:
+                            percentage: "0.998891"
+                            flat: "0.1"
+                        blockchain:
+                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
+                          blockExplorerUrl: "https://polygonscan.com/"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:10Z"
+                "on-ramp: failed":
+                  summary: Failed
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "6000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "failed"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      error:
+                        code: "INSUFFICIENT_FUNDS"
+                        message: "The payment was rejected due to insufficient funds"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:15Z"
+              schema:
+                oneOf:
+                  - type: object
+                    title: On-ramp
+                    allOf:
+                      - $ref: '#/components/schemas/BaseTransactionResponse'
+                      - $ref: '#/components/schemas/OnRampResponse'
+                      - $ref: '#/components/schemas/TransactionTimestamps'
+                  - type: object
+                    title: Off-ramp
+                    allOf:
+                      - $ref: '#/components/schemas/BaseTransactionResponse'
+                      - $ref: '#/components/schemas/OffRampResponse'
+                      - $ref: '#/components/schemas/TransactionTimestamps'
+                  - type: object
+                    title: Transfer
+                    allOf:
+                      - $ref: '#/components/schemas/BaseTransactionResponse'
+                      # - $ref: "#/components/schemas/TransferResponse"
+                      - $ref: '#/components/schemas/TransactionTimestamps'
+      security:
+        - apiKey: []
+  
   /transactions:
     get:
       tags:
@@ -613,58 +851,6 @@ paths:
                   #     pageSize:
                   #       type: number
                   #       description: The size of the page.
-      security:
-        - apiKey: []
-  '/transactions/{transactionId}':
-    get:
-      tags:
-        - Transactions
-      summary: Read a transaction
-      description: This endpoint reads a transaction made with your API key.
-      parameters:
-        - name: transactionId
-          in: path
-          description: The ID of the transaction.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The details of the transaction were retrieved successfully.
-          content:
-            application/json:
-              examples:
-                "on-ramp":
-                  $ref: "#/components/schemas/BaseTransactionResponse"
-                "off-ramp":
-                  value:
-                    name:
-                      description: The name of the project.
-                      type: string
-                    blockchainName:
-                      description: The blockchain used by the project. More blockchains coming soon.
-                      type: string
-                      enum:  ["Polygon"]
-              schema:
-                oneOf:
-                  - type: object
-                    title: On-ramp
-                    allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
-                      - $ref: '#/components/schemas/OnRampResponse'
-                      - $ref: '#/components/schemas/TransactionTimestamps'
-                  - type: object
-                    title: Off-ramp
-                    allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
-                      - $ref: '#/components/schemas/OffRampResponse'
-                      - $ref: '#/components/schemas/TransactionTimestamps'
-                  - type: object
-                    title: Transfer
-                    allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
-                      # - $ref: "#/components/schemas/TransferResponse"
-                      - $ref: '#/components/schemas/TransactionTimestamps'
       security:
         - apiKey: []
 
