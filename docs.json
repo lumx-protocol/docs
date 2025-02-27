@@ -4,7 +4,7 @@
   "name": "Lumx",
   "colors": {
     "primary": "#6E05FF",
-    "light": "#52525B",
+    "light": "#6E05FF",
     "dark": "#030712"
   },
   "favicon": "/favicon.svg",
