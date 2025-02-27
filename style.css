@@ -1,0 +1,155 @@
+.dark {
+  .codeblock-dark {
+    background-color: #030712 !important;
+    div {
+      border-color: #27272a !important;
+      background-color: #030712 !important;
+
+      button {
+        div {
+          background-color: unset !important;
+          color: #a19ea6 !important;
+
+          &:hover {
+            background-color: #27272a !important;
+          }
+        }
+      }
+
+      [aria-selected="true"] {
+        div {
+          background-color: unset !important;
+          color: white !important;
+
+          &:hover {
+            background-color: unset !important;
+          }
+        }
+        div:nth-child(2) {
+          border-bottom-color: #6e05ff !important;
+        }
+      }
+    }
+
+    [aria-label="Copy the contents from the code block"] {
+      svg {
+        background-color: #a19ea6 !important;
+      }
+
+      .fill-primary-light {
+        background-color: transparent !important;
+
+        svg {
+          fill: #a19ea6 !important;
+          background-color: #a19ea6 !important;
+        }
+      }
+    }
+
+    code {
+      color: white !important;
+
+      .number,
+      .function {
+        color: #dcdcaa !important;
+      }
+
+      .property,
+      .operator,
+      .parameter,
+      .constant,
+      .variable {
+        color: #9cdcfe !important;
+      }
+
+      .string {
+        color: #ce9178 !important;
+      }
+
+      .punctuation {
+        color: #d4d4d4 !important;
+      }
+
+      .class-name {
+        color: #4ec9b0 !important;
+      }
+    }
+  }
+}
+
+.codeblock-dark {
+  background-color: #f9fafb !important;
+  div {
+    border-color: #e2e8f0 !important;
+    background-color: #f9fafb !important;
+
+    button {
+      div {
+        background-color: unset !important;
+        color: black !important;
+        opacity: 0.5 !important;
+
+        &:hover {
+          background-color: #e4e4e7 !important;
+        }
+      }
+    }
+
+    [aria-selected="true"] {
+      div {
+        color: black !important;
+        opacity: 1 !important;
+        &:hover {
+          background-color: transparent !important;
+        }
+      }
+      div:nth-child(2) {
+        border-bottom-color: #6e05ff !important;
+      }
+    }
+  }
+
+  [aria-label="Copy the contents from the code block"] {
+    svg {
+      background-color: black !important;
+    }
+
+    .fill-primary-light {
+      background-color: transparent !important;
+
+      svg {
+        fill: black !important;
+        background-color: black !important;
+      }
+    }
+  }
+
+  code {
+    color: black !important;
+
+    .number,
+    .function {
+      color: #a1a173 !important;
+    }
+
+    .property,
+    .operator,
+    .parameter,
+    .constant,
+    .variable {
+      color: #669ebf !important;
+    }
+
+    .string {
+      color: #aa7661 !important;
+    }
+
+    .punctuation {
+      color: #27272a !important;
+    }
+
+    .class-name {
+      color: #3ea28d !important;
+    }
+  }
+}
