@@ -12,7 +12,6 @@
 
           &:hover {
             background-color: #27272a !important;
-            color: #6e05ff !important;
           }
         }
       }
@@ -20,7 +19,7 @@
       [aria-selected="true"] {
         div {
           background-color: unset !important;
-          color: #6e05ff !important;
+          color: white !important;
 
           &:hover {
             background-color: unset !important;
@@ -88,6 +87,7 @@
       div {
         background-color: unset !important;
         color: black !important;
+        opacity: 0.5 !important;
 
         &:hover {
           background-color: #e4e4e7 !important;
@@ -97,11 +97,10 @@
 
     [aria-selected="true"] {
       div {
-        background-color: #e4e4e7 !important;
         color: black !important;
-
+        opacity: 1 !important;
         &:hover {
-          background-color: #e4e4e7 !important;
+          background-color: transparent !important;
         }
       }
       div:nth-child(2) {
