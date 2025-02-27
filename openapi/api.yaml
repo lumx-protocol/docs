@@ -457,6 +457,8 @@ paths:
           description: The details of the transaction were retrieved successfully.
           content:
             application/json:
+              examples:
+                on-ramp
               schema:
                 oneOf:
                   - type: object
@@ -776,26 +778,12 @@ components:
           type: string
           description: The type of this transaction
           enum: ["on-ramp", "off-ramp", "transfer", "swap"]
-        state:
-          type: object
-          description: The transactions's results.
         request:
           type: object
           description: The parameters used when creating this transaction.
-    BaseTransactionState:
-      type: object
-      properties:
-        status:
-          type: string
-          description: The status of the transaction.
-        transactionHash:
-          type: string
-          description: The identifier of this transaction on the blockchain.
-          nullable: true
-        blockExplorerUrl:
-          type: string
-          nullable: true
-          description: The URL of the block explorer where the details of this transaction can be read.
+        state:
+          type: object
+          description: The transaction's results.
     TransactionTimestamps:
       type: object
       properties:
@@ -839,9 +827,8 @@ components:
             - $ref: "#/components/schemas/OnRampRequest"
         state:
           allOf:
-            - $ref: "#/components/schemas/BaseTransactionState"
-            - $ref: "#/components/schemas/OnRampTransactionState"
-    OnRampTransactionState:
+            - $ref: "#/components/schemas/OngoingOnRampTransactionState"
+    OngoingOnRampTransactionState:
       type: object
       title: On ramp
       properties:
@@ -849,20 +836,31 @@ components:
           enum:
             - awaiting_funds
             - processing
+        payment:
+          $ref: "#/components/schemas/StatePayment"
+          description: The payment details to add funds for this on ramp transaction.
+    FinishedOnRampTransactionState:
+      type: object
+      title: On ramp
+      properties:
+        status:
+          enum:
             - success
             - failed
         payment:
-          type: object
+          $ref: "#/components/schemas/StatePayment"
           description: The payment details to add funds for this on ramp transaction.
-          properties:
-            rail:
-              type: string
-              enum: ["pix"]
-              description: The payment rail that will be used for this transaction.
-            brCode:
-              type: string
-              description: The PIX copy-and-paste code to be used for payment.
-              example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+        receipt:
+          oneOf:  
+            - $ref: "#/components/schemas/SuccessReceipt"
+              description: The receipt details for this transaction.
+            - $ref: "#/components/schemas/FailedReceipt"
+              description: The receipt details for this transaction.
+          discriminator:
+            propertyName: status
+            mapping:
+              success: "#/components/schemas/SuccessReceipt"
+              failed: "#/components/schemas/FailedReceipt"
     OffRampRequest:
       type: object
       required:
@@ -978,6 +976,90 @@ components:
           type: array
           items:
             type: string
+    StatePayment:
+      type: object
+      description: The payment details to add funds for this on ramp transaction.
+      properties:
+          rail:
+            type: string
+            enum: ["pix"]
+            description: The payment rail that will be used for this transaction.
+          brCode:
+            type: string
+            description: The PIX copy-and-paste code to be used for payment.
+            example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+    SuccessReceipt:
+      type: object
+      description: The receipt details for this transaction.
+      properties:
+        sourceAmount:
+          type: number
+          description: The amount that was converted from the source currency.
+        rate:
+          type: number
+          description: The exchange rate used for this transaction.
+        grossTargetAmount:
+          type: number
+          description: The amount converted to the target currency, before fees are subtracted.
+        netTargetAmount:
+          type: number
+          description: The amount converted to the target currency, after fees are subtracted.
+        fees:
+          type: object
+          description: The fee details for this transaction.
+          properties:
+            total:
+              type: number
+              description: The total fee, which is the sum of the Lumx and developer fees.
+            currency:
+              type: string
+              description: The currency of the fee.
+            lumx:
+              type: object
+              description: The fees charged by Lumx for processing this transaction.
+              properties:
+                percentage:
+                  type: number
+                  description: The percentage fee, calculated as a percentage of the target amount.
+                flat:
+                  type: number
+                  description: The flat fee which is subtracted from the target amount.
+            developer:
+              type: object
+              description: The fees charged by the developer (you) for processing this transaction.
+              properties:
+                percentage:
+                  type: number
+                  description: The percentage fee, calculated as a percentage of the target amount.
+                flat:
+                  type: number
+                  description: The flat fee which is subtracted from the target amount.
+        transactionHash:
+          type: string
+          description: The hash of the transaction.
+        blockExplorerUrl:
+          type: string
+          description: The URL of the block explorer where the details of this transaction can be read.
+    FailedReceipt:
+      type: object
+      description: The receipt details for this transaction.
+      properties:
+        transactionHash:
+          type: string
+          description: The hash of the transaction.
+        blockExplorerUrl:
+          type: string
+        description: The URL of the block explorer where the details of this transaction can be read.
+        error:
+          type: object
+          description: The error details for this transaction.
+          properties:
+            code:
+              type: string
+              description: The error code.
+            message:
+              type: string
+              description: The error message.
   securitySchemes:
     apiKey:
       type: http
