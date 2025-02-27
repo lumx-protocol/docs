@@ -1,0 +1,18 @@
+---
+title: "Simulation"
+description: "Simulate stablecoin movement in the Sandbox environment"
+---
+
+To simulate stablecoin movement in the Sandbox environment, we deployed the USDL token on Polygon Amoy. Developers can simulate on-ramping, transferring stablecoin between wallets, and off-ramping with USDL.
+
+### On-ramp from Fiat to USDL
+
+After creating a Customer, you can use the customer id created to simulate onramps to USDL with the On-ramp endpoint. You can pick any available source fiat currency and target stablecoin (USDC or USDT at the moment) and we will automatically mint the USDL for you and send it to the Customer's wallet.
+
+### Transfer USDL between Wallets
+
+You can also transfer USDL between wallets. You can pick any available stablecoin (USDC or USDT at the moment) and we will automatically route it to USDL and transfer it to the specific wallet.
+
+### Off-ramp from USDL to Fiat
+
+After creating a Customer and simulating on-ramping, you can use the customer id created to simulate off-ramps to USDL with the Off-ramp endpoint. You can pick any available source stablecoin (USDC or USDT at the moment) and target fiat currency, we will route it to USDL for you and simulate the off-ramp.
