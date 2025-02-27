@@ -75,6 +75,75 @@
       }
     }
   }
+
+  .w-full.rounded-2xl.border.bg-\[\#0F1117\].dark\:bg-codeblock.border-gray-800\/50.hidden.lg\:block.min-h-fit {
+    background-color: #030712 !important;
+    border-color: #030712 !important;
+
+    a {
+      svg {
+        background-color: white !important;
+      }
+    }
+
+    [aria-label="Copy the contents from the code block"] {
+      svg {
+        fill: white !important;
+        background-color: white !important;
+      }
+
+      .fill-primary-light {
+        background-color: transparent !important;
+
+        svg {
+          fill: white !important;
+          background-color: white !important;
+        }
+      }
+    }
+    div:first-child {
+      border-bottom-color: #27272a !important;
+    }
+
+    .text-xs.text-gray-200.font-medium,
+    tr {
+      color: white !important;
+    }
+
+    select {
+      background-color: #030712 !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    .language-json-dark {
+      color: white !important;
+
+      .number,
+      .function {
+        color: #dcdcaa !important;
+      }
+
+      .property,
+      .operator,
+      .parameter,
+      .constant,
+      .variable {
+        color: #9cdcfe !important;
+      }
+
+      .string {
+        color: #ce9178 !important;
+      }
+
+      .punctuation {
+        color: #d4d4d4 !important;
+      }
+
+      .class-name {
+        color: #4ec9b0 !important;
+      }
+    }
+  }
 }
 
 .codeblock-dark {
@@ -125,6 +194,75 @@
   }
 
   code {
+    color: black !important;
+
+    .number,
+    .function {
+      color: #a1a173 !important;
+    }
+
+    .property,
+    .operator,
+    .parameter,
+    .constant,
+    .variable {
+      color: #669ebf !important;
+    }
+
+    .string {
+      color: #aa7661 !important;
+    }
+
+    .punctuation {
+      color: #27272a !important;
+    }
+
+    .class-name {
+      color: #3ea28d !important;
+    }
+  }
+}
+
+.w-full.rounded-2xl.border.bg-\[\#0F1117\].dark\:bg-codeblock.border-gray-800\/50.hidden.lg\:block.min-h-fit {
+  background-color: #f9fafb !important;
+  border-color: #f9fafb !important;
+
+  a {
+    svg {
+      background-color: black !important;
+    }
+  }
+
+  [aria-label="Copy the contents from the code block"] {
+    svg {
+      fill: black !important;
+      background-color: black !important;
+    }
+
+    .fill-primary-light {
+      background-color: transparent !important;
+
+      svg {
+        fill: black !important;
+        background-color: black !important;
+      }
+    }
+  }
+  div:first-child {
+    border-bottom-color: #e2e8f0 !important;
+  }
+
+  .text-xs.text-gray-200.font-medium,
+  tr {
+    color: black !important;
+  }
+
+  select {
+    background-color: #f9fafb !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  .language-json-dark {
     color: black !important;
 
     .number,
