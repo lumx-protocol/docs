@@ -4,7 +4,7 @@
   "name": "Lumx",
   "colors": {
     "primary": "#6E05FF",
-    "light": "#6E05FF",
+    "light": "#52525B",
     "dark": "#030712"
   },
   "favicon": "/favicon.svg",
@@ -88,7 +88,7 @@
   },
   "background": {
     "color": {
-      "dark": "#030712"
+      "dark": "#141416"
     }
   },
   "navbar": {
