@@ -442,7 +442,7 @@ paths:
                   - $ref: '#/components/schemas/TransactionTimestamps'
       security:
         - apiKey: []
-  /transactions/transfer:
+  /transactions/transfers:
     post:
       tags:
         - Transactions
