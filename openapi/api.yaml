@@ -5,7 +5,7 @@ info:
   description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
 servers:
   - url: https://api-sandbox.lumx.io
-  - url: https://api-staging.int.lumx.io
+  - url: https://api.stg.lumx.cloud
   - url: https://api.lumx.io
 paths:
   /customers:
