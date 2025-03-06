@@ -971,9 +971,6 @@ components:
           type: string
           description: The type of this customer.
           enum: ['individual', 'business']
-        passkeyPublicKey:
-          type: string
-          description: Customer's passkey public key
         address:
           $ref: '#/components/schemas/CustomerAddress'
           example:
