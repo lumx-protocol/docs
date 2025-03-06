@@ -14,6 +14,11 @@
         "version": "Beta",
         "anchors": [
           {
+            "anchor": "API Reference",
+            "openapi": "openapi/api.yaml",
+            "icon": "api"
+          },
+          {
             "anchor": "Documentation",
             "icon": "book-open",
             "groups": [
