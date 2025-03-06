@@ -4,8 +4,8 @@ info:
   title: Lumx API
   description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
 servers:
-  - url: https://api-sandbox.lumx.io
-  # - url: https://api.stg.lumx.cloud
+  # - url: https://api-sandbox.lumx.io
+  - url: https://api.stg.lumx.cloud
   # - url: https://api.lumx.io
 paths:
   /customers:
@@ -18,17 +18,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerCreateRequest'
+              $ref: "#/components/schemas/CustomerCreateRequest"
       responses:
-        '201':
+        "201":
           description: Successfully created the customer.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
+                $ref: "#/components/schemas/Customer"
+        "400":
           description: Invalid request parameters
-        '409':
+        "409":
           description: A conflict error ocurred trying to create a customer
           content:
             application/json:
@@ -66,7 +66,7 @@ paths:
       #     required: false
       #     description: The number of customers to return.
       responses:
-        '200':
+        "200":
           description: The list of customers was retrieved successfully.
           content:
             application/json:
@@ -77,7 +77,7 @@ paths:
                     description: An array containing all customers.
                     type: array
                     items:
-                      $ref: '#/components/schemas/Customer'
+                      $ref: "#/components/schemas/Customer"
                   # pagination:
                   #   type: object
                   #   properties:
@@ -87,7 +87,7 @@ paths:
                   #       type: number
       security:
         - apiKey: []
-  '/customers/{id}':
+  "/customers/{id}":
     get:
       tags:
         - Customers
@@ -102,13 +102,13 @@ paths:
             format: uuid
           description: The ID of the customer.
       responses:
-        '200':
+        "200":
           description: Customer details retrieved successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-        '404':
+                $ref: "#/components/schemas/Customer"
+        "404":
           description: Customer not found!.
       security:
         - apiKey: []
@@ -129,19 +129,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerUpdateRequest'
+              $ref: "#/components/schemas/CustomerUpdateRequest"
       responses:
-        '200':
+        "200":
           description: Customer updated successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
+                $ref: "#/components/schemas/Customer"
+        "400":
           description: Invalid request parameters.
-        '404':
+        "404":
           description: Customer not found!
-        '409':
+        "409":
           description: An error ocurred trying to create a customer
           content:
             application/json:
@@ -182,12 +182,12 @@ paths:
             enum: [BRL, USDC, USDT]
           description: The currency to convert to.
       responses:
-        '200':
+        "200":
           description: Exchange rate quote returned successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExchangeRateResponse'
+                $ref: "#/components/schemas/ExchangeRateResponse"
       security:
         - apiKey: []
   /transactions/on-ramp:
@@ -202,11 +202,11 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/CustomerId'
-                - $ref: '#/components/schemas/CrossRampRequest'
-                - $ref: '#/components/schemas/OnRampRequest'
+                - $ref: "#/components/schemas/CustomerId"
+                - $ref: "#/components/schemas/CrossRampRequest"
+                - $ref: "#/components/schemas/OnRampRequest"
       responses:
-        '201':
+        "201":
           description: On-ramp operation created successfully.
           content:
             application/json:
@@ -309,9 +309,9 @@ paths:
                     updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/BaseTransactionResponse'
-                  - $ref: '#/components/schemas/OnRampResponse'
-                  - $ref: '#/components/schemas/TransactionTimestamps'
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/OnRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   /transactions/off-ramp:
@@ -326,11 +326,11 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/CustomerId'
-                - $ref: '#/components/schemas/CrossRampRequest'
-                - $ref: '#/components/schemas/OffRampRequest'
+                - $ref: "#/components/schemas/CustomerId"
+                - $ref: "#/components/schemas/CrossRampRequest"
+                - $ref: "#/components/schemas/OffRampRequest"
       responses:
-        '201':
+        "201":
           description: Off-ramp operation created successfully.
           content:
             application/json:
@@ -373,25 +373,25 @@ paths:
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:10Z"
                 processing:
-                    summary: Processing
-                    value:
-                      id: "123e4567-e89b-12d3-a456-426614174002"
-                      customerId: "123e4567-e89b-12d3-a456-426614174001"
-                      type: "off_ramp"
-                      request:
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        amount: "100.00"
-                        payment:
-                          rail: "pix"
-                          keyValue: "user@email.com"
-                          keyType: "email"
-                      state:
-                        status: "processing"
-                        payment:
-                          rail: "pix"
-                      createdAt: "2024-03-20T15:30:00Z"
-                      updatedAt: "2024-03-20T15:30:05Z"
+                  summary: Processing
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
                 awaiting_funds:
                   summary: Awaiting funds
                   value:
@@ -437,9 +437,9 @@ paths:
                     updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/BaseTransactionResponse'
-                  - $ref: '#/components/schemas/OffRampResponse'
-                  - $ref: '#/components/schemas/TransactionTimestamps'
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/OffRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   /transactions/transfers:
@@ -453,17 +453,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
+              $ref: "#/components/schemas/TransferRequest"
       responses:
-        '201':
+        "201":
           description: Transfer transaction created successfully.
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/BaseTransactionResponse'
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
                   # - $ref: "#/components/schemas/TransferResponse"
-                  - $ref: '#/components/schemas/TransactionTimestamps'
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   # "/transactions/{transactionId}/execute":
@@ -515,7 +515,7 @@ paths:
   #                           enum: ['processing']
   #     security:
   #       - apiKey: []
-  '/transactions/{transactionId}':
+  "/transactions/{transactionId}":
     get:
       tags:
         - Transactions
@@ -529,31 +529,31 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: The details of the transaction were retrieved successfully.
           content:
             application/json:
               examples:
                 "off-ramp: processing":
-                    summary: Processing
-                    value:
-                      id: "123e4567-e89b-12d3-a456-426614174002"
-                      customerId: "123e4567-e89b-12d3-a456-426614174001"
-                      type: "off_ramp"
-                      request:
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        amount: "100.00"
-                        payment:
-                          rail: "pix"
-                          keyValue: "user@email.com"
-                          keyType: "email"
-                      state:
-                        status: "processing"
-                        payment:
-                          rail: "pix"
-                      createdAt: "2024-03-20T15:30:00Z"
-                      updatedAt: "2024-03-20T15:30:05Z"
+                  summary: Processing
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "100.00"
+                      payment:
+                        rail: "pix"
+                        keyValue: "user@email.com"
+                        keyType: "email"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
                 "off-ramp: success":
                   summary: Successful off-ramp
                   value:
@@ -735,24 +735,24 @@ paths:
                   - type: object
                     title: On-ramp
                     allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
-                      - $ref: '#/components/schemas/OnRampResponse'
-                      - $ref: '#/components/schemas/TransactionTimestamps'
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/OnRampResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
                   - type: object
                     title: Off-ramp
                     allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
-                      - $ref: '#/components/schemas/OffRampResponse'
-                      - $ref: '#/components/schemas/TransactionTimestamps'
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
+                      - $ref: "#/components/schemas/OffRampResponse"
+                      - $ref: "#/components/schemas/TransactionTimestamps"
                   - type: object
                     title: Transfer
                     allOf:
-                      - $ref: '#/components/schemas/BaseTransactionResponse'
+                      - $ref: "#/components/schemas/BaseTransactionResponse"
                       # - $ref: "#/components/schemas/TransferResponse"
-                      - $ref: '#/components/schemas/TransactionTimestamps'
+                      - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-  
+
   /transactions:
     get:
       tags:
@@ -812,7 +812,7 @@ paths:
       #       type: string
       #     description: The id of the contract.
       responses:
-        '200':
+        "200":
           description: The list of transactions was retrieved successfully.
           content:
             application/json:
@@ -827,21 +827,21 @@ paths:
                         - type: object
                           title: On-ramps
                           allOf:
-                            - $ref: '#/components/schemas/BaseTransactionResponse'
-                            - $ref: '#/components/schemas/OnRampResponse'
-                            - $ref: '#/components/schemas/TransactionTimestamps'
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
+                            - $ref: "#/components/schemas/OnRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
                         - type: object
                           title: Off-ramps
                           allOf:
-                            - $ref: '#/components/schemas/BaseTransactionResponse'
-                            - $ref: '#/components/schemas/OffRampResponse'
-                            - $ref: '#/components/schemas/TransactionTimestamps'
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
+                            - $ref: "#/components/schemas/OffRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
                         - type: object
                           title: Transfers
                           allOf:
-                            - $ref: '#/components/schemas/BaseTransactionResponse'
+                            - $ref: "#/components/schemas/BaseTransactionResponse"
                             # - $ref: "#/components/schemas/TransferResponse"
-                            - $ref: '#/components/schemas/TransactionTimestamps'
+                            - $ref: "#/components/schemas/TransactionTimestamps"
                   # pagination:
                   #   type: object
                   #   properties:
@@ -865,7 +865,7 @@ components:
         blockchainName:
           description: The blockchain used by the project. More blockchains coming soon.
           type: string
-          enum: ['Polygon']
+          enum: ["Polygon"]
     ProjectResponse:
       type: object
       properties:
@@ -882,7 +882,7 @@ components:
           properties:
             name:
               type: string
-              example: 'Polygon'
+              example: "Polygon"
               description: The name of the blockchain.
             decimalChainId:
               type: number
@@ -902,7 +902,7 @@ components:
       allOf:
         - oneOf:
             - allOf:
-                - $ref: '#/components/schemas/CustomerIndividual'
+                - $ref: "#/components/schemas/CustomerIndividual"
                   description: Individual customer
                   title: Individual
                 - type: object
@@ -910,7 +910,7 @@ components:
                     - name
                     - birthdate
             - allOf:
-                - $ref: '#/components/schemas/CustomerBusiness'
+                - $ref: "#/components/schemas/CustomerBusiness"
                   description: Business customer
                   title: Business
                 - type: object
@@ -920,24 +920,24 @@ components:
           discriminator:
             propertyName: type
             mapping:
-              individual: '#/components/schemas/CustomerIndividual'
-              business: '#/components/schemas/CustomerBusiness'
-        - $ref: '#/components/schemas/CustomerCreateRulesRequest'
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerCreateRulesRequest"
     CustomerUpdateRequest:
       allOf:
         - oneOf:
-            - $ref: '#/components/schemas/CustomerIndividual'
+            - $ref: "#/components/schemas/CustomerIndividual"
               description: Individual customer
               title: Individual
-            - $ref: '#/components/schemas/CustomerBusiness'
+            - $ref: "#/components/schemas/CustomerBusiness"
               description: Business customer
               title: Business
           discriminator:
             propertyName: type
             mapping:
-              individual: '#/components/schemas/CustomerIndividual'
-              business: '#/components/schemas/CustomerBusiness'
-        - $ref: '#/components/schemas/CustomerUpdateRulesRequest'
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -970,24 +970,24 @@ components:
         type:
           type: string
           description: The type of this customer.
-          enum: ['individual', 'business']
+          enum: ["individual", "business"]
         passkeyPublicKey:
           type: string
           description: Customer's passkey public key
         address:
-          $ref: '#/components/schemas/CustomerAddress'
+          $ref: "#/components/schemas/CustomerAddress"
           example:
-            line1: 'Rua dos Bobos, 0'
-            line2: 'Apto 101'
-            country: 'BRA'
-            state: 'SP'
-            city: 'São Paulo'
-            zipCode: '01234-567'
+            line1: "Rua dos Bobos, 0"
+            line2: "Apto 101"
+            country: "BRA"
+            state: "SP"
+            city: "São Paulo"
+            zipCode: "01234-567"
         documents:
           type: array
           description: List of customer documents
           items:
-            $ref: '#/components/schemas/CustomerDocument'
+            $ref: "#/components/schemas/CustomerDocument"
           example:
             - country: BRA
               type: TAX_ID
@@ -1009,28 +1009,28 @@ components:
         line1:
           type: string
           description: The first line of the address
-          example: 'Rua dos Bobos, 0'
+          example: "Rua dos Bobos, 0"
         line2:
           type: string
           description: The second line of the address
-          example: 'Apto 101'
+          example: "Apto 101"
         country:
           type: string
           description: The country code where the customer is located following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
           enum: [BRA]
-          example: 'BRA'
+          example: "BRA"
         state:
           type: string
           description: The state where the customer is located
-          example: 'SP'
+          example: "SP"
         city:
           type: string
           description: The city where the customer is located
-          example: 'São Paulo'
+          example: "São Paulo"
         zipCode:
           type: string
           description: The postal code where the customer is located
-          example: '01234-567'
+          example: "01234-567"
     CustomerDocument:
       type: object
       required:
@@ -1054,11 +1054,11 @@ components:
     CustomerIndividual:
       type: object
       allOf:
-        - $ref: '#/components/schemas/CustomerBase'
+        - $ref: "#/components/schemas/CustomerBase"
         - type: object
           properties:
             type:
-              enum: ['individual']
+              enum: ["individual"]
             name:
               type: string
               description: Customer full name
@@ -1066,15 +1066,15 @@ components:
               type: string
               description: Customer birth date
               format: date
-              example: '1990-01-01'
+              example: "1990-01-01"
     CustomerBusiness:
       type: object
       allOf:
-        - $ref: '#/components/schemas/CustomerBase'
+        - $ref: "#/components/schemas/CustomerBase"
         - type: object
           properties:
             type:
-              enum: ['business']
+              enum: ["business"]
             legalName:
               type: string
               description: Customer legal name
@@ -1082,18 +1082,18 @@ components:
               type: string
               description: Customer incorporation date
               format: date
-              example: '2020-01-01'
+              example: "2020-01-01"
     Customer:
       oneOf:
-        - $ref: '#/components/schemas/CustomerIndividual'
+        - $ref: "#/components/schemas/CustomerIndividual"
           title: Individual
-        - $ref: '#/components/schemas/CustomerBusiness'
+        - $ref: "#/components/schemas/CustomerBusiness"
           title: Business
       discriminator:
         propertyName: type
         mapping:
-          individual: '#/components/schemas/CustomerIndividual'
-          business: '#/components/schemas/CustomerBusiness'
+          individual: "#/components/schemas/CustomerIndividual"
+          business: "#/components/schemas/CustomerBusiness"
     ExchangeRateResponse:
       type: object
       properties:
@@ -1149,7 +1149,7 @@ components:
         type:
           type: string
           description: The type of this transaction
-          enum: ['on_ramp', 'off_ramp', 'transfer', 'swap']
+          enum: ["on_ramp", "off_ramp", "transfer", "swap"]
         request:
           type: object
           description: The parameters used when creating this transaction.
@@ -1168,17 +1168,17 @@ components:
           format: date-time
           description: The timestamp from when the transaction was last updated.
     BlockchainReceipt:
-          type: object
-          description: Blockchains information regarding this transaction
-          properties:
-            transactionHash:
-                type: string
-                description: Transaction hash recorded on the blockchain
-                example: '0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832'
-            blockExplorerUrl:
-                type: string
-                description: Block explorer from the chain
-                example: 'https://polygonscan.com/'
+      type: object
+      description: Blockchains information regarding this transaction
+      properties:
+        transactionHash:
+          type: string
+          description: Transaction hash recorded on the blockchain
+          example: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
+        blockExplorerUrl:
+          type: string
+          description: Block explorer from the chain
+          example: "https://polygonscan.com/"
     OnRampRequest:
       type: object
       properties:
@@ -1189,7 +1189,7 @@ components:
           properties:
             rail:
               type: string
-              enum: ['pix']
+              enum: ["pix"]
               description: The payment rail that will be used for this transaction.
         sourceCurrency:
           enum: [BRL]
@@ -1198,13 +1198,13 @@ components:
           enum: [USDC, USDT]
           description: The stablecoin to convert to.
         amount:
-          example: '100.99'
+          example: "100.99"
           description: The amount to be converted from fiat to stablecoin.
     OnRampResponse:
       type: object
       properties:
         type:
-          enum: ['on_ramp']
+          enum: ["on_ramp"]
         status:
           enum:
             - awaiting_funds
@@ -1214,18 +1214,18 @@ components:
         request:
           description: An object containing the parameters used for this on-ramp.
           allOf:
-            - $ref: '#/components/schemas/CrossRampRequest'
-            - $ref: '#/components/schemas/OnRampRequest'
+            - $ref: "#/components/schemas/CrossRampRequest"
+            - $ref: "#/components/schemas/OnRampRequest"
         state:
           oneOf:
             - allOf:
-                - $ref: '#/components/schemas/OngoingOnRampTransactionState'
+                - $ref: "#/components/schemas/OngoingOnRampTransactionState"
             - allOf:
-                - $ref: '#/components/schemas/FinishedOnRampTransactionState'
-                - $ref: '#/components/schemas/SuccessOnRampTransactionState'
+                - $ref: "#/components/schemas/FinishedOnRampTransactionState"
+                - $ref: "#/components/schemas/SuccessOnRampTransactionState"
             - allOf:
-                - $ref: '#/components/schemas/FinishedOnRampTransactionState'
-                - $ref: '#/components/schemas/FailedOnRampTransactionState'
+                - $ref: "#/components/schemas/FinishedOnRampTransactionState"
+                - $ref: "#/components/schemas/FailedOnRampTransactionState"
     OngoingOnRampTransactionState:
       type: object
       title: On ramp processing
@@ -1235,7 +1235,7 @@ components:
             - awaiting_funds
             - processing
         payment:
-          $ref: '#/components/schemas/OnRampStatePayment'
+          $ref: "#/components/schemas/OnRampStatePayment"
           description: The payment details to add funds for this on ramp transaction.
     FinishedOnRampTransactionState:
       type: object
@@ -1245,14 +1245,14 @@ components:
             - success
             - failed
         payment:
-          $ref: '#/components/schemas/OnRampStatePayment'
+          $ref: "#/components/schemas/OnRampStatePayment"
           description: The payment details to add funds for this on ramp transaction.
     SuccessOnRampTransactionState:
       type: object
       title: On ramp success
       properties:
         receipt:
-          $ref: '#/components/schemas/OnRampSuccessReceipt'
+          $ref: "#/components/schemas/OnRampSuccessReceipt"
           description: The receipt details for this transaction.
     FailedOnRampTransactionState:
       type: object
@@ -1283,14 +1283,14 @@ components:
           properties:
             rail:
               type: string
-              enum: ['pix']
+              enum: ["pix"]
               description: The payment rail that will be used for this transaction.
             keyValue:
               type: string
               description: The PIX key identifying the account where to send funds.
             keyType:
               type: string
-              enum: ['phone', 'CPF/CNPJ', 'email', 'random']
+              enum: ["phone", "CPF/CNPJ", "email", "random"]
         sourceCurrency:
           enum: [USDC, USDT]
           description: The stablecoin to convert from.
@@ -1298,28 +1298,28 @@ components:
           enum: [BRL]
           description: The fiat currency to convert to.
         amount:
-          example: '100.123456'
+          example: "100.123456"
           description: The amount to be converted from stablecoin to fiat.
     OffRampResponse:
       type: object
       properties:
         type:
-          enum: ['off_ramp']
+          enum: ["off_ramp"]
         request:
           description: An object containing the parameters used for this off-ramp.
           allOf:
-            - $ref: '#/components/schemas/CrossRampRequest'
-            - $ref: '#/components/schemas/OffRampRequest'
+            - $ref: "#/components/schemas/CrossRampRequest"
+            - $ref: "#/components/schemas/OffRampRequest"
         state:
           oneOf:
             - allOf:
-              - $ref: '#/components/schemas/OngoingOffRampTransactionState'
+                - $ref: "#/components/schemas/OngoingOffRampTransactionState"
             - allOf:
-                - $ref: '#/components/schemas/FinishedOffRampTransactionState'
-                - $ref: '#/components/schemas/SuccessOffRampTransactionState'
+                - $ref: "#/components/schemas/FinishedOffRampTransactionState"
+                - $ref: "#/components/schemas/SuccessOffRampTransactionState"
             - allOf:
-                - $ref: '#/components/schemas/FinishedOffRampTransactionState'
-                - $ref: '#/components/schemas/FailedOffRampTransactionState'
+                - $ref: "#/components/schemas/FinishedOffRampTransactionState"
+                - $ref: "#/components/schemas/FailedOffRampTransactionState"
     OngoingOffRampTransactionState:
       type: object
       title: Off ramp processing
@@ -1329,14 +1329,14 @@ components:
             - awaiting_funds
             - processing
         payment:
-          $ref: '#/components/schemas/StatePayment'
+          $ref: "#/components/schemas/StatePayment"
           description: The payment details for this off ramp transaction.
     SuccessOffRampTransactionState:
       type: object
       title: Off ramp success
       properties:
         receipt:
-          $ref: '#/components/schemas/OffRampSuccessReceipt'
+          $ref: "#/components/schemas/OffRampSuccessReceipt"
           description: The receipt details for this transaction.
     FinishedOffRampTransactionState:
       type: object
@@ -1346,7 +1346,7 @@ components:
             - success
             - failed
         payment:
-          $ref: '#/components/schemas/StatePayment'
+          $ref: "#/components/schemas/StatePayment"
           description: The payment details for this off ramp transaction.
     FailedOffRampTransactionState:
       type: object
@@ -1371,7 +1371,7 @@ components:
       properties:
         currency:
           type: string
-          enum: ['USDC', 'USDT']
+          enum: ["USDC", "USDT"]
           description: The stablecoin to be transferred.
         from:
           type: string
@@ -1381,8 +1381,8 @@ components:
           type: string
           description: The wallet address or customer ID who will receive the tokens.
           examples:
-            - '123e4567-e89b-12d3-a456-426614174000'
-            - '0xa65aae78edef916d4102ba7b5672068c0d35fbff'
+            - "123e4567-e89b-12d3-a456-426614174000"
+            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
         amount:
           type: string
           format: number
@@ -1394,7 +1394,7 @@ components:
         type:
           type: string
           description: The type of this transaction.
-          enum: ['transfer']
+          enum: ["transfer"]
         status:
           enum:
             # - awaiting_signature
@@ -1403,7 +1403,7 @@ components:
             - failed
         request:
           description: An object containing the parameters used for this transfer.
-          $ref: '#/components/schemas/TransferRequest'
+          $ref: "#/components/schemas/TransferRequest"
         # state:
         # allOf:
         # - $ref: "#/components/schemas/BaseTransactionState"
@@ -1424,17 +1424,17 @@ components:
       properties:
         rail:
           type: string
-          enum: ['pix']
+          enum: ["pix"]
           description: The payment rail that will be used for this transaction.
     OnRampStatePayment:
       allOf:
-        - $ref: '#/components/schemas/StatePayment'
+        - $ref: "#/components/schemas/StatePayment"
         - type: object
           properties:
             brCode:
               type: string
               description: The PIX copy-and-paste code to be used for payment.
-              example: '00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234'
+              example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
     OnRampSuccessReceipt:
       type: object
       description: The receipt details for this transaction.
@@ -1454,11 +1454,11 @@ components:
         sourceCurrency:
           type: string
           description: The currency to convert from.
-          example: 'BRL'
+          example: "BRL"
         targetCurrency:
           type: string
           description: The currency to convert to.
-          example: 'USDC'
+          example: "USDC"
         fees:
           type: object
           description: The fee details for this transaction.
@@ -1466,8 +1466,8 @@ components:
             currency:
               type: string
               description: The currency of the fee.
-              example: 'USDC'
-              enum: ['BRL', 'USDC', 'USDT']
+              example: "USDC"
+              enum: ["BRL", "USDC", "USDT"]
             lumx:
               type: object
               description: The fees charged by Lumx for processing this transaction.
@@ -1493,7 +1493,7 @@ components:
                   description: The flat fee which is subtracted from the target amount.
                   example: 0.1
         blockchain:
-          $ref: '#/components/schemas/BlockchainReceipt'
+          $ref: "#/components/schemas/BlockchainReceipt"
     OffRampSuccessReceipt:
       type: object
       description: The receipt details for this transaction.
@@ -1513,11 +1513,11 @@ components:
         sourceCurrency:
           type: string
           description: The currency to convert from.
-          example: 'USDC'
+          example: "USDC"
         targetCurrency:
           type: string
           description: The currency to convert to.
-          example: 'BRL'
+          example: "BRL"
         fees:
           type: object
           description: The fee details for this transaction.
@@ -1525,8 +1525,8 @@ components:
             currency:
               type: string
               description: The currency of the fee.
-              example: 'USDC'
-              enum: ['BRL', 'USDC', 'USDT']
+              example: "USDC"
+              enum: ["BRL", "USDC", "USDT"]
             lumx:
               type: object
               description: The fees charged by Lumx for processing this transaction.
@@ -1552,7 +1552,7 @@ components:
                   description: The flat fee which is subtracted from the target amount.
                   example: 0.1
         blockchain:
-          $ref: '#/components/schemas/BlockchainReceipt'
+          $ref: "#/components/schemas/BlockchainReceipt"
   securitySchemes:
     apiKey:
       type: http
