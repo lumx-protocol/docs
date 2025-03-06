@@ -1,0 +1,124 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Lumx",
+  "colors": {
+    "primary": "#6E05FF",
+    "light": "#843BFF",
+    "dark": "#030712"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "get-started/introduction",
+              "get-started/authentication",
+              "get-started/environments",
+              "get-started/blockchains",
+              "get-started/coverage",
+              "get-started/testing",
+              "get-started/troubleshooting"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/apis",
+              "concepts/accounts",
+              "concepts/orchestration"
+            ]
+          },
+          {
+            "group": "Compliance",
+            "pages": [
+              "compliance/beneficiaries",
+              "compliance/compliance-requirements",
+              "compliance/prohibited-activities"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "openapi": "/openapi/api.yaml"
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Dashboard",
+          "href": "https://dashboard.lumx.io",
+          "icon": "rocket"
+        },
+        {
+          "anchor": "System Status",
+          "href": "https://status.lumx.io",
+          "icon": "signal"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dIG4Mg",
+          "icon": "slack"
+        },
+        {
+          "anchor": "OpenAPI",
+          "href": "https://raw.githubusercontent.com/lumx-protocol/docs/refs/heads/main/openapi/api.yaml",
+          "icon": "circle"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "appearance": {
+    "default": "light"
+  },
+  "background": {
+    "color": {
+      "dark": "#141416"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dIG4Mg"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Request demo",
+      "href": "https://lumx.io/contact"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/lumx-protocol",
+      "twitter": "https://twitter.com/hellolumx",
+      "linkedin": "https://www.linkedin.com/company/hellolumx"
+    }
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-0MVRGD699K"
+    },
+    "mixpanel": {
+      "projectToken": "87f5c334d0c77d5e7585a110f542f9ed"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Inter"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  }
+}

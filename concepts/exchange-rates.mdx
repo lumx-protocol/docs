@@ -1,0 +1,50 @@
+---
+title: "Exchange Rates"
+description: "Learn about exchange rates"
+---
+
+The **Exchange Rates** module enables real-time currency quotation, a critical component for forex transactions. Main Objetive is facilitate transparent and competitive currency conversion using stablecoins as a bridge.
+
+It simplifies and facilitates competitive currency conversion by:
+
+* Acting as an intermediary for fiat-to-crypto conversions using stablecoins.
+
+* Providing transparent and predictable conversion rates to enhance user confidence in cross-border transactions.
+
+### Main Features:
+
+* Fetch live exchange rates for supported fiat and cryptocurrency pairs.
+
+* Ensure users always have access to the most accurate and up-to-date rates for their transactions.
+
+* Enable automatic rate refresh during periods of high market volatility.
+
+* Clearly display any fees applied to conversions for complete transparency.
+
+* Provide detailed breakdowns of conversion calculations for end-user visibility.
+
+* Clients can request a provisional exchange rate by specifying the source and target currencies.
+
+### Exchange Rates Retrieval
+
+The API normalizes data from external providers into a unified Lumx format, abstracting provider-specific complexities.
+
+Data points included in an exchange rate response:
+
+* **Lumx ID:** Unique identifier for the exchange rate within Lumx.
+
+* **Provider ID:** Internal reference for the source provider (not exposed in API response).
+
+* **External ID:** Identifier for the rate in the external provider’s system (not exposed in API response).
+
+* **Source Currency:** The original currency being converted.
+
+* **Target Currency:** The currency being converted into.
+
+* **Rate:** The conversion rate provided.
+
+* **Expires At:** Timestamp indicating when the rate will no longer be valid.
+
+* **Created At:** Timestamp of when the exchange rate was generated.
+
+Next, let's learn more about our [On/Off ramp processes](/concepts/onofframp).

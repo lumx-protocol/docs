@@ -1,0 +1,71 @@
+---
+title: "Testing"
+description: "Testing in the Sandbox environment"
+---
+
+To simulate the journey in the Sandbox environment, we deployed the USDL, Lumx USD stablecoin for testing purposes. Developers can emulate on-ramping, transferring stablecoin between wallets, and off-ramping with USDL.
+
+### On-ramp from fiat to USDL
+
+After creating a Customer, you can use the customer id created to simulate on-ramps to USDL with the [on-ramp endpoint](/api-reference/endpoints/transactions/on-ramp). You can pick any available source fiat currency and target stablecoin, and we will automatically mint the USDL for you and send it to the Customer's wallet.
+
+<CodeGroup>
+  ```bash cURL
+  curl --request POST \
+    --url https://api-sandbox.lumx.io/transactions/on-ramp \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "customerId": "<CUSTOMER_ID>",
+    "sourceCurrency": "BRL",
+    "targetCurrency": "USDC",
+    "amount": "100.99",
+    "payment": {
+      "rail": "pix"
+    }
+  }'
+  ```
+</CodeGroup>
+
+### Transfer USDL between wallets
+
+You can also [transfer](/api-reference/endpoints/transactions/transfer) USDL between wallets. You can pick any available stablecoin and we will automatically route it to USDL and transfer it to the specific wallet.
+
+<CodeGroup>
+  ```bash cURL
+  curl --request POST \
+    --url https://api-sandbox.lumx.io/transactions/transfer \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "currency": "USDC",
+    "from": "<CUSTOMER_1_WALLET_ID>",
+    "to": "<CUSTOMER_2_WALLET_ID>",
+    "amount": "100.123456"
+  }'
+  ```
+</CodeGroup>
+
+### Off-ramp from USDL to fiat
+
+After creating a Customer and simulating on-ramping, you can use the customer id created to simulate off-ramps to USDL with the [off-ramp endpoint](/api-reference/endpoints/transactions/off-ramp). You can pick any available source stablecoin and target fiat currency, we will route it to USDL for you and simulate the off-ramp.
+
+<CodeGroup>
+  ```bash cURL
+  curl --request POST \
+    --url https://api-sandbox.lumx.io/transactions/off-ramp \
+    --header 'Authorization: Bearer <API_KEY>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "customerId": "<CUSTOMER_ID>",
+    "sourceCurrency": "USDC",
+    "targetCurrency": "BRL",
+    "amount": "100.123456",
+    "payment": {
+      "rail": "pix",
+      "keyValue": "<KEY_VALUE>",
+      "keyType": "<KEY_TYPE>"
+    }
+  }'
+  ```
+</CodeGroup>

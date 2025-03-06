@@ -1,0 +1,102 @@
+---
+title: "Orchestration"
+description: "Learn about the on/off ramp processes "
+sidebarTitle: "Orchestration"
+---
+
+Orchestration provides a seamless interface for converting between fiat and stablecoins, enabling businesses to integrate these transitions effortlessly into their platforms. This module supports flexible flows that abstract the complexities of provider-specific implementations.
+
+#### On-Ramp process
+
+The **On-Ramp** process enables customers to convert fiat currency into stablecoins, which are then deposited into their designated wallets.
+
+##### **Overview:**
+
+1. **Customer request:**
+
+   - The client initiates an on-ramp request by specifying:
+
+     - Customer details
+
+     - Exchange rate
+
+     - Desired stablecoin
+
+     - The fiat amount to be converted
+
+   - Lumx validates the request and prepares the necessary transaction details.
+
+2. **Payment generation:**
+
+   - Lumx generates a payment instruction (e.g., Pix code or similar) and provides it to the customer for fiat payment.
+
+   - A transaction is created with the status `awaiting_payment`.
+
+3. **Payment confirmation:**
+
+   - Once the customer completes the payment, Lumx receives a confirmation (via webhook or provider notification).
+
+   - The transaction status is updated to `funds_received`.
+
+4. **Stablecoin delivery:**
+
+   - Lumx transfers the specific stablecoin to the customer’s designated wallet.
+
+   - The transaction is finalized with the status `success` upon confirmation of the transfer on the blockchain.
+
+#### Off-Ramp process
+
+The **Off-Ramp** process allows customers to convert stablecoins into fiat currency, which are then transferred to their associated bank accounts.
+
+##### **Overview:**
+
+1. **Customer request:**
+
+   - The client initiates an off-ramp request by providing:
+
+     - Customer details
+
+     - Exchange rate
+
+     - Stablecoin to be off-ramped and its amount
+
+     - Bank account or payment details for fiat transfer
+
+   - Lumx validates the ownership of the destination account to ensure compliance.
+
+2. **Transaction setup:**
+
+   - Lumx prepares a transaction for the stablecoin-to-fiat conversion, requiring customer authorization.
+
+   - The transaction starts with the status `awaiting_signature`.
+
+3. **Stablecoin transfer:**
+
+   - The customer authorizes and executes the transfer of the specified stablecoin to the Lumx or provider-designated wallet.
+
+   - The transaction status is updated to `pending` or `processing`.
+
+4. **Fiat transfer:**
+
+   - Lumx initiates a fiat transfer to the customer’s specified bank account.
+
+   - Upon confirmation of the fiat transfer, the transaction status is updated to `success`.
+
+### Transaction lifecycle for On/Off-Ramps
+
+Both on-ramp and off-ramp processes share a common lifecycle to ensure transparency and traceability:
+
+- **Statuses:**
+
+  - `awaiting_payment`: Awaiting customer action to complete fiat payment.
+
+  - `awaiting_signature`: Waiting for customer authorization for a stablecoin transfer.
+
+  - `funds_received`: Fiat payment or stablecoin transfer has been confirmed.
+
+  - `pending` or `processing`: In-progress actions such as stablecoin deposit, transfer, or fiat payout.
+
+  - `success`: Transaction completed successfully.
+
+- **Webhooks:**
+  Lumx integrates provider notifications via webhooks to confirm critical actions, such as payment receipts, stablecoin transfers, and fiat payouts.
