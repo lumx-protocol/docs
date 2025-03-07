@@ -1,0 +1,66 @@
+---
+title: "Sandbox testing"
+---
+
+---
+title: "Sandbox testing"
+---To simulate stablecoin movement in the Sandbox environment, we deployed the [USDL](https://amoy.polygonscan.com/token/0x7b33F4Bc77a0C911231a388aaf9b590Ff7E8ee16) token on Polygon Amoy. Developers can simulate on-ramping, transferring stablecoin between wallets, and off-ramping with USDL.
+
+## On-ramp from Fiat to USDL
+
+After [creating a ](https://docs.lumx.io/api-reference/customers/create-a-customer)[Customer](https://docs.lumx.io/api-reference/customers/create-a-customer), you can use the customer `id` created to simulate onramps to USDL with the [On-ramp](https://docs.lumx.io/api-reference/transactions/on-ramp) endpoint. You can pick any available source fiat currency and target stablecoin (USDC or USDT at the moment) and we will automatically mint the USDL for you and send it to the Customer's wallet.
+
+```bash
+curl --request POST \
+  --url https://api-sandbox.lumx.io/transactions/on-ramp \
+  --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicHJvamVjdElkIjoiYzIxZDRiMGUtZDZhYy00ZDBkLTgyMTUtNWUxNGFmMGM4NGUzIiwic2NvcGVzIjpbIlJFQURfV0FMTEVUUyIsIldSSVRFX1dBTExFVFMiLCJTSUdOX01FU1NBR0UiLCJSRUFEX0NPTlRSQUNUUyIsIldSSVRFX0NPTlRSQUNUUyIsIkRFUExPWV9DT05UUkFDVFMiLCJSRUFEX1RPS0VOX1RZUEVTIiwiV1JJVEVfVE9LRU5fVFlQRVMiLCJXUklURV9NSU5UUyIsIldSSVRFX1RSQU5TRkVSUyIsIldSSVRFX0NVU1RPTV9UUkFOU0FDVElPTlMiLCJSRUFEX1RSQU5TQUNUSU9OUyIsIlJFQURfQ1VTVE9NRVJTIiwiV1JJVEVfQ1VTVE9NRVJTIiwiV1JJVEVfRlgiLCJSRUFEX0ZYIl0sImlhdCI6MTczOTMxNTc4Nn0.bIkfIOU7_1vbD8Jj4oRi2VIdVyAQLP36VfVN_AXgszZRrHI0XYaFM3KEAh9GCrgFO68JrI7Ro9d1AXzcopaoe3BOufYfUDmzh1KoQDgIqOLlFdtUSMpmZZ3cuJqI1NiLhl0WuM3gEkywfe8ZpNyrHhO5SMhlKzC3b1VYeOsqAOmBGn4AC-4nyrK8P9BjFlVEZA89qnIjgFT1hHjxFzDP3xe5pxZWv4kFKnzhifiTP0ScWqU1XJMQdll-E7g5JdVsEzJeyu4jTgt-Cbn9BTxxO-xrh17wmWU6L9SeyEPOJquB-86a_7PbrMznV9eXZZMptwae_Sm6U7QRLBI3vrebP1AyEYZ6_aacVa9rpsXIU_Ny9c1yYzyyA8-pCUFX8_G3R4m47yremDpJWrX9FW-lsJBcRCfN4ru7XdFrMlivnqG3Mq7ceKuWDxbmxLf-ugfBm7T7f67YSDTsx7s-bQ4w1SsX0D1mCsJGA2aKOk0p1-h6EN8zusv1fTvSQqZsYA9Z2VMTw7zVARNSUnNWK32aplCcY6zTo0pvCEJBOWuOy4gyXzRWoVxhtvDYgDbFEP4Wi9DEMTChYtulSjw3YTggAKttuxOdohrH_L43X3vXNYiO-6kfeGIDUvDVAFPkCU4bxM3cjDL8-tbEtJJIcIuUOW-iG9PIgelJr_5Ngcb7bD4' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "customerId": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "sourceCurrency": "BRL",
+  "targetCurrency": "USDC",
+  "amount": "100.99",
+  "payment": {
+    "rail": "pix"
+  }
+}'
+```
+
+## Transfer USDL between Wallets
+
+You can also [transfer USDL](https://docs.lumx.io/api-reference/transactions/transfer) between wallets. You can pick any available stablecoin (USDC or USDT at the moment) and we will automatically route it to USDL and transfer it to the specific wallet.
+
+```bash
+curl --request POST \
+  --url https://api-sandbox.lumx.io/transactions/transfer \
+  --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicHJvamVjdElkIjoiYzIxZDRiMGUtZDZhYy00ZDBkLTgyMTUtNWUxNGFmMGM4NGUzIiwic2NvcGVzIjpbIlJFQURfV0FMTEVUUyIsIldSSVRFX1dBTExFVFMiLCJTSUdOX01FU1NBR0UiLCJSRUFEX0NPTlRSQUNUUyIsIldSSVRFX0NPTlRSQUNUUyIsIkRFUExPWV9DT05UUkFDVFMiLCJSRUFEX1RPS0VOX1RZUEVTIiwiV1JJVEVfVE9LRU5fVFlQRVMiLCJXUklURV9NSU5UUyIsIldSSVRFX1RSQU5TRkVSUyIsIldSSVRFX0NVU1RPTV9UUkFOU0FDVElPTlMiLCJSRUFEX1RSQU5TQUNUSU9OUyIsIlJFQURfQ1VTVE9NRVJTIiwiV1JJVEVfQ1VTVE9NRVJTIiwiV1JJVEVfRlgiLCJSRUFEX0ZYIl0sImlhdCI6MTczOTMxNTc4Nn0.bIkfIOU7_1vbD8Jj4oRi2VIdVyAQLP36VfVN_AXgszZRrHI0XYaFM3KEAh9GCrgFO68JrI7Ro9d1AXzcopaoe3BOufYfUDmzh1KoQDgIqOLlFdtUSMpmZZ3cuJqI1NiLhl0WuM3gEkywfe8ZpNyrHhO5SMhlKzC3b1VYeOsqAOmBGn4AC-4nyrK8P9BjFlVEZA89qnIjgFT1hHjxFzDP3xe5pxZWv4kFKnzhifiTP0ScWqU1XJMQdll-E7g5JdVsEzJeyu4jTgt-Cbn9BTxxO-xrh17wmWU6L9SeyEPOJquB-86a_7PbrMznV9eXZZMptwae_Sm6U7QRLBI3vrebP1AyEYZ6_aacVa9rpsXIU_Ny9c1yYzyyA8-pCUFX8_G3R4m47yremDpJWrX9FW-lsJBcRCfN4ru7XdFrMlivnqG3Mq7ceKuWDxbmxLf-ugfBm7T7f67YSDTsx7s-bQ4w1SsX0D1mCsJGA2aKOk0p1-h6EN8zusv1fTvSQqZsYA9Z2VMTw7zVARNSUnNWK32aplCcY6zTo0pvCEJBOWuOy4gyXzRWoVxhtvDYgDbFEP4Wi9DEMTChYtulSjw3YTggAKttuxOdohrH_L43X3vXNYiO-6kfeGIDUvDVAFPkCU4bxM3cjDL8-tbEtJJIcIuUOW-iG9PIgelJr_5Ngcb7bD4' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "currency": "USDC",
+  "from": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "to": "123e4567-e89b-12d3-a456-426614174000",
+  "amount": "100.123456"
+}'
+```
+
+## Off-ramp from USDL to Fiat
+
+After [creating a ](https://docs.lumx.io/api-reference/customers/create-a-customer)[Customer](https://docs.lumx.io/api-reference/customers/create-a-customer) and simulating [on-ramping](https://docs.lumx.io/api-reference/transactions/on-ramp), you can use the customer `id` created to simulate off-ramps to USDL with the [Off-ramp](https://docs.lumx.io/api-reference/transactions/off-ramp) endpoint. You can pick any available source stablecoin (USDC or USDT at the moment) and target fiat currency, we will route it to USDL for you and simulate the off-ramp.
+
+```bash
+curl --request POST \
+  --url https://api-sandbox.lumx.io/transactions/off-ramp \
+  --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicHJvamVjdElkIjoiYzIxZDRiMGUtZDZhYy00ZDBkLTgyMTUtNWUxNGFmMGM4NGUzIiwic2NvcGVzIjpbIlJFQURfV0FMTEVUUyIsIldSSVRFX1dBTExFVFMiLCJTSUdOX01FU1NBR0UiLCJSRUFEX0NPTlRSQUNUUyIsIldSSVRFX0NPTlRSQUNUUyIsIkRFUExPWV9DT05UUkFDVFMiLCJSRUFEX1RPS0VOX1RZUEVTIiwiV1JJVEVfVE9LRU5fVFlQRVMiLCJXUklURV9NSU5UUyIsIldSSVRFX1RSQU5TRkVSUyIsIldSSVRFX0NVU1RPTV9UUkFOU0FDVElPTlMiLCJSRUFEX1RSQU5TQUNUSU9OUyIsIlJFQURfQ1VTVE9NRVJTIiwiV1JJVEVfQ1VTVE9NRVJTIiwiV1JJVEVfRlgiLCJSRUFEX0ZYIl0sImlhdCI6MTczOTMxNTc4Nn0.bIkfIOU7_1vbD8Jj4oRi2VIdVyAQLP36VfVN_AXgszZRrHI0XYaFM3KEAh9GCrgFO68JrI7Ro9d1AXzcopaoe3BOufYfUDmzh1KoQDgIqOLlFdtUSMpmZZ3cuJqI1NiLhl0WuM3gEkywfe8ZpNyrHhO5SMhlKzC3b1VYeOsqAOmBGn4AC-4nyrK8P9BjFlVEZA89qnIjgFT1hHjxFzDP3xe5pxZWv4kFKnzhifiTP0ScWqU1XJMQdll-E7g5JdVsEzJeyu4jTgt-Cbn9BTxxO-xrh17wmWU6L9SeyEPOJquB-86a_7PbrMznV9eXZZMptwae_Sm6U7QRLBI3vrebP1AyEYZ6_aacVa9rpsXIU_Ny9c1yYzyyA8-pCUFX8_G3R4m47yremDpJWrX9FW-lsJBcRCfN4ru7XdFrMlivnqG3Mq7ceKuWDxbmxLf-ugfBm7T7f67YSDTsx7s-bQ4w1SsX0D1mCsJGA2aKOk0p1-h6EN8zusv1fTvSQqZsYA9Z2VMTw7zVARNSUnNWK32aplCcY6zTo0pvCEJBOWuOy4gyXzRWoVxhtvDYgDbFEP4Wi9DEMTChYtulSjw3YTggAKttuxOdohrH_L43X3vXNYiO-6kfeGIDUvDVAFPkCU4bxM3cjDL8-tbEtJJIcIuUOW-iG9PIgelJr_5Ngcb7bD4' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "customerId": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+  "sourceCurrency": "USDC",
+  "targetCurrency": "BRL",
+  "amount": "100.123456",
+  "payment": {
+    "rail": "pix",
+    "keyValue": "<string>",
+    "keyType": "phone"
+  }
+}'
+```
