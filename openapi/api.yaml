@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://api-sandbox.lumx.io
   # - url: https://api.stg.lumx.cloud
-  # - url: https://api.lumx.io
+  - url: https://api.lumx.io
 paths:
   /customers:
     post:
