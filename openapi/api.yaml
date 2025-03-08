@@ -1287,7 +1287,7 @@ components:
               description: The PIX key identifying the account where to send funds.
             keyType:
               type: string
-              enum: ['phone', 'CPF/CNPJ', 'email', 'random']
+              enum: ['phone', 'CPF', 'CNPJ', 'email', 'random']
         sourceCurrency:
           enum: [USDC, USDT]
           description: The stablecoin to convert from.
