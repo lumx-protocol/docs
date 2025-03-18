@@ -1249,7 +1249,7 @@ components:
       title: On ramp success
       properties:
         receipt:
-          $ref: '#/components/schemas/OnRampSuccessReceipt'
+          $ref: '#/components/schemas/SuccessReceipt'
           description: The receipt details for this transaction.
     FailedOnRampTransactionState:
       type: object
@@ -1333,7 +1333,7 @@ components:
       title: Off ramp success
       properties:
         receipt:
-          $ref: '#/components/schemas/OffRampSuccessReceipt'
+          $ref: '#/components/schemas/SuccessReceipt'
           description: The receipt details for this transaction.
     FinishedOffRampTransactionState:
       type: object
@@ -1432,29 +1432,29 @@ components:
               type: string
               description: The PIX copy-and-paste code to be used for payment.
               example: '00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234'
-    OnRampSuccessReceipt:
+    SuccessReceipt:
       type: object
       description: The receipt details for this transaction.
       properties:
         rate:
           type: number
-          description: The exchange rate used for this transaction.
-          example: 0.166
+          description: The effective exchange rate used for this transaction, consisting of the target amount after fees divided by the source amount.
+          example: 5.6186
         sourceAmount:
           type: number
           description: The amount that was converted from the source currency.
-          example: 6000
+          example: 1000
         targetAmount:
           type: number
           description: The converted amount after fees.
-          example: 986.80
+          example: 5618.65
         sourceCurrency:
           type: string
-          description: The currency to convert from.
+          description: The currency that was converted from.
           example: 'BRL'
         targetCurrency:
           type: string
-          description: The currency to convert to.
+          description: The currency that was converted to.
           example: 'USDC'
         fees:
           type: object
@@ -1462,20 +1462,24 @@ components:
           properties:
             currency:
               type: string
-              description: The currency of the fee.
+              description: The currency of the fee. It will always be a stablecoin.
               example: 'USDC'
-              enum: ['BRL', 'USDC', 'USDT']
+              enum: ['USDC', 'USDT']
+            total:
+              type: string
+              description: The total fee for this transaction.
+              example: '2.456723'
             lumx:
               type: object
               description: The fees charged by Lumx for processing this transaction.
               properties:
                 percentage:
                   type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
+                  description: The variable fee, calculated as a percentage of the target amount.
                   example: 9.988916
                 flat:
                   type: number
-                  description: The flat fee which is subtracted from the target amount.
+                  description: The fixed fee, which was subtracted from the target amount.
                   example: 1
             developer:
               type: object
@@ -1483,70 +1487,11 @@ components:
               properties:
                 percentage:
                   type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
+                  description: The variable fee, calculated as a percentage of the target amount.
                   example: 0.998891
                 flat:
                   type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 0.1
-        blockchain:
-          $ref: '#/components/schemas/BlockchainReceipt'
-    OffRampSuccessReceipt:
-      type: object
-      description: The receipt details for this transaction.
-      properties:
-        rate:
-          type: number
-          description: The exchange rate used for this transaction.
-          example: 6.0066
-        sourceAmount:
-          type: number
-          description: The amount that was converted from the source currency.
-          example: 1000.00
-        targetAmount:
-          type: number
-          description: The converted amount after fees.
-          example: 5925.55
-        sourceCurrency:
-          type: string
-          description: The currency to convert from.
-          example: 'USDC'
-        targetCurrency:
-          type: string
-          description: The currency to convert to.
-          example: 'BRL'
-        fees:
-          type: object
-          description: The fee details for this transaction.
-          properties:
-            currency:
-              type: string
-              description: The currency of the fee.
-              example: 'USDC'
-              enum: ['BRL', 'USDC', 'USDT']
-            lumx:
-              type: object
-              description: The fees charged by Lumx for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 10.000000
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 1
-            developer:
-              type: object
-              description: The fees charged by the developer (you) for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 1.000000
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
+                  description: The fixed fee, which was subtracted from the target amount.
                   example: 0.1
         blockchain:
           $ref: '#/components/schemas/BlockchainReceipt'
