@@ -92,7 +92,8 @@ The API signs the event by adding a `X-Hub-Signature` header to the request. Thi
 	</Step>
 	<Step title='Second Step'>
 		Compute an `HMAC-SHA256` hash of the payload using the secret as the **key**
-		and the stringified payload as the **message**.
+		and the stringified payload as the **message**. The decoding algorithm is
+		`hex`.
 	</Step>
 	<Step title='Third Step'>
 		Compare the generated signature with the one received in the
