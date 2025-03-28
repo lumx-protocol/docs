@@ -591,26 +591,6 @@ paths:
                           blockExplorerUrl: "https://polygonscan.com/"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:10Z"
-                # "off-ramp: awaiting_funds":
-                #   summary: Awaiting funds
-                #   value:
-                #     id: "123e4567-e89b-12d3-a456-426614174002"
-                #     customerId: "123e4567-e89b-12d3-a456-426614174001"
-                #     type: "off_ramp"
-                #     request:
-                #       sourceCurrency: "USDC"
-                #       targetCurrency: "BRL"
-                #       amount: "100.00"
-                #       payment:
-                #         rail: "pix"
-                #         keyValue: "user@email.com"
-                #         keyType: "email"
-                #     state:
-                #       status: "awaiting_funds"
-                #       payment:
-                #         rail: "pix"
-                #     createdAt: "2024-03-20T15:30:00Z"
-                #     updatedAt: "2024-03-20T15:30:00Z"
                 "off-ramp: failed":
                   summary: Failed
                   value:
@@ -748,7 +728,7 @@ paths:
                     title: Transfer
                     allOf:
                       - $ref: '#/components/schemas/BaseTransactionResponse'
-                      # - $ref: "#/components/schemas/TransferResponse"
+                      - $ref: "#/components/schemas/TransferResponse"
                       - $ref: '#/components/schemas/TransactionTimestamps'
       security:
         - apiKey: []
@@ -1392,19 +1372,20 @@ components:
           type: string
           description: The type of this transaction.
           enum: ['transfer']
-        status:
-          enum:
-            # - awaiting_signature
-            - processing
-            - success
-            - failed
         request:
           description: An object containing the parameters used for this transfer.
           $ref: '#/components/schemas/TransferRequest'
-        # state:
-        # allOf:
-        # - $ref: "#/components/schemas/BaseTransactionState"
-        # - $ref: "#/components/schemas/TransferTransactionState"
+        state:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - processing
+                - success
+                - failed
+            blockchain:
+              $ref: '#/components/schemas/BlockchainReceipt'
     ExecuteTransactionRequest:
       type: object
       required:
