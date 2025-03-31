@@ -7,7 +7,7 @@ Our Webhook system provides updates on the status of transactions, ensuring seam
 
 ## Creating webhooks
 
-To create a webhook, head to the [dashboard](https://dashboard.lumx.io/), click on the **Settings** tab, and then head to the **Webhooks** tab. There you can register your webhook and set the events you want to receive.
+To create a webhook, head to the [dashboard](https://dashboard.lumx.io/?to=%2Fsettings%2Fwebhooks), select the project and create your webhook.
 
 <Note>You need to be an project admin or owner to create a webhook.</Note>
 
@@ -20,20 +20,10 @@ The webhook will be triggered for every asynchronous status change.
 		Called when the transaction first enters the `awaiting_funds` status from
 		`processing`. The second call will be triggered when the transaction moves
 		from `awaiting_funds` to `success` or `failed`.
-	</Tab>
-	<Tab title='Off-ramp'>
-		Called when the transaction changes from `processing` to `success` or
-		`failed`.
-	</Tab>
-	<Tab title='Transfer'>
-		Called when the transaction changes from `processing` to `success` or
-		`failed`.
-	</Tab>
-</Tabs>
 
-## Webhook payload
+    	### Webhook payload
 
-Here is an example of the payload delivered to your webhook URL:
+Here is an example of the payload delivered to your webhook URL when using both on-ramp and off-ramp:
 
 ```json
 {
@@ -81,6 +71,98 @@ Here is an example of the payload delivered to your webhook URL:
 	"updatedAt": "2025-03-20T13:55:52.610Z"
 }
 ```
+
+    </Tab>
+    	<Tab title='Off-ramp'>
+    				Called when the transaction changes from `processing` to `success` or
+    				`failed`.
+
+    	### Webhook payload
+
+    	Here is an example of the payload delivered to your webhook URL when using both on-ramp and off-ramp:
+
+```json
+{
+	"id": "86030912-a5fc-4351-b596-0cfaf766b638",
+	"customerId": "77e04882-c54e-4203-afd9-d0d963598dc5",
+	"type": "off_ramp",
+	"request": {
+		"amount": "15",
+		"payment": {
+			"rail": "pix"
+		},
+		"sourceCurrency": "USDC",
+		"targetCurrency": "BRL"
+	},
+	"state": {
+		"status": "success",
+		"payment": {
+			"rail": "pix"
+		},
+		"receipt": {
+			"fees": {
+				"lumx": {
+					"flat": "0.500000",
+					"percentage": "0.004954"
+				},
+				"total": "0.535945",
+				"currency": "USDC",
+				"developer": {
+					"flat": "0.030000",
+					"percentage": "0.000991"
+				}
+			},
+			"rate": "5.7327",
+			"blockchain": {
+				"transactionHash": "0xc30abe7bc2c90c90a5ab0cb5666a752a1d87c811ac8e24aa031037bb9df23b68",
+				"blockExplorerUrl": "https://amoy.polygonscan.com/tx/0xc30abe7bc2c90c90a5ab0cb5666a752a1d87c811ac8e24aa031037bb9df23b68"
+			},
+			"sourceAmount": "9.908024",
+			"targetAmount": "56.80",
+			"sourceCurrency": "USDC",
+			"targetCurrency": "BRL"
+		}
+	},
+	"createdAt": "2025-03-20T13:49:44.209Z",
+	"updatedAt": "2025-03-20T13:55:52.610Z"
+}
+```
+
+</Tab>
+<Tab title='Transfer'>
+Called when the transaction changes from `processing` to `success` or
+`failed`.
+
+### Webhook payload
+
+Here is an example of the payload delivered to your webhook URL when using transfer:
+
+```json
+{
+	"id": "d700934e-5ae0-45da-9c68-5c4f5223b934",
+	"customerId": "acc7c342-0f01-423c-b38c-56010cb698da",
+	"type": "transfer",
+	"request": {
+		"to": "0xdc5dfe62177d42467d1bd8809455d29813266bf9",
+		"from": "acc7c342-0f01-423c-b38c-56010cb698da",
+		"currency": "USDC",
+		"quantity": 0.001
+	},
+	"state": {
+		"status": "success",
+		"blockchain": {
+			"transactionHash": "0x8226a7ecb8b630eeb47996dd2551882f8d3ea44c69623cd8f373389690b7a0d5",
+			"blockExplorerUrl": "https://polygonscan.com/tx/0x8226a7ecb8b630eeb47996dd2551882f8d3ea44c69623cd8f373389690b7a0d5"
+		}
+	},
+	"createdAt": "2025-03-28T21:11:41.394Z",
+	"updatedAt": "2025-03-28T21:11:46.308Z"
+}
+```
+
+</Tab>
+
+</Tabs>
 
 ## Security
 
