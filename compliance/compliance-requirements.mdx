@@ -4,7 +4,7 @@ title: "Compliance Requirements"
 
 All entities using Lumx services must agree to our [Terms and Conditions (“TC”)](https://lumx.io/terms-of-use) and our [Privacy Policy](https://lumx.io/privacy-policy). The preferred approach is to incorporate these documents within your own, ensuring your end users review and accept the terms before using Lumx services.
 
-If incorporating the TC directly is not feasible, we provide a dedicated [Terms and Conditions](https://lumx.io/terms-of-use)[ link](https://lumx.io/terms-of-use). Entities can share this link with their end users to ensure they agree to the terms before proceeding with Lumx services.[
+If incorporating the TC directly is not feasible, we provide a dedicated [Terms and Conditions link](https://lumx.io/terms-of-use). Entities can share this link with their end users to ensure they agree to the terms before proceeding with Lumx services.[
 ](https://docs.lumx.io/concepts/orchestration)
 
 Alternatively, we provide a dedicated Terms and Conditions link, which can be shared with entities so that their end users accept the terms before proceeding.
@@ -17,24 +17,19 @@ Every beneficiary must undergo a KYC/B (Know Your Customer/Business) process for
 
 Below are the required data according to the type of beneficiary (individual or business) and the KYC/B level applied:
 
-### KYC/B Light
-
-| Individual    | Business                             |
-| ------------- | ------------------------------------ |
-| First Name    | Legal Name                           |
-| Last Name     | Tax ID (or government-issued number) |
-| Date of Birth | Incorporation Date                   |
-| Email         | Email                                |
-| Country       | Country                              |
-| Full Address  | Full Address                         |
-| Postal Code   | Postal Code                          |
-
 ### KYC/B Standard
 
 Includes all information from KYC/B light, plus:
 
 | Individual                                                               | Legal Entity                                                                             |
 | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| First Name                                                               | Legal Name                                                                               |
+| Last Name                                                                | Tax ID (or government-issued number)                                                     |
+| Date of Birth                                                            | Incorporation Date                                                                       |
+| Email                                                                    | Email                                                                                    |
+| Country                                                                  | Country                                                                                  |
+| Full Address                                                             | Full Address                                                                             |
+| Postal Code                                                              | Postal Code                                                                              |
 | Tax Identification Number (CPF or equivalent)                            | Trade Name\*                                                                             |
 | Phone Number\*                                                           | Website\*                                                                                |
 | IP Address                                                               | IP Address                                                                               |
@@ -44,45 +39,42 @@ Includes all information from KYC/B light, plus:
 | Identification Document - Back\*                                         | Company Financial Documents (balance sheet, income statement, or recent bank statements) |
 | Type of Address Proof (utility bill, bank statement)\*                   | --                                                                                       |
 | Address Proof Document\*                                                 | --                                                                                       |
+| Bank Statement\*                                                         |                                                                                          |
 
 \*Fields marked with an asterisk are optional.
 
 ### Enhanced KYC
 
-Includes all information from KYC/B Standard, plus:
-
-**Attention:** All individuals undergoing Enhanced KYC will be manually verified by Lumx’s compliance team. This process may take up to 48 hours.
-
-| Individual                                 |
-| ------------------------------------------ |
-| Proof of Income                            |
-| Purpose of Transactions                    |
-| Description of the Purpose of Transactions |
+Lumx has an advanced KYC process, applied in specific cases and individually assessed by the compliance team. This process involves a detailed analysis and may take up to 48 hours.
 
 ### Transaction limits
 
 We apply transaction limits based on the KYC/B level of beneficiaries. In other words, as transaction amounts increase, more stringent verification and compliance levels are required to ensure security and regulatory compliance.
 
-|                 | KYC Light | KYB Light | KYC Standard | KYB Standard | KYC Enhanced |
-| :-------------- | --------- | :-------- | :----------- | :----------- | :----------- |
-| Per transaction | $1,000    | $3,000    | $10,000      | $30,000      | $50,000      |
-| Daily           | $2,000    | $6,000    | $50,000      | $100,000     | $100,000     |
-| Monthly         | $10,000   | $15,000   | $100,000     | $250,000     | $500,00      |
+|                 | KYC Standard | KYB Standard |
+| :-------------- | :----------- | :----------- |
+| Per transaction | $10,000      | $30,000      |
+| Daily           | $50,000      | $100,000     |
+| Monthly         | $100,000     | $250,000     |
 
-**Attention:** All individuals undergoing Enhanced KYC will be manually verified by Lumx’s compliance team. This process may take up to 48 hours.
+<Note>
+  The values indicated above do not represent the transaction limits permitted on the Lumx platform. They are exclusively used to determine which levels of KYC or KYB will be applied according to the intended transaction amounts.
+</Note>
+
+It is emphasized that in cases where the relationship occurs directly between Lumx and the Beneficiary, operational limits will be defined based on the KYB documentation submitted by the entity and may vary from the previously established limits.
 
 ### Status progression
 
 KYC/KYB status can progress according to the following flow:
 
-* `PENDING` → `UNDER REVIEW` → `APPROVED`
+- `PENDING` → `UNDER REVIEW` → `APPROVED`
 
 For low-risk regions, the review process can be completed within seconds. However, in high-risk locations or cases requiring manual review, verification may take 1 to 2 business days.
 
-* `PENDING` → `UNDER REVIEW` → `CHANGES REQUESTED` → `APPROVED / REJECTED`
+- `PENDING` → `UNDER REVIEW` → `CHANGES REQUESTED` → `APPROVED / REJECTED`
 
 If the entity's provided information is incomplete or inconsistent, Lumx may request corrections or additional documents before concluding the review.
 
-* `PENDING` → `UNDER REVIEW` → `REJECTED`
+- `PENDING` → `UNDER REVIEW` → `REJECTED`
 
 In some cases, an entity may be rejected if the submitted information is invalid or inconsistent, such as an incorrect tax identification number or unrecognized documents.
