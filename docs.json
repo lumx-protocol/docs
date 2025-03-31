@@ -22,8 +22,9 @@
               "get-started/blockchains",
               "get-started/coverage",
               "get-started/testing",
-              "get-started/troubleshooting",
-              "get-started/developer-fees"
+              "get-started/webhooks",
+              "get-started/developer-fees",
+              "get-started/troubleshooting"
             ]
           },
           {
