@@ -181,6 +181,12 @@ paths:
             type: string
             enum: [BRL, USDC, USDT]
           description: The currency to convert to.
+        - name: sourceAmount
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The amount to convert.
       responses:
         "200":
           description: Exchange rate quote returned successfully.
@@ -937,7 +943,6 @@ components:
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
-        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -1106,10 +1111,13 @@ components:
           enum: [BRL, USDC, USDT]
           description: The currency to convert to.
         rate:
-          type: number
-          format: double
-          example: 6.15
+          type: string
+          example: "5.9030"
           description: The exchange rate between source and target currencies.
+        sourceAmount:
+          type: string
+          example: "1009"
+          description: The amount to be converted from the source currency.
     CustomerId:
       type: object
       required:
