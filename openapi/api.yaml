@@ -185,6 +185,7 @@ paths:
           required: true
           schema:
             type: string
+            example: "10000.00"
           description: The amount to convert.
         - name: targetCurrency
           in: query
@@ -1118,7 +1119,7 @@ components:
           description: The currency to convert from.
         sourceAmount:
           type: string
-          example: "1009"
+          example: "10000.00"
           description: The amount to be converted from the source currency.
         targetCurrency:
           type: string
