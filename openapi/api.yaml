@@ -165,6 +165,44 @@ paths:
                         example: 3d830599-f834-43c9-93f1-3ff6cf84798c
       security:
         - apiKey: []
+  "/customers/{id}/documents":
+    post:
+      tags:
+        - Customers
+      summary: Upload a document
+      description: This endpoint uploads a document for KYC/KYB.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/DocumentUploadRequest"
+      responses:
+        "200":
+          description: Document uploaded successfully.
+          content: {}
+        "400":
+          description: Bad request.
+          content: {}
+  "/customers/{id}/verify":
+    post:
+      tags:
+        - Customers
+      summary: Verify a customer
+      description: This endpoint starts the KYC/KYB verification process for a customer.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
   /exchange-rate:
     get:
       tags:
@@ -929,7 +967,6 @@ components:
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
-        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -1109,6 +1146,30 @@ components:
         mapping:
           individual: "#/components/schemas/CustomerIndividual"
           business: "#/components/schemas/CustomerBusiness"
+    DocumentUploadRequest:
+      type: object
+      required:
+        - metadata
+        - file
+      properties:
+        metadata:
+          type: object
+          properties:
+            country:
+              type: string
+              description: The country code that issued the document following ISO 3166-1 alpha-2
+            type:
+              type: string
+              description: The type of document
+              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
+            side:
+              type: string
+              description: The side of the document (FRONT_SIDE or BACK_SIDE)
+              enum: [FRONT_SIDE, BACK_SIDE]
+        file:
+          type: string
+          description: The document file to be uploaded.
+          format: binary
     ExchangeRateResponse:
       type: object
       properties:
