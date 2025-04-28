@@ -1161,7 +1161,7 @@ components:
             type:
               type: string
               description: The type of document
-              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
+              enum: [ID_CARD, PASSPORT, DRIVERS, UTILITY_BILL, TAX_ID]
             side:
               type: string
               description: The side of the document (FRONT_SIDE or BACK_SIDE)
