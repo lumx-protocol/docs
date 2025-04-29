@@ -212,8 +212,8 @@ paths:
     get:
       tags:
         - Exchange Rates
-      summary: Get an exchange rate
-      description: Get the current exchange rate between two currencies. The rate can vary based on the amount to be converted.
+      summary: Get an exchange rate (deprecated)
+      description: Get the current exchange rate between two currencies.
       parameters:
         - name: sourceCurrency
           in: query
@@ -236,6 +236,27 @@ paths:
             type: string
             enum: [BRL, USDC, USDT]
           description: The currency to convert to.
+      responses:
+        "200":
+          description: Exchange rate quote returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeRateOldResponse"
+      security:
+        - apiKey: []
+  /exchange-rates:
+    post:
+      tags:
+        - Exchange Rates
+      summary: Get an exchange rate
+      description: >-
+        Get the current exchange rate between two currencies.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExchangeRateRequest"
       responses:
         "200":
           description: Exchange rate quote returned successfully.
@@ -787,7 +808,6 @@ paths:
                       - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-
   /transactions:
     get:
       tags:
@@ -888,7 +908,6 @@ paths:
                   #       description: The size of the page.
       security:
         - apiKey: []
-
 components:
   schemas:
     ProjectRequest:
@@ -1159,7 +1178,8 @@ components:
           type: string
           description: The document file to be uploaded.
           format: binary
-    ExchangeRateResponse:
+
+    ExchangeRateOldResponse:
       type: object
       properties:
         sourceCurrency:
@@ -1178,15 +1198,69 @@ components:
           type: string
           example: "5.9030"
           description: The exchange rate between source and target currencies.
-    CustomerId:
+    ExchangeRateRequest:
       type: object
-      required:
-        - customerId
       properties:
-        customerId:
+        type:
+          type: string
+          description: The type of this exchange rate.
+          enum: ["FLOATING", "LOCKED"]
+          default: "FLOATING"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT, BRL]
+          description: The currency to convert from.
+        sourceAmount:
+          type: string
+          example: "10000.00"
+          description: The amount to be converted from the source currency.
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: The currency to convert to.
+        targetAmount:
+          type: string
+          example: "59030.00"
+          description: The amount to be converted to the target currency.
+          nullable: true
+      required:
+        - type
+        - sourceCurrency
+        - targetCurrency
+    ExchangeRateResponse:
+      type: object
+      properties:
+        id:
           type: string
           format: uuid
-          description: The customer performing the operation.
+          description: The id of the exchange rate.
+          nullable: true
+        type:
+          type: string
+          description: The type of this exchange rate.
+          enum: ["FLOATING", "LOCKED"]
+          default: "FLOATING"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT, BRL]
+          description: The currency to convert from.
+        sourceAmount:
+          type: string
+          example: "10000.00"
+          description: The amount to be converted from the source currency.
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: The currency to convert to.
+        targetAmount:
+          type: string
+          example: "59030.00"
+          description: The amount to be converted to the target currency.
+          nullable: true
+        rate:
+          type: string
+          example: "5.9030"
+          description: The exchange rate between source and target currencies.
     CrossRampRequest:
       type: object
       required:
