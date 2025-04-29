@@ -6,7 +6,6 @@ info:
 servers:
   - url: https://api-sandbox.lumx.io
   - url: https://api.lumx.io
-  - url: https://api.stg.lumx.cloud
 paths:
   /customers:
     post:
@@ -1203,9 +1202,8 @@ components:
       properties:
         type:
           type: string
-          description: The type of this exchange rate.
+          description: The type of this exchange rate. Use FLOATING for indicative rates and LOCKED to get an exchangeRateId that you can use when creating on ramps or off ramps. LOCKED rates are more expensive than FLOATING rates.
           enum: ["FLOATING", "LOCKED"]
-          default: "FLOATING"
         sourceCurrency:
           type: string
           enum: [USDC, USDT, BRL]
@@ -1213,7 +1211,7 @@ components:
         sourceAmount:
           type: string
           example: "10000.00"
-          description: The amount to be converted from the source currency.
+          description: The amount to be converted from the source currency. Only used for FLOATING rates.
         targetCurrency:
           type: string
           enum: [BRL, USDC, USDT]
@@ -1221,8 +1219,7 @@ components:
         targetAmount:
           type: string
           example: "59030.00"
-          description: The amount to be converted to the target currency.
-          nullable: true
+          description: The amount to be converted to the target currency. Only used for LOCKED rates.
       required:
         - type
         - sourceCurrency
@@ -1233,13 +1230,11 @@ components:
         id:
           type: string
           format: uuid
-          description: The id of the exchange rate.
-          nullable: true
+          description: The id of the exchange rate. Only returned for LOCKED rates.
         type:
           type: string
           description: The type of this exchange rate.
           enum: ["FLOATING", "LOCKED"]
-          default: "FLOATING"
         sourceCurrency:
           type: string
           enum: [USDC, USDT, BRL]
@@ -1256,7 +1251,6 @@ components:
           type: string
           example: "59030.00"
           description: The amount to be converted to the target currency.
-          nullable: true
         rate:
           type: string
           example: "5.9030"
@@ -1277,6 +1271,10 @@ components:
         amount:
           type: string
           format: number
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: The id of the exchange rate to be used for this transaction. If empty, a floating rate will be used.
     BaseTransactionResponse:
       type: object
       properties:
@@ -1341,7 +1339,7 @@ components:
           description: The stablecoin to convert to.
         amount:
           example: "100.99"
-          description: The amount to be converted from fiat to stablecoin.
+          description: The amount to be converted from fiat to stablecoin. If exchangeRateId is provided, the amount MUST match the sourceAmount from the exchange rate response obtained previously.
     OnRampResponse:
       type: object
       properties:
@@ -1443,7 +1441,7 @@ components:
           description: The fiat currency to convert to.
         amount:
           example: "100.123456"
-          description: The amount to be converted from stablecoin to fiat.
+          description: The amount to be converted from stablecoin to fiat. If exchangeRateId is provided, the amount MUST match the targetAmount from the exchange rate response obtained previously.
     OffRampResponse:
       type: object
       properties:
