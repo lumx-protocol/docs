@@ -984,6 +984,7 @@ components:
           type: object
           required:
             - line1
+            - line2
             - country
             - state
             - city
@@ -1038,28 +1039,6 @@ components:
           type: string
           description: The wallet address of the customer.
           example: "0x1234567890123456789012345678901234567890"
-        blockExplorerUrl:
-          type: string
-          description: The block explorer URL of the customer.
-          example: "https://polygonscan.com/address/0x1234567890123456789012345678901234567890"
-        balances:
-          type: array
-          description: The balances of the customer. Only returned if includeBalances is true.
-          items:
-            type: object
-            properties:
-              currency:
-                type: string
-                description: The currency of the balance.
-                example: "USDC"
-              amount:
-                type: string
-                description: The balance of the customer in the currency.
-                example: "100.123456"
-              updatedAt:
-                type: string
-                description: The timestamp from when the balance was last updated.
-                format: date-time
     CustomerAddress:
       type: object
       additionalProperties: false
