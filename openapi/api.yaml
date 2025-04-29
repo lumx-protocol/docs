@@ -277,7 +277,6 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/CustomerId"
                 - $ref: "#/components/schemas/CrossRampRequest"
                 - $ref: "#/components/schemas/OnRampRequest"
       responses:
@@ -401,7 +400,6 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: "#/components/schemas/CustomerId"
                 - $ref: "#/components/schemas/CrossRampRequest"
                 - $ref: "#/components/schemas/OffRampRequest"
       responses:
@@ -1264,6 +1262,10 @@ components:
         - sourceCurrency
         - targetCurrency
       properties:
+        customerId:
+          type: string
+          format: uuid
+          description: The id of the customer performing the operation.
         sourceCurrency:
           type: string
         targetCurrency:
