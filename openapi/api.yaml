@@ -6,6 +6,7 @@ info:
 servers:
   - url: https://api-sandbox.lumx.io
   - url: https://api.lumx.io
+  - url: https://api.stg.lumx.cloud
 paths:
   /customers:
     post:
@@ -163,6 +164,48 @@ paths:
                         type: string
                         format: uuid
                         example: 3d830599-f834-43c9-93f1-3ff6cf84798c
+      security:
+        - apiKey: []
+  "/customers/{id}/documents":
+    post:
+      tags:
+        - Customers
+      summary: Upload a document
+      description: This endpoint uploads a document for KYC/KYB.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/DocumentUploadRequest"
+      responses:
+        "200":
+          description: Document uploaded successfully.
+          content: {}
+        "400":
+          description: Bad request.
+          content: {}
+      security:
+        - apiKey: []
+  "/customers/{id}/verify":
+    post:
+      tags:
+        - Customers
+      summary: Verify a customer
+      description: This endpoint starts the KYC/KYB verification process for a customer.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       security:
         - apiKey: []
   /exchange-rate:
@@ -919,7 +962,8 @@ components:
                 - type: object
                   required:
                     - name
-                    - birthdate
+                    - birthDate
+                    - email
             - allOf:
                 - $ref: "#/components/schemas/CustomerBusiness"
                   description: Business customer
@@ -948,7 +992,6 @@ components:
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
-        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -960,6 +1003,7 @@ components:
           type: object
           required:
             - line1
+            - line2
             - country
             - state
             - city
@@ -1014,28 +1058,6 @@ components:
           type: string
           description: The wallet address of the customer.
           example: "0x1234567890123456789012345678901234567890"
-        blockExplorerUrl:
-          type: string
-          description: The block explorer URL of the customer.
-          example: "https://polygonscan.com/address/0x1234567890123456789012345678901234567890"
-        balances:
-          type: array
-          description: The balances of the customer. Only returned if includeBalances is true.
-          items:
-            type: object
-            properties:
-              currency:
-                type: string
-                description: The currency of the balance.
-                example: "USDC"
-              amount:
-                type: string
-                description: The balance of the customer in the currency.
-                example: "100.123456"
-              updatedAt:
-                type: string
-                description: The timestamp from when the balance was last updated.
-                format: date-time
     CustomerAddress:
       type: object
       additionalProperties: false
@@ -1096,11 +1118,15 @@ components:
             name:
               type: string
               description: Customer full name
-            birthdate:
+            birthDate:
               type: string
               description: Customer birth date
               format: date
               example: "1990-01-01"
+            email:
+              type: string
+              description: Customer email
+              example: "john.doe@example.com"
     CustomerBusiness:
       type: object
       allOf:
@@ -1128,6 +1154,31 @@ components:
         mapping:
           individual: "#/components/schemas/CustomerIndividual"
           business: "#/components/schemas/CustomerBusiness"
+    DocumentUploadRequest:
+      type: object
+      required:
+        - metadata
+        - file
+      properties:
+        metadata:
+          type: object
+          properties:
+            country:
+              type: string
+              description: The country code that issued the document following ISO 3166-1 alpha-2
+            type:
+              type: string
+              description: The type of document
+              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
+            side:
+              type: string
+              description: The side of the document (FRONT_SIDE or BACK_SIDE)
+              enum: [FRONT_SIDE, BACK_SIDE]
+        file:
+          type: string
+          description: The document file to be uploaded.
+          format: binary
+
     ExchangeRateOldResponse:
       type: object
       properties:
@@ -1148,12 +1199,12 @@ components:
           example: "5.9030"
           description: The exchange rate between source and target currencies.
     ExchangeRateRequest:
-      type: object 
+      type: object
       properties:
         type:
           type: string
           description: The type of this exchange rate.
-          enum: ["FLOATING","LOCKED"]
+          enum: ["FLOATING", "LOCKED"]
           default: "FLOATING"
         sourceCurrency:
           type: string
@@ -1187,7 +1238,7 @@ components:
         type:
           type: string
           description: The type of this exchange rate.
-          enum: ["FLOATING","LOCKED"]
+          enum: ["FLOATING", "LOCKED"]
           default: "FLOATING"
         sourceCurrency:
           type: string
