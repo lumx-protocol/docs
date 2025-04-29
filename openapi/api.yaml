@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: "#/components/schemas/CustomerResponse"
         "400":
           description: Invalid request parameters
         "409":
@@ -76,7 +76,7 @@ paths:
                     description: An array containing all customers.
                     type: array
                     items:
-                      $ref: "#/components/schemas/Customer"
+                      $ref: "#/components/schemas/CustomerResponse"
                   # pagination:
                   #   type: object
                   #   properties:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: "#/components/schemas/CustomerResponse"
         "404":
           description: Customer not found!.
       security:
@@ -141,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: "#/components/schemas/CustomerResponse"
         "400":
           description: Invalid request parameters.
         "404":
@@ -1055,6 +1055,80 @@ components:
           type: string
           description: The wallet address of the customer.
           example: "0x1234567890123456789012345678901234567890"
+    CustomerResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Unique customer identifier
+          format: uuid
+          readOnly: true
+        type:
+          type: string
+          description: The type of this customer.
+          enum: ["individual", "business"]
+        address:
+          $ref: "#/components/schemas/CustomerAddress"
+          example:
+            line1: "Rua dos Bobos, 0"
+            line2: "Apto 101"
+            country: "BRA"
+            state: "SP"
+            city: "São Paulo"
+            zipCode: "01234-567"
+        documents:
+          type: array
+          description: List of customer documents
+          items:
+            $ref: "#/components/schemas/CustomerDocument"
+          example:
+            - country: BRA
+              type: TAX_ID
+              value: 123.456.789-00
+        createdAt:
+          type: string
+          description: Record creation timestamp
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Record last update timestamp
+          format: date-time
+          readOnly: true
+        walletAddress:
+          type: string
+          description: The wallet address of the customer.
+          example: "0x1234567890123456789012345678901234567890"
+        kyc:
+          type: object
+          properties:
+            status:
+              type: string
+              description: The status of the customer's KYC.
+              enum:
+                [
+                  "pending",
+                  "approved",
+                  "final_rejection",
+                  "temporary_rejection",
+                ]
+            level:
+              type: string
+              description: The level of the customer's KYC.
+              example: "standard"
+            transactionLimits:
+              type: object
+              properties:
+                daily:
+                  type: number
+                  description: The daily limit for the customer's KYC.
+                monthly:
+                  type: number
+                  description: The monthly limit for the customer's KYC.
+                single:
+                  type: number
+                  description: The limit for a single transaction for the customer's KYC.
     CustomerAddress:
       type: object
       additionalProperties: false
