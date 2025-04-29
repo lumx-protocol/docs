@@ -6,6 +6,7 @@ info:
 servers:
   - url: https://api-sandbox.lumx.io
   - url: https://api.lumx.io
+  - url: https://api.stg.lumx.cloud
 paths:
   /customers:
     post:
@@ -190,6 +191,8 @@ paths:
         "400":
           description: Bad request.
           content: {}
+      security:
+        - apiKey: []
   "/customers/{id}/verify":
     post:
       tags:
@@ -203,6 +206,8 @@ paths:
           schema:
             type: string
             format: uuid
+      security:
+        - apiKey: []
   /exchange-rate:
     get:
       tags:
@@ -938,7 +943,8 @@ components:
                 - type: object
                   required:
                     - name
-                    - birthdate
+                    - birthDate
+                    - email
             - allOf:
                 - $ref: "#/components/schemas/CustomerBusiness"
                   description: Business customer
@@ -1114,11 +1120,15 @@ components:
             name:
               type: string
               description: Customer full name
-            birthdate:
+            birthDate:
               type: string
               description: Customer birth date
               format: date
               example: "1990-01-01"
+            email:
+              type: string
+              description: Customer email
+              example: "john.doe@example.com"
     CustomerBusiness:
       type: object
       allOf:
@@ -1161,7 +1171,7 @@ components:
             type:
               type: string
               description: The type of document
-              enum: [ID_CARD, PASSPORT, DRIVERS, UTILITY_BILL, TAX_ID]
+              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
             side:
               type: string
               description: The side of the document (FRONT_SIDE or BACK_SIDE)
