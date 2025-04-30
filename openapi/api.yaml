@@ -1274,7 +1274,7 @@ components:
       properties:
         type:
           type: string
-          description: The type of this exchange rate. Use FLOATING for indicative rates and LOCKED to get an exchangeRateId that you can use when creating on ramps or off ramps. LOCKED rates are more expensive than FLOATING rates.
+          description: The type of this exchange rate. Use FLOATING for indicative rates and LOCKED to get an exchangeRateId that you can use when creating on ramps or off ramps.
           enum: ["FLOATING", "LOCKED"]
         sourceCurrency:
           type: string
