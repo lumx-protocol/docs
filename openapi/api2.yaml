@@ -139,6 +139,317 @@ paths:
                 $ref: "#/components/schemas/ExchangeRateResponse"
       security:
         - apiKey: []
+  /transactions/on-ramp:
+    post:
+      tags:
+        - Transactions
+      summary: On-ramp
+      description: >-
+        Convert from fiat to stablecoin.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRampRequest"
+      responses:
+        "201":
+          description: On-ramp operation created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OnRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+
+      security:
+        - apiKey: []
+  /transactions/off-ramp:
+    post:
+      tags:
+        - Transactions
+      summary: Off-ramp
+      description: >-
+        Convert from stablecoin to fiat.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OffRampRequest"
+      responses:
+        "201":
+          description: Off-ramp operation created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OffRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+  /transactions/transfer:
+    post:
+      tags:
+        - Transactions
+      summary: Transfer
+      description: >-
+        Transfer funds between customers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferRequest"
+      responses:
+        "201":
+          description: Transfer operation created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/TransferResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+  "/transactions/{id}":
+    get:
+      tags:
+        - Transactions
+      summary: Read a transaction
+      description: This endpoint reads a transaction.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Transaction retrieved successfully.
+          content:
+            application/json:
+              examples:
+                "on_ramp: awaiting_funds":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    customerId: "123e4567-e89b-12d3-a456-426614174000"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "10000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "awaiting_funds"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "on_ramp: processing":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "on_ramp: success":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      receipt:
+                        rate: "6.0066"
+                        sourceAmount: "1000.00"
+                        targetAmount: "5925.55"
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: "10.000000"
+                            flat: "1"
+                          developer:
+                            percentage: "0.000000"
+                            flat: "0"
+                      blockchain:
+                        transactionHash: "0x1234567890123456789012345678901234567890"
+                        blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "on_ramp: failed":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174002"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "on_ramp"
+                    request:
+                      sourceCurrency: "BRL"
+                      targetCurrency: "USDC"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                    state:
+                      status: "failed"
+                      payment:
+                        rail: "pix"
+                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+                      error:
+                        code: "INSUFFICIENT_FUNDS"
+                        message: "The payment was rejected due to insufficient funds"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "off_ramp: awaiting_funds":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174003"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyType: "email"
+                        keyValue: "user@email.com"
+                    state:
+                      status: "awaiting_funds"
+                      payment:
+                        rail: "pix"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "off_ramp: processing":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174003"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyType: "email"
+                        keyValue: "user@email.com"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "off_ramp: success":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174003"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyType: "email"
+                        keyValue: "user@email.com"
+                    state:
+                      status: "success"
+                      payment:
+                        rail: "pix"
+                      receipt:
+                        rate: "6.0066"
+                        sourceAmount: "1000.00"
+                        targetAmount: "5925.55"
+                        sourceCurrency: "USDC"
+                        targetCurrency: "BRL"
+                        fees:
+                          currency: "USDC"
+                          lumx:
+                            percentage: "10.000000"
+                            flat: "1"
+                          developer:
+                            percentage: "0.000000"
+                            flat: "0"
+                      blockchain:
+                        transactionHash: "0x1234567890123456789012345678901234567890"
+                        blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+                "off_ramp: failed":
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174003"
+                    customerId: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "off_ramp"
+                    request:
+                      sourceCurrency: "USDC"
+                      targetCurrency: "BRL"
+                      amount: "1000.00"
+                      payment:
+                        rail: "pix"
+                        keyType: "email"
+                        keyValue: "user@email.com"
+                    state:
+                      status: "processing"
+                      payment:
+                        rail: "pix"
+                      error:
+                        code: "INVALID_PIX_KEY"
+                        message: "The provided PIX key is invalid or not found"
+                    createdAt: "2024-03-20T15:30:00Z"
+                    updatedAt: "2024-03-20T15:30:05Z"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+  /transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Read all transactions
+      description: This endpoint reads all of your transactions.
+      responses:
+        "200":
+          description: The list of transactions was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: An array containing all transactions made by wallets of this project.
+                    items:
+                      oneOf:
+                        - type: object
+                          title: On-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/OnRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Off-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/OffRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Transfers
+                          allOf:
+                            - $ref: "#/components/schemas/TransferResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
 components:
   schemas:
     CustomerRequest:
@@ -299,7 +610,8 @@ components:
         status:
           type: string
           description: Status of the customer's KYC.
-          enum: ["pending", "approved", "final_rejection", "temporary_rejection"]
+          enum:
+            ["pending", "approved", "final_rejection", "temporary_rejection"]
           example: "pending"
         level:
           type: string
@@ -366,12 +678,12 @@ components:
         - metadata
         - file
     ExchangeRateRequest:
-      type: object 
+      type: object
       properties:
         type:
           type: string
           description: Exchange rate's type.
-          enum: ["floating","locked"]
+          enum: ["floating", "locked"]
           default: "floating"
           example: "floating"
         sourceCurrency:
@@ -435,7 +747,303 @@ components:
         rate:
           type: string
           example: "5.9030"
-          description: Exchange rate's rate.        
+          description: Exchange rate's rate.
+    OnRampRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        sourceCurrency:
+          type: string
+          enum: [BRL]
+          description: Fiat currency to be converted.
+          example: "BRL"
+        targetCurrency:
+          type: string
+          enum: [USDC, USDT]
+          description: Stablecoin to be received.
+          example: "USDC"
+        amount:
+          type: string
+          description: Amount to be converted. If exchangeRateId is provided, the amount MUST match the sourceAmount from the exchange rate response obtained previously.
+          example: "10000.00"
+        payment:
+          type: object
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange rate's id to be used for this transaction. If empty, a floating rate will be used.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          nullable: true
+      required:
+        - customerId
+        - sourceCurrency
+        - targetCurrency
+        - amount
+        - payment
+    OnRampResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: On-ramp operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: On-ramp operation's type.
+          enum: ["on_ramp"]
+          example: "on_ramp"
+        request:
+          type: object
+          properties:
+            sourceCurrency:
+              type: string
+              description: Fiat currency to be converted.
+              example: "BRL"
+            targetCurrency:
+              type: string
+              description: Stablecoin to be received.
+              example: "USDC"
+            amount:
+              type: string
+              description: Amount to be converted.
+              example: "10000.00"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
+        state:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Status of the on-ramp operation.
+              example: "awaiting_funds"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
+                brCode:
+                  type: string
+                  description: Payment's code.
+                  example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+    OffRampRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT]
+          description: Stablecoin to be converted.
+          example: "USDC"
+        targetCurrency:
+          type: string
+          enum: [BRL]
+          description: Fiat currency to be received.
+          example: "BRL"
+        amount:
+          type: string
+          description: Amount to be converted. If exchangeRateId is provided, the amount MUST match the targetAmount from the exchange rate response obtained previously.
+          example: "10000.00"
+        payment:
+          type: object
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+            keyType:
+              type: string
+              description: Payment rail's key type.
+              enum: [email]
+              example: "email"
+            keyValue:
+              type: string
+              description: Payment rail's key value.
+              example: "user@email.com"
+
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange rate's id to be used for this transaction. If empty, a floating rate will be used.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      required:
+        - customerId
+        - sourceCurrency
+        - targetCurrency
+        - amount
+        - payment
+    OffRampResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Off-ramp operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: Off-ramp operation's type.
+          enum: ["off_ramp"]
+          example: "off_ramp"
+        request:
+          type: object
+          properties:
+            sourceCurrency:
+              type: string
+              description: Stablecoin to be converted.
+              example: "USDC"
+            targetCurrency:
+              type: string
+              description: Fiat currency to be received.
+              example: "BRL"
+            amount:
+              type: string
+              description: Amount to be converted.
+              example: "10000.00"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
+                keyType:
+                  type: string
+                  description: Payment rail's key type.
+                  enum: [email]
+                  example: "email"
+                keyValue:
+                  type: string
+                  description: Payment rail's key value.
+                  example: "user@email.com"
+        state:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Status of the on-ramp operation.
+              example: "awaiting_funds"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
+    TransferRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          enum: [USDC, USDT]
+          description: Stablecoin to be transferred.
+          example: "USDC"
+        from:
+          type: string
+          format: uuid
+          description: Customer's id that will send the tokens.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        to:
+          type: string
+          format: uuid
+          description: Customer's id that will receive the tokens.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        amount:
+          type: string
+          description: Amount to be transferred.
+          example: "10000.00"
+      required:
+        - currency
+        - amount
+        - from
+        - to
+    TransferResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transfer operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: Transfer operation's type.
+          enum: ["transfer"]
+          example: "transfer"
+        request:
+          type: object
+        state:
+          type: object
+    TransactionTimestamps:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the transaction was submitted.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp from when the transaction was last updated.
+    BaseTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transaction's unique identifier.
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+        type:
+          type: string
+          description: Transaction's type.
+          enum: ["on_ramp", "off_ramp", "transfer"]
+        request:
+          type: object
+          description: Transaction's request.
+        state:
+          type: object
+          description: Transaction's state.
   securitySchemes:
     apiKey:
       type: http
