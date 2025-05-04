@@ -24,7 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomerResponse"
+                $ref: "#/components/schemas/Customer"
         "400":
           description: Invalid request parameters
         "409":
@@ -76,7 +76,7 @@ paths:
                     description: An array containing all customers.
                     type: array
                     items:
-                      $ref: "#/components/schemas/CustomerResponse"
+                      $ref: "#/components/schemas/Customer"
                   # pagination:
                   #   type: object
                   #   properties:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomerResponse"
+                $ref: "#/components/schemas/Customer"
         "404":
           description: Customer not found!.
       security:
@@ -141,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CustomerResponse"
+                $ref: "#/components/schemas/Customer"
         "400":
           description: Invalid request parameters.
         "404":
@@ -163,48 +163,6 @@ paths:
                         type: string
                         format: uuid
                         example: 3d830599-f834-43c9-93f1-3ff6cf84798c
-      security:
-        - apiKey: []
-  "/customers/{id}/documents":
-    post:
-      tags:
-        - Customers
-      summary: Upload a document
-      description: This endpoint uploads a document for KYC/KYB.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/DocumentUploadRequest"
-      responses:
-        "200":
-          description: Document uploaded successfully.
-          content: {}
-        "400":
-          description: Bad request.
-          content: {}
-      security:
-        - apiKey: []
-  "/customers/{id}/verify":
-    post:
-      tags:
-        - Customers
-      summary: Verify a customer
-      description: This endpoint starts the KYC/KYB verification process for a customer.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
       security:
         - apiKey: []
   /exchange-rate:
@@ -277,6 +235,7 @@ paths:
           application/json:
             schema:
               allOf:
+                - $ref: "#/components/schemas/CustomerId"
                 - $ref: "#/components/schemas/CrossRampRequest"
                 - $ref: "#/components/schemas/OnRampRequest"
       responses:
@@ -400,6 +359,7 @@ paths:
           application/json:
             schema:
               allOf:
+                - $ref: "#/components/schemas/CustomerId"
                 - $ref: "#/components/schemas/CrossRampRequest"
                 - $ref: "#/components/schemas/OffRampRequest"
       responses:
@@ -959,8 +919,7 @@ components:
                 - type: object
                   required:
                     - name
-                    - birthDate
-                    - email
+                    - birthdate
             - allOf:
                 - $ref: "#/components/schemas/CustomerBusiness"
                   description: Business customer
@@ -989,6 +948,7 @@ components:
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerUpdateRulesRequest"
     CustomerCreateRulesRequest:
       type: object
       required:
@@ -1000,7 +960,6 @@ components:
           type: object
           required:
             - line1
-            - line2
             - country
             - state
             - city
@@ -1055,80 +1014,28 @@ components:
           type: string
           description: The wallet address of the customer.
           example: "0x1234567890123456789012345678901234567890"
-    CustomerResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
+        blockExplorerUrl:
           type: string
-          description: Unique customer identifier
-          format: uuid
-          readOnly: true
-        type:
-          type: string
-          description: The type of this customer.
-          enum: ["individual", "business"]
-        address:
-          $ref: "#/components/schemas/CustomerAddress"
-          example:
-            line1: "Rua dos Bobos, 0"
-            line2: "Apto 101"
-            country: "BRA"
-            state: "SP"
-            city: "São Paulo"
-            zipCode: "01234-567"
-        documents:
+          description: The block explorer URL of the customer.
+          example: "https://polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
           type: array
-          description: List of customer documents
+          description: The balances of the customer. Only returned if includeBalances is true.
           items:
-            $ref: "#/components/schemas/CustomerDocument"
-          example:
-            - country: BRA
-              type: TAX_ID
-              value: 123.456.789-00
-        createdAt:
-          type: string
-          description: Record creation timestamp
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          description: Record last update timestamp
-          format: date-time
-          readOnly: true
-        walletAddress:
-          type: string
-          description: The wallet address of the customer.
-          example: "0x1234567890123456789012345678901234567890"
-        kyc:
-          type: object
-          properties:
-            status:
-              type: string
-              description: The status of the customer's KYC.
-              enum:
-                [
-                  "pending",
-                  "approved",
-                  "final_rejection",
-                  "temporary_rejection",
-                ]
-            level:
-              type: string
-              description: The level of the customer's KYC.
-              example: "standard"
-            transactionLimits:
-              type: object
-              properties:
-                daily:
-                  type: number
-                  description: The daily limit for the customer's KYC.
-                monthly:
-                  type: number
-                  description: The monthly limit for the customer's KYC.
-                single:
-                  type: number
-                  description: The limit for a single transaction for the customer's KYC.
+            type: object
+            properties:
+              currency:
+                type: string
+                description: The currency of the balance.
+                example: "USDC"
+              amount:
+                type: string
+                description: The balance of the customer in the currency.
+                example: "100.123456"
+              updatedAt:
+                type: string
+                description: The timestamp from when the balance was last updated.
+                format: date-time
     CustomerAddress:
       type: object
       additionalProperties: false
@@ -1189,15 +1096,11 @@ components:
             name:
               type: string
               description: Customer full name
-            birthDate:
+            birthdate:
               type: string
               description: Customer birth date
               format: date
               example: "1990-01-01"
-            email:
-              type: string
-              description: Customer email
-              example: "john.doe@example.com"
     CustomerBusiness:
       type: object
       allOf:
@@ -1225,31 +1128,6 @@ components:
         mapping:
           individual: "#/components/schemas/CustomerIndividual"
           business: "#/components/schemas/CustomerBusiness"
-    DocumentUploadRequest:
-      type: object
-      required:
-        - metadata
-        - file
-      properties:
-        metadata:
-          type: object
-          properties:
-            country:
-              type: string
-              description: The country code that issued the document following ISO 3166-1 alpha-2
-            type:
-              type: string
-              description: The type of document
-              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
-            side:
-              type: string
-              description: The side of the document (FRONT_SIDE or BACK_SIDE)
-              enum: [FRONT_SIDE, BACK_SIDE]
-        file:
-          type: string
-          description: The document file to be uploaded.
-          format: binary
-
     ExchangeRateOldResponse:
       type: object
       properties:
@@ -1270,43 +1148,13 @@ components:
           example: "5.9030"
           description: The exchange rate between source and target currencies.
     ExchangeRateRequest:
-      type: object
+      type: object 
       properties:
-        type:
-          type: string
-          description: The type of this exchange rate. Use FLOATING for indicative rates and LOCKED to get an exchangeRateId that you can use when creating on ramps or off ramps.
-          enum: ["FLOATING", "LOCKED"]
-        sourceCurrency:
-          type: string
-          enum: [USDC, USDT, BRL]
-          description: The currency to convert from.
-        sourceAmount:
-          type: string
-          example: "10000.00"
-          description: The amount to be converted from the source currency. Only used for FLOATING rates.
-        targetCurrency:
-          type: string
-          enum: [BRL, USDC, USDT]
-          description: The currency to convert to.
-        targetAmount:
-          type: string
-          example: "59030.00"
-          description: The amount to be converted to the target currency. Only used for LOCKED rates.
-      required:
-        - type
-        - sourceCurrency
-        - targetCurrency
-    ExchangeRateResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The id of the exchange rate. Only returned for LOCKED rates.
         type:
           type: string
           description: The type of this exchange rate.
-          enum: ["FLOATING", "LOCKED"]
+          enum: ["FLOATING","LOCKED"]
+          default: "FLOATING"
         sourceCurrency:
           type: string
           enum: [USDC, USDT, BRL]
@@ -1323,6 +1171,41 @@ components:
           type: string
           example: "59030.00"
           description: The amount to be converted to the target currency.
+          nullable: true
+      required:
+        - type
+        - sourceCurrency
+        - targetCurrency
+    ExchangeRateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The id of the exchange rate.
+          nullable: true
+        type:
+          type: string
+          description: The type of this exchange rate.
+          enum: ["FLOATING","LOCKED"]
+          default: "FLOATING"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT, BRL]
+          description: The currency to convert from.
+        sourceAmount:
+          type: string
+          example: "10000.00"
+          description: The amount to be converted from the source currency.
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: The currency to convert to.
+        targetAmount:
+          type: string
+          example: "59030.00"
+          description: The amount to be converted to the target currency.
+          nullable: true
         rate:
           type: string
           example: "5.9030"
@@ -1336,10 +1219,6 @@ components:
         - sourceCurrency
         - targetCurrency
       properties:
-        customerId:
-          type: string
-          format: uuid
-          description: The id of the customer performing the operation.
         sourceCurrency:
           type: string
         targetCurrency:
@@ -1347,10 +1226,6 @@ components:
         amount:
           type: string
           format: number
-        exchangeRateId:
-          type: string
-          format: uuid
-          description: The id of the exchange rate to be used for this transaction. If empty, a floating rate will be used.
     BaseTransactionResponse:
       type: object
       properties:
@@ -1415,7 +1290,7 @@ components:
           description: The stablecoin to convert to.
         amount:
           example: "100.99"
-          description: The amount to be converted from fiat to stablecoin. If exchangeRateId is provided, the amount MUST match the sourceAmount from the exchange rate response obtained previously.
+          description: The amount to be converted from fiat to stablecoin.
     OnRampResponse:
       type: object
       properties:
@@ -1517,7 +1392,7 @@ components:
           description: The fiat currency to convert to.
         amount:
           example: "100.123456"
-          description: The amount to be converted from stablecoin to fiat. If exchangeRateId is provided, the amount MUST match the targetAmount from the exchange rate response obtained previously.
+          description: The amount to be converted from stablecoin to fiat.
     OffRampResponse:
       type: object
       properties:

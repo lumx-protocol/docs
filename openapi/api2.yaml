@@ -1,0 +1,443 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Lumx API
+  description: A cross-border banking API with instant settlements and unmatched liquidity, powered by stablecoins.
+servers:
+  - url: https://api-sandbox.lumx.io
+  - url: https://api.lumx.io
+paths:
+  /customers:
+    get:
+      tags:
+        - Customers
+      summary: Read all customers
+      description: This endpoint reads all customers.
+      responses:
+        "200":
+          description: The list of customers was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    description: An array containing all customers.
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CustomerResponse"
+      security:
+        - apiKey: []
+    post:
+      tags:
+        - Customers
+      summary: Create a customer
+      description: This endpoint creates a customer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerRequest"
+      responses:
+        "201":
+          description: Resource successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+  "/customers/{id}":
+    get:
+      tags:
+        - Customers
+      summary: Read a customer
+      description: This endpoint reads a customer.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+        - name: includeBalances
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Whether to include balances in the response.
+      responses:
+        "200":
+          description: Resource successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
+        "404":
+          description: Resource not found.
+      security:
+        - apiKey: []
+  "/customers/{id}/documents":
+    post:
+      tags:
+        - Customers
+      summary: Upload a document
+      description: This endpoint uploads a document of a customer.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CustomerDocumentRequest"
+      responses:
+        "200":
+          description: Resource successfully accepted.
+      security:
+        - apiKey: []
+  "/customers/{id}/verify":
+    post:
+      tags:
+        - Customers
+      summary: Verify a customer
+      description: This endpoint verifies a customer.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+      responses:
+        "200":
+          description: Resource successfully verified.
+      security:
+        - apiKey: []
+  /exchange-rates:
+    post:
+      tags:
+        - Exchange Rates
+      summary: Get an exchange rate
+      description: This endpoint returns an exchange rate quote currencies.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExchangeRateRequest"
+      responses:
+        "200":
+          description: Exchange rate quote returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeRateResponse"
+      security:
+        - apiKey: []
+components:
+  schemas:
+    CustomerRequest:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+              readOnly: true
+        - oneOf:
+            - allOf:
+                - $ref: "#/components/schemas/CustomerIndividual"
+                  description: Customer type is individual
+                  title: Individual
+                - type: object
+            - allOf:
+                - $ref: "#/components/schemas/CustomerBusiness"
+                  description: Customer type is business
+                  title: Business
+                - type: object
+          discriminator:
+            propertyName: type
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+    CustomerResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+              readOnly: true
+        - oneOf:
+            - allOf:
+                - $ref: "#/components/schemas/CustomerIndividual"
+                  description: Customer type is individual
+                  title: Individual
+                - type: object
+            - allOf:
+                - $ref: "#/components/schemas/CustomerBusiness"
+                  description: Customer type is business
+                  title: Business
+                - type: object
+          discriminator:
+            propertyName: type
+            mapping:
+              individual: "#/components/schemas/CustomerIndividual"
+              business: "#/components/schemas/CustomerBusiness"
+        - $ref: "#/components/schemas/CustomerBase"
+    CustomerIndividual:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Customer's type.
+          enum: ["individual"]
+        name:
+          type: string
+          description: Customer full name
+          example: "John Doe"
+        taxId:
+          type: string
+          description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
+          example: "123.456.789-00"
+        birthdate:
+          type: string
+          description: Customer birth date
+          format: date
+          example: "1990-01-01"
+        address:
+          $ref: "#/components/schemas/CustomerAddress"
+    CustomerBusiness:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Customer's type.
+          enum: ["business"]
+        legalName:
+          type: string
+          description: Customer legal name
+          example: "Lumx S.A"
+        taxId:
+          type: string
+          description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
+          example: "23.456.789/0001-00"
+        incorporationDate:
+          type: string
+          description: Customer incorporation date
+          format: date
+          example: "2020-01-01"
+        address:
+          $ref: "#/components/schemas/CustomerAddress"
+    CustomerBase:
+      type: object
+      additionalProperties: false
+      properties:
+        walletAddress:
+          type: string
+          description: Customer's wallet address.
+          example: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl:
+          type: string
+          description: Customer's block explorer URL.
+          example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerBalance"
+        compliance:
+          $ref: "#/components/schemas/CustomerCompliance"
+        createdAt:
+          type: string
+          description: Creation date and time.
+          format: date-time
+          example: "2021-01-01T00:00:00Z"
+        updatedAt:
+          type: string
+          description: Last update date and time.
+          format: date-time
+          example: "2021-01-01T00:00:00Z"
+    CustomerAddress:
+      type: object
+      description: Address where the customer is located.
+      properties:
+        line1:
+          type: string
+          description: Address's first line.
+          example: "Rua dos Bobos, 0"
+        line2:
+          type: string
+          description: Address's second line.
+          example: "Apto 101"
+        country:
+          type: string
+          description: Address's country code following ISO 3166-1 alpha-2.
+          enum: [BRA]
+          example: "BRA"
+        state:
+          type: string
+          description: Address's state.
+          example: "SP"
+        city:
+          type: string
+          description: Address's city.
+          example: "São Paulo"
+        zipCode:
+          type: string
+          description: Address's zip code.
+          example: "01234-567"
+    CustomerCompliance:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the customer's KYC.
+          enum: ["pending", "approved", "final_rejection", "temporary_rejection"]
+          example: "pending"
+        level:
+          type: string
+          description: Level of the customer's KYC.
+          enum: ["standard"]
+          example: "standard"
+        transactionLimits:
+          type: object
+          properties:
+            single:
+              type: string
+              description: Single transaction limit for the customer's KYC.
+              example: "1000.00"
+            daily:
+              type: string
+              description: Daily limit for the customer's KYC.
+              example: "10000.00"
+            monthly:
+              type: string
+              description: Monthly limit for the customer's KYC.
+              example: "100000.00"
+    CustomerBalance:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Balance's currency.
+          enum: [USDC, USDT]
+        amount:
+          type: string
+          description: Balance's amount.
+          example: "1000.00"
+        updatedAt:
+          type: string
+          description: Last update date and time.
+          example: "2021-01-01T00:00:00Z"
+    CustomerDocumentRequest:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            country:
+              type: string
+              description: Document's country code following ISO 3166-1 alpha-2
+              enum: [BRA]
+              example: "BRA"
+            type:
+              type: string
+              description: Document's type
+              enum: [id_card, passport, driving_license, utility_bill]
+              example: "id_card"
+            side:
+              type: string
+              description: Document's side
+              enum: [front_side, back_side]
+              example: "front_side"
+              default: "front_side"
+        file:
+          type: string
+          description: The document file to be uploaded.
+          format: binary
+      required:
+        - metadata
+        - file
+    ExchangeRateRequest:
+      type: object 
+      properties:
+        type:
+          type: string
+          description: Exchange rate's type.
+          enum: ["floating","locked"]
+          default: "floating"
+          example: "floating"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT, BRL]
+          description: Exchange rate's source currency.
+          example: "BRL"
+        sourceAmount:
+          type: string
+          description: Exchange rate's source amount.
+          example: "10000.00"
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's target currency.
+          example: "USDC"
+        targetAmount:
+          type: string
+          description: Exchange rate's target amount.
+          example: null
+          nullable: true
+      required:
+        - type
+        - sourceCurrency
+        - targetCurrency
+        - sourceAmount
+        - targetAmount
+    ExchangeRateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Exchange rate's unique identifier.
+          example: null
+          nullable: true
+        type:
+          type: string
+          description: The type of this exchange rate.
+          enum: ["floating", "locked"]
+          default: "floating"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT, BRL]
+          description: Exchange rate's source currency.
+          example: "BRL"
+        sourceAmount:
+          type: string
+          description: Exchange rate's source amount.
+          example: "10000.00"
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's target currency.
+          example: "USDC"
+        targetAmount:
+          type: string
+          description: Exchange rate's target amount.
+          nullable: true
+          example: "59030.00"
+        rate:
+          type: string
+          example: "5.9030"
+          description: Exchange rate's rate.        
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      description: Bearer authentication header of the form `Bearer <API_KEY>`.
