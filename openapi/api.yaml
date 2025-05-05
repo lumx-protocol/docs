@@ -1055,6 +1055,7 @@ components:
           type: string
           description: The wallet address of the customer.
           example: "0x1234567890123456789012345678901234567890"
+          readOnly: true
     CustomerResponse:
       type: object
       additionalProperties: false
@@ -1198,6 +1199,12 @@ components:
               type: string
               description: Customer email
               example: "john.doe@example.com"
+          required:
+            - name
+            - birthDate
+            - email
+            - address
+            - type
     CustomerBusiness:
       type: object
       allOf:
@@ -1214,6 +1221,21 @@ components:
               description: Customer incorporation date
               format: date
               example: "2020-01-01"
+            beneficiaries:
+              type: array
+              description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+              items: 
+                type: object 
+                allOf:
+                  - $ref: "#/components/schemas/CustomerIndividual"
+                  - type: object
+                    properties:
+                      sharePercentage:
+                        type: number
+                        description: The share percentage of the beneficiary.
+                        example: 20
+                    required:
+                      - sharePercentage
     Customer:
       oneOf:
         - $ref: "#/components/schemas/CustomerIndividual"
