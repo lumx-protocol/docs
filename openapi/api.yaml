@@ -43,8 +43,39 @@ paths:
           description: Resource successfully created.
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
+              examples:
+                individual:
+                  value:
+                    id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                    type: "individual"
+                    name: "John Doe"
+                    taxId: "123.456.789-00"
+                    birthDate: "1990-01-01"
+                    address:
+                      line1: "Rua Voluntários da Pátria, 89"
+                      line2: "Apto 302"
+                      country: "BRA"
+                      state: "SP"
+                      city: "São Paulo"
+                      zipCode: "01234-567"
+                    walletAddress: "0x1234567890123456789012345678901234567890"
+                    blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+                    compliance:
+                      status: "pending"
+                      level: "standard"
+                      transactionLimits:
+                        single: "1000.00"
+                        daily: "10000.00"
+                        monthly: "100000.00"
+                    createdAt: "2021-01-01T00:00:00Z"
+                    updatedAt: "2021-01-01T00:00:00Z"
+                business:
+                  value:
+                    id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                    type: "business"
+                    name: "John Doe"
+                    taxId: "123.456.789-00"
+
   "/customers/{id}":
     get:
       tags:
@@ -487,16 +518,16 @@ components:
               format: uuid
               readOnly: true
         - oneOf:
-          - allOf:
-            - $ref: "#/components/schemas/CustomerIndividual"
-              description: Customer type is individual
-              title: Individual
-            - type: object
-          - allOf:
-            - $ref: "#/components/schemas/CustomerBusiness"
-              description: Customer type is business
-              title: Business
-            - type: object
+            - allOf:
+                - $ref: "#/components/schemas/CustomerIndividual"
+                  description: Customer type is individual
+                  title: Individual
+                - type: object
+            - allOf:
+                - $ref: "#/components/schemas/CustomerBusiness"
+                  description: Customer type is business
+                  title: Business
+                - type: object
         - type: object
           properties:
             walletAddress:
@@ -645,69 +676,70 @@ components:
       allOf:
         - oneOf:
             - allOf:
-              - type: object
-                description: Customer type is individual
-                title: Individual
-                properties:
-                  metadata:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: Document type.
-                        enum: [id_card, passport, driving_license, utility_bill]
-                      country:
-                        type: string
-                        description: Document country.
-                        enum: [BRA]
-                      side:
-                        type: string
-                        description: Document side. Only required for documents with both sides.
-                        nullable: true
-                        enum: [front_side, back_side]
-                  file:
-                    type: string
-                    description: The document file to be uploaded.
-                    format: binary
-              - required:
-                  - metadata
-                  - file
+                - type: object
+                  description: Customer type is individual
+                  title: Individual
+                  properties:
+                    metadata:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Document type.
+                          enum:
+                            [id_card, passport, driving_license, utility_bill]
+                        country:
+                          type: string
+                          description: Document country.
+                          enum: [BRA]
+                        side:
+                          type: string
+                          description: Document side. Only required for documents with both sides.
+                          nullable: true
+                          enum: [front_side, back_side]
+                    file:
+                      type: string
+                      description: The document file to be uploaded.
+                      format: binary
+                - required:
+                    - metadata
+                    - file
             - allOf:
-              - type: object
-                description: Customer type is business
-                title: Business
-                properties:
-                  metadata:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: Document type.
-                        enum: [incorporation_articles, proof_of_address]
-                      country:
-                        type: string
-                        description: Document country code following ISO 3166-1 alpha-2.
-                        enum: [BRA]
-                  file:
-                    type: string
-                    description: The document file to be uploaded.
-                    format: binary
-              - required:
-                  - metadata
-                  - file
+                - type: object
+                  description: Customer type is business
+                  title: Business
+                  properties:
+                    metadata:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Document type.
+                          enum: [incorporation_articles, proof_of_address]
+                        country:
+                          type: string
+                          description: Document country code following ISO 3166-1 alpha-2.
+                          enum: [BRA]
+                    file:
+                      type: string
+                      description: The document file to be uploaded.
+                      format: binary
+                - required:
+                    - metadata
+                    - file
     ExchangeRateRequest:
       allOf:
         - oneOf:
-          - allOf:
-            - type: object
-              description: Exchange rate type is floating
-              title: Floating
-            - $ref: "#/components/schemas/ExchangeRateFloating"
-          - allOf:
-            - type: object
-              description: Exchange rate type is locked
-              title: Locked
-            - $ref: "#/components/schemas/ExchangeRateLocked"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is floating
+                  title: Floating
+                - $ref: "#/components/schemas/ExchangeRateFloating"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is locked
+                  title: Locked
+                - $ref: "#/components/schemas/ExchangeRateLocked"
       required:
         - type
         - sourceCurrency
@@ -717,31 +749,31 @@ components:
     ExchangeRateResponse:
       allOf:
         - oneOf:
-          - allOf:
-            - type: object
-              description: Exchange rate type is floating
-              title: Floating
-              properties:
-                type:
-                  type: string
-                  description: Exchange rate's type.
-                  enum: ["floating"]
-                  example: "floating"
-          - allOf:
-            - type: object
-              description: Exchange rate type is locked
-              title: Locked
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  description: Exchange rate's unique identifier.
-                  example: "123e4567-e89b-12d3-a456-426614174000"
-                type:
-                  type: string
-                  description: Exchange rate's type.
-                  enum: ["locked"]
-                  example: "locked"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is floating
+                  title: Floating
+                  properties:
+                    type:
+                      type: string
+                      description: Exchange rate's type.
+                      enum: ["floating"]
+                      example: "floating"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is locked
+                  title: Locked
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: Exchange rate's unique identifier.
+                      example: "123e4567-e89b-12d3-a456-426614174000"
+                    type:
+                      type: string
+                      description: Exchange rate's type.
+                      enum: ["locked"]
+                      example: "locked"
         - type: object
           properties:
             sourceCurrency:
@@ -807,7 +839,7 @@ components:
         targetAmount:
           type: string
           description: Exchange rate's target amount.
-          example: "59030.00"          
+          example: "59030.00"
     TransactionResponse:
       type: object
       properties:
@@ -830,6 +862,44 @@ components:
           type: object
           description: Transaction's state.
     TransactionOnRampRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: On-ramp using floating exchange rate
+                  title: Floating
+                - $ref: "#/components/schemas/TransactionOnRampFloating"
+            - allOf:
+                - type: object
+                  description: On-ramp using locked exchange rate
+                  title: Locked
+                - $ref: "#/components/schemas/TransactionOnRampLocked"
+    TransactionOnRampLocked:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange rate's id to be used for this transaction.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        payment:
+          type: object
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+      required:
+        - customerId
+        - payment
+        - exchangeRateId
+    TransactionOnRampFloating:
       type: object
       properties:
         customerId:
@@ -859,12 +929,6 @@ components:
               enum: [pix]
               description: Payment rail to be used.
               example: "pix"
-        exchangeRateId:
-          type: string
-          format: uuid
-          description: Exchange rate's id to be used for this transaction. If empty, a floating rate will be used.
-          example: "123e4567-e89b-12d3-a456-426614174000"
-          nullable: true
       required:
         - customerId
         - sourceCurrency
@@ -930,6 +994,54 @@ components:
                   description: Payment's code.
                   example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
     TransactionOffRampRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: Off-ramp using floating exchange rate
+                  title: Floating
+                - $ref: "#/components/schemas/TransactionOffRampFloating"
+            - allOf:
+                - type: object
+                  description: Off-ramp using locked exchange rate
+                  title: Locked
+                - $ref: "#/components/schemas/TransactionOffRampLocked"
+    TransactionOffRampLocked:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange rate's id to be used for this transaction.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        payment:
+          type: object
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+            keyType:
+              type: string
+              description: Payment rail's key type.
+              enum: [email]
+              example: "email"
+            keyValue:
+              type: string
+              description: Payment rail's key value.
+              example: "user@email.com"
+      required:
+        - customerId
+        - payment
+        - exchangeRateId
+    TransactionOffRampFloating:
       type: object
       properties:
         customerId:
@@ -969,11 +1081,6 @@ components:
               type: string
               description: Payment rail's key value.
               example: "user@email.com"
-        exchangeRateId:
-          type: string
-          format: uuid
-          description: Exchange rate's id to be used for this transaction. If empty, a floating rate will be used.
-          example: "123e4567-e89b-12d3-a456-426614174000"
       required:
         - customerId
         - sourceCurrency
