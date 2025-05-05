@@ -139,72 +139,40 @@ paths:
                 $ref: "#/components/schemas/ExchangeRateResponse"
       security:
         - apiKey: []
-  /transactions/on-ramp:
-    post:
+  /transactions:
+    get:
       tags:
         - Transactions
-      summary: On-ramp
-      description: >-
-        Convert from fiat to stablecoin.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OnRampRequest"
+      summary: Read all transactions
+      description: This endpoint reads all of your transactions.
       responses:
-        "201":
-          description: On-ramp operation created successfully.
+        "200":
+          description: The list of transactions was retrieved successfully.
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/OnRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimestamps"
-
-      security:
-        - apiKey: []
-  /transactions/off-ramp:
-    post:
-      tags:
-        - Transactions
-      summary: Off-ramp
-      description: >-
-        Convert from stablecoin to fiat.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OffRampRequest"
-      responses:
-        "201":
-          description: Off-ramp operation created successfully.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/OffRampResponse"
-                  - $ref: "#/components/schemas/TransactionTimestamps"
-  /transactions/transfer:
-    post:
-      tags:
-        - Transactions
-      summary: Transfer
-      description: >-
-        Transfer funds between customers.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TransferRequest"
-      responses:
-        "201":
-          description: Transfer operation created successfully.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/TransferResponse"
-                  - $ref: "#/components/schemas/TransactionTimestamps"
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: An array containing all transactions made by wallets of this project.
+                    items:
+                      oneOf:
+                        - type: object
+                          title: On-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionOnRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Off-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/OffRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Transfers
+                          allOf:
+                            - $ref: "#/components/schemas/TransferResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
   "/transactions/{id}":
     get:
       tags:
@@ -414,42 +382,72 @@ paths:
                     updatedAt: "2024-03-20T15:30:05Z"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
+                  - $ref: "#/components/schemas/TransactionResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
-  /transactions:
-    get:
+  /transactions/on-ramp:
+    post:
       tags:
         - Transactions
-      summary: Read all transactions
-      description: This endpoint reads all of your transactions.
+      summary: On-ramp
+      description: >-
+        Convert from fiat to stablecoin.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionOnRampRequest"
       responses:
-        "200":
-          description: The list of transactions was retrieved successfully.
+        "201":
+          description: On-ramp operation created successfully.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    description: An array containing all transactions made by wallets of this project.
-                    items:
-                      oneOf:
-                        - type: object
-                          title: On-ramps
-                          allOf:
-                            - $ref: "#/components/schemas/OnRampResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
-                        - type: object
-                          title: Off-ramps
-                          allOf:
-                            - $ref: "#/components/schemas/OffRampResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
-                        - type: object
-                          title: Transfers
-                          allOf:
-                            - $ref: "#/components/schemas/TransferResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
+                allOf:
+                  - $ref: "#/components/schemas/TransactionOnRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
+  /transactions/off-ramp:
+    post:
+      tags:
+        - Transactions
+      summary: Off-ramp
+      description: Convert from stablecoin to fiat.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionOffRampRequest"
+      responses:
+        "201":
+          description: Off-ramp operation created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/TransactionOffRampResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
+  /transactions/transfer:
+    post:
+      tags:
+        - Transactions
+      summary: Transfer
+      description: >-
+        Transfer funds between customers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionTransferRequest"
+      responses:
+        "201":
+          description: Transfer operation created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/TransactionTransferResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
 components:
   schemas:
     CustomerRequest:
@@ -477,6 +475,15 @@ components:
             mapping:
               individual: "#/components/schemas/CustomerIndividual"
               business: "#/components/schemas/CustomerBusiness"
+      required:
+        - id
+        - type
+        - name
+        - legalName
+        - taxId
+        - birthdate
+        - incorporationDate
+        - address
     CustomerResponse:
       allOf:
         - type: object
@@ -539,7 +546,7 @@ components:
         taxId:
           type: string
           description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
-          example: "23.456.789/0001-00"
+          example: "42.887.120/0001-00"
         incorporationDate:
           type: string
           description: Customer incorporation date
@@ -549,7 +556,6 @@ components:
           $ref: "#/components/schemas/CustomerAddress"
     CustomerBase:
       type: object
-      additionalProperties: false
       properties:
         walletAddress:
           type: string
@@ -722,7 +728,7 @@ components:
           nullable: true
         type:
           type: string
-          description: The type of this exchange rate.
+          description: Exchange rate's type.
           enum: ["floating", "locked"]
           default: "floating"
         sourceCurrency:
@@ -748,7 +754,28 @@ components:
           type: string
           example: "5.9030"
           description: Exchange rate's rate.
-    OnRampRequest:
+    TransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transaction's unique identifier.
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+        type:
+          type: string
+          description: Transaction's type.
+          enum: ["on_ramp", "off_ramp", "transfer"]
+        request:
+          type: object
+          description: Transaction's request.
+        state:
+          type: object
+          description: Transaction's state.
+    TransactionOnRampRequest:
       type: object
       properties:
         customerId:
@@ -790,7 +817,7 @@ components:
         - targetCurrency
         - amount
         - payment
-    OnRampResponse:
+    TransactionOnRampResponse:
       type: object
       properties:
         id:
@@ -848,7 +875,7 @@ components:
                   type: string
                   description: Payment's code.
                   example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-    OffRampRequest:
+    TransactionOffRampRequest:
       type: object
       properties:
         customerId:
@@ -888,7 +915,6 @@ components:
               type: string
               description: Payment rail's key value.
               example: "user@email.com"
-
         exchangeRateId:
           type: string
           format: uuid
@@ -900,7 +926,7 @@ components:
         - targetCurrency
         - amount
         - payment
-    OffRampResponse:
+    TransactionOffRampResponse:
       type: object
       properties:
         id:
@@ -963,7 +989,7 @@ components:
                   type: string
                   description: Payment rail to be used.
                   example: "pix"
-    TransferRequest:
+    TransactionTransferRequest:
       type: object
       properties:
         currency:
@@ -990,7 +1016,7 @@ components:
         - amount
         - from
         - to
-    TransferResponse:
+    TransactionTransferResponse:
       type: object
       properties:
         id:
@@ -1018,32 +1044,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp from when the transaction was submitted.
+          description: Creation date and time.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp from when the transaction was last updated.
-    BaseTransactionResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Transaction's unique identifier.
-        customerId:
-          type: string
-          format: uuid
-          description: Customer's unique identifier.
-        type:
-          type: string
-          description: Transaction's type.
-          enum: ["on_ramp", "off_ramp", "transfer"]
-        request:
-          type: object
-          description: Transaction's request.
-        state:
-          type: object
-          description: Transaction's state.
+          description: Last update date and time.
   securitySchemes:
     apiKey:
       type: http
