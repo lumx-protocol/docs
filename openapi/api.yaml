@@ -18,6 +18,15 @@ paths:
           description: Resources successfully retrieved.
           content:
             application/json:
+              examples:
+                Individual:
+                  value:
+                    data:
+                      - $ref: "#/components/examples/CustomerIndividualExample"
+                Business:
+                  value:
+                    data:
+                      - $ref: "#/components/examples/CustomerBusinessExample"
               schema:
                 type: object
                 properties:
@@ -44,38 +53,12 @@ paths:
           content:
             application/json:
               examples:
-                individual:
-                  value:
-                    id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
-                    type: "individual"
-                    name: "John Doe"
-                    taxId: "123.456.789-00"
-                    birthDate: "1990-01-01"
-                    address:
-                      line1: "Rua Voluntários da Pátria, 89"
-                      line2: "Apto 302"
-                      country: "BRA"
-                      state: "SP"
-                      city: "São Paulo"
-                      zipCode: "01234-567"
-                    walletAddress: "0x1234567890123456789012345678901234567890"
-                    blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
-                    compliance:
-                      status: "pending"
-                      level: "standard"
-                      transactionLimits:
-                        single: "1000.00"
-                        daily: "10000.00"
-                        monthly: "100000.00"
-                    createdAt: "2021-01-01T00:00:00Z"
-                    updatedAt: "2021-01-01T00:00:00Z"
-                business:
-                  value:
-                    id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
-                    type: "business"
-                    name: "John Doe"
-                    taxId: "123.456.789-00"
-
+                Individual:
+                  $ref: "#/components/examples/CustomerIndividualExample"
+                Business:
+                  $ref: "#/components/examples/CustomerBusinessExample"
+              schema:
+                $ref: "#/components/schemas/CustomerResponse"
   "/customers/{id}":
     get:
       tags:
@@ -101,6 +84,11 @@ paths:
           description: Resource successfully retrieved.
           content:
             application/json:
+              examples:
+                Individual:
+                  $ref: "#/components/examples/CustomerIndividualExample"
+                Business:
+                  $ref: "#/components/examples/CustomerBusinessExample"
               schema:
                 $ref: "#/components/schemas/CustomerResponse"
         "404":
@@ -166,6 +154,24 @@ paths:
           description: Resource successfully retrieved.
           content:
             application/json:
+              examples:
+                Floating:
+                  value:
+                    type: "floating"
+                    sourceCurrency: "USDC"
+                    sourceAmount: "1000.00000"
+                    targetCurrency: "BRL"
+                    targetAmount: "5925.55"
+                    rate: "5.9255"
+                Locked:
+                  value:
+                    type: "locked"
+                    id: "123e4567-e89b-12d3-a456-426614174001"
+                    sourceCurrency: "USDC"
+                    sourceAmount: "1012.572778"
+                    targetCurrency: "BRL"
+                    targetAmount: "6000"
+                    rate: "5.9255"
               schema:
                 $ref: "#/components/schemas/ExchangeRateResponse"
       security:
@@ -223,7 +229,7 @@ paths:
           content:
             application/json:
               examples:
-                "type: on_ramp, state.status: awaiting_funds":
+                "On-ramp with awaiting funds status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174000"
@@ -241,7 +247,7 @@ paths:
                         brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: on_ramp, state.status: processing":
+                "On-ramp with processing status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -259,7 +265,7 @@ paths:
                         brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: on_ramp, state.status: success":
+                "On-ramp with success status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -294,7 +300,7 @@ paths:
                         blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: on_ramp, state.status: failed":
+                "On-ramp with failed status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -315,7 +321,7 @@ paths:
                         message: "The payment was rejected due to insufficient funds"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: off_ramp, state.status: awaiting_funds":
+                "Off-ramp with awaiting funds status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -334,7 +340,7 @@ paths:
                         rail: "pix"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: off_ramp, state.status: processing":
+                "Off-ramp with processing status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -353,7 +359,7 @@ paths:
                         rail: "pix"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: off_ramp, state.status: success":
+                "Off-ramp with success status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -389,7 +395,7 @@ paths:
                         blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "type: off_ramp, state.status: failed":
+                "Off-ramp with failed status":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -403,7 +409,7 @@ paths:
                         keyType: "email"
                         keyValue: "user@email.com"
                     state:
-                      status: "processing"
+                      status: "failed"
                       payment:
                         rail: "pix"
                       error:
@@ -478,6 +484,72 @@ paths:
                   - $ref: "#/components/schemas/TransactionTransferResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
 components:
+  examples:
+    CustomerIndividualExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "individual"
+        name: "William Default"
+        taxId: "123.456.789-00"
+        birthDate: "1990-01-01"
+        email: "william.default@example.com"
+        address:
+          line1: "Rua Voluntários da Pátria, 89"
+          line2: "Apto 302"
+          country: "BRA"
+          state: "SP"
+          city: "São Paulo"
+          zipCode: "01234-567"
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
+          - currency: "USDC"
+            amount: "10000.00"
+        compliance:
+          status: "pending"
+          level: "standard"
+          transactionLimits:
+            single: "1000.00"
+            daily: "10000.00"
+            monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerBusinessExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "business"
+        legalName: "Lumx S.A"
+        taxId: "42.887.120/0001-00"
+        incorporationDate: "2020-01-01"
+        beneficiaries:
+          - type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            email: "william.default@example.com"
+            address: "Rua Voluntários da Pátria, 89"
+            sharePercentage: 20
+        address:
+          line1: "Rua Voluntários da Pátria, 89"
+          line2: "Apto 302"
+          country: "BRA"
+          state: "SP"
+          city: "São Paulo"
+          zipCode: "01234-567"
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
+          - currency: "USDC"
+            amount: "10000.00"
+        compliance:
+          status: "pending"
+          level: "standard"
+          transactionLimits:
+            single: "1000.00"
+            daily: "10000.00"
+            monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"   
   schemas:
     CustomerRequest:
       allOf:
@@ -506,7 +578,9 @@ components:
         - legalName
         - taxId
         - birthDate
+        - email
         - incorporationDate
+        - beneficiaries
         - address
     CustomerResponse:
       allOf:
@@ -565,7 +639,7 @@ components:
         name:
           type: string
           description: Customer full name
-          example: "John Doe"
+          example: "William Default"
         taxId:
           type: string
           description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
@@ -575,6 +649,10 @@ components:
           description: Customer birth date
           format: date
           example: "1990-01-01"
+        email:
+          type: string
+          description: Customer email
+          example: "william.default@example.com"
         address:
           $ref: "#/components/schemas/CustomerAddress"
     CustomerBusiness:
@@ -597,6 +675,37 @@ components:
           description: Customer incorporation date
           format: date
           example: "2020-01-01"
+        beneficiaries:
+            type: array
+            description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+            items: 
+              type: object 
+              allOf:
+                - $ref: "#/components/schemas/CustomerIndividual"
+                - type: object
+                  properties:
+                    type:
+                      description: Beneficiary's type.
+                    name:
+                      description: Beneficiary's name.
+                    taxId:
+                      description: Beneficiary's tax ID.
+                    birthDate:
+                      description: Beneficiary's birth date.
+                    address:
+                      description: Address where the beneficiary is located.
+                    sharePercentage:
+                      type: number
+                      description: The share percentage of the beneficiary.
+                      example: 20
+                - required:
+                    - type
+                    - name
+                    - taxId
+                    - birthDate
+                    - email
+                    - address
+                    - sharePercentage
         address:
           $ref: "#/components/schemas/CustomerAddress"
     CustomerAddress:
@@ -806,7 +915,7 @@ components:
           example: "floating"
         sourceCurrency:
           type: string
-          enum: [BRL]
+          enum: [BRL, USDC, USDT]
           description: Exchange rate's source currency.
           example: "BRL"
         sourceAmount:
@@ -815,7 +924,7 @@ components:
           example: "10000.00"
         targetCurrency:
           type: string
-          enum: [USDC, USDT]
+          enum: [BRL, USDC, USDT]
           description: Exchange rate's target currency.
           example: "USDC"
     ExchangeRateLocked:
@@ -828,12 +937,12 @@ components:
           example: "locked"
         sourceCurrency:
           type: string
-          enum: [BRL]
+          enum: [BRL, USDC, USDT]
           description: Exchange rate's source currency.
           example: "BRL"
         targetCurrency:
           type: string
-          enum: [USDC, USDT]
+          enum: [BRL, USDC, USDT]
           description: Exchange rate's target currency.
           example: "USDC"
         targetAmount:
