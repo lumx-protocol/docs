@@ -47,7 +47,7 @@
       },
       {
         "tab": "API Reference",
-        "openapi": "/openapi/api2.yaml"
+        "openapi": "/openapi/api.yaml"
       }
     ],
     "global": {
@@ -56,11 +56,6 @@
           "anchor": "Dashboard",
           "href": "https://dashboard.lumx.io",
           "icon": "rocket"
-        },
-        {
-          "anchor": "System Status",
-          "href": "https://status.lumx.io",
-          "icon": "signal"
         },
         {
           "anchor": "Community",

@@ -15,7 +15,7 @@ paths:
       description: This endpoint reads all customers.
       responses:
         "200":
-          description: The list of customers was retrieved successfully.
+          description: Resources successfully retrieved.
           content:
             application/json:
               schema:
@@ -132,7 +132,7 @@ paths:
               $ref: "#/components/schemas/ExchangeRateRequest"
       responses:
         "200":
-          description: Exchange rate quote returned successfully.
+          description: Resource successfully retrieved.
           content:
             application/json:
               schema:
@@ -147,7 +147,7 @@ paths:
       description: This endpoint reads all of your transactions.
       responses:
         "200":
-          description: The list of transactions was retrieved successfully.
+          description: Resources successfully retrieved.
           content:
             application/json:
               schema:
@@ -155,7 +155,7 @@ paths:
                 properties:
                   data:
                     type: array
-                    description: An array containing all transactions made by wallets of this project.
+                    description: An array containing all transactions.
                     items:
                       oneOf:
                         - type: object
@@ -166,12 +166,12 @@ paths:
                         - type: object
                           title: Off-ramps
                           allOf:
-                            - $ref: "#/components/schemas/OffRampResponse"
+                            - $ref: "#/components/schemas/TransactionOffRampResponse"
                             - $ref: "#/components/schemas/TransactionTimestamps"
                         - type: object
                           title: Transfers
                           allOf:
-                            - $ref: "#/components/schemas/TransferResponse"
+                            - $ref: "#/components/schemas/TransactionTransferResponse"
                             - $ref: "#/components/schemas/TransactionTimestamps"
   "/transactions/{id}":
     get:
@@ -188,11 +188,11 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Transaction retrieved successfully.
+          description: Resource successfully retrieved.
           content:
             application/json:
               examples:
-                "on_ramp: awaiting_funds":
+                "type: on_ramp, state.status: awaiting_funds":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174000"
                     customerId: "123e4567-e89b-12d3-a456-426614174000"
@@ -210,7 +210,7 @@ paths:
                         brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "on_ramp: processing":
+                "type: on_ramp, state.status: processing":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -228,7 +228,7 @@ paths:
                         brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "on_ramp: success":
+                "type: on_ramp, state.status: success":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -263,7 +263,7 @@ paths:
                         blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "on_ramp: failed":
+                "type: on_ramp, state.status: failed":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174002"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -284,7 +284,7 @@ paths:
                         message: "The payment was rejected due to insufficient funds"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "off_ramp: awaiting_funds":
+                "type: off_ramp, state.status: awaiting_funds":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -303,7 +303,7 @@ paths:
                         rail: "pix"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "off_ramp: processing":
+                "type: off_ramp, state.status: processing":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -322,7 +322,7 @@ paths:
                         rail: "pix"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "off_ramp: success":
+                "type: off_ramp, state.status: success":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -358,7 +358,7 @@ paths:
                         blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
                     createdAt: "2024-03-20T15:30:00Z"
                     updatedAt: "2024-03-20T15:30:05Z"
-                "off_ramp: failed":
+                "type: off_ramp, state.status: failed":
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174003"
                     customerId: "123e4567-e89b-12d3-a456-426614174001"
@@ -389,8 +389,7 @@ paths:
       tags:
         - Transactions
       summary: On-ramp
-      description: >-
-        Convert from fiat to stablecoin.
+      description: This endpoint converts fiat to stablecoin.
       requestBody:
         content:
           application/json:
@@ -398,7 +397,7 @@ paths:
               $ref: "#/components/schemas/TransactionOnRampRequest"
       responses:
         "201":
-          description: On-ramp operation created successfully.
+          description: Resource successfully created.
           content:
             application/json:
               schema:
@@ -412,7 +411,7 @@ paths:
       tags:
         - Transactions
       summary: Off-ramp
-      description: Convert from stablecoin to fiat.
+      description: This endpoint converts stablecoin to fiat.
       requestBody:
         content:
           application/json:
@@ -420,7 +419,7 @@ paths:
               $ref: "#/components/schemas/TransactionOffRampRequest"
       responses:
         "201":
-          description: Off-ramp operation created successfully.
+          description: Resource successfully created.
           content:
             application/json:
               schema:
@@ -432,8 +431,7 @@ paths:
       tags:
         - Transactions
       summary: Transfer
-      description: >-
-        Transfer funds between customers.
+      description: This endpoint transfers funds between customers.
       requestBody:
         content:
           application/json:
@@ -441,7 +439,7 @@ paths:
               $ref: "#/components/schemas/TransactionTransferRequest"
       responses:
         "201":
-          description: Transfer operation created successfully.
+          description: Resource successfully created.
           content:
             application/json:
               schema:
@@ -461,27 +459,22 @@ components:
               readOnly: true
         - oneOf:
             - allOf:
-                - $ref: "#/components/schemas/CustomerIndividual"
+                - type: object
                   description: Customer type is individual
                   title: Individual
-                - type: object
+                - $ref: "#/components/schemas/CustomerIndividual"
             - allOf:
-                - $ref: "#/components/schemas/CustomerBusiness"
+                - type: object
                   description: Customer type is business
                   title: Business
-                - type: object
-          discriminator:
-            propertyName: type
-            mapping:
-              individual: "#/components/schemas/CustomerIndividual"
-              business: "#/components/schemas/CustomerBusiness"
+                - $ref: "#/components/schemas/CustomerBusiness"
       required:
         - id
         - type
         - name
         - legalName
         - taxId
-        - birthdate
+        - birthDate
         - incorporationDate
         - address
     CustomerResponse:
@@ -494,22 +487,42 @@ components:
               format: uuid
               readOnly: true
         - oneOf:
-            - allOf:
-                - $ref: "#/components/schemas/CustomerIndividual"
-                  description: Customer type is individual
-                  title: Individual
-                - type: object
-            - allOf:
-                - $ref: "#/components/schemas/CustomerBusiness"
-                  description: Customer type is business
-                  title: Business
-                - type: object
-          discriminator:
-            propertyName: type
-            mapping:
-              individual: "#/components/schemas/CustomerIndividual"
-              business: "#/components/schemas/CustomerBusiness"
-        - $ref: "#/components/schemas/CustomerBase"
+          - allOf:
+            - $ref: "#/components/schemas/CustomerIndividual"
+              description: Customer type is individual
+              title: Individual
+            - type: object
+          - allOf:
+            - $ref: "#/components/schemas/CustomerBusiness"
+              description: Customer type is business
+              title: Business
+            - type: object
+        - type: object
+          properties:
+            walletAddress:
+              type: string
+              description: Customer's wallet address.
+              example: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl:
+              type: string
+              description: Customer's block explorer URL.
+              example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            balances:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomerBalance"
+            compliance:
+              $ref: "#/components/schemas/CustomerCompliance"
+            createdAt:
+              type: string
+              description: Creation date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
+            updatedAt:
+              type: string
+              description: Last update date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
     CustomerIndividual:
       type: object
       properties:
@@ -517,6 +530,7 @@ components:
           type: string
           description: Customer's type.
           enum: ["individual"]
+          example: "individual"
         name:
           type: string
           description: Customer full name
@@ -525,7 +539,7 @@ components:
           type: string
           description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
           example: "123.456.789-00"
-        birthdate:
+        birthDate:
           type: string
           description: Customer birth date
           format: date
@@ -554,33 +568,6 @@ components:
           example: "2020-01-01"
         address:
           $ref: "#/components/schemas/CustomerAddress"
-    CustomerBase:
-      type: object
-      properties:
-        walletAddress:
-          type: string
-          description: Customer's wallet address.
-          example: "0x1234567890123456789012345678901234567890"
-        blockExplorerUrl:
-          type: string
-          description: Customer's block explorer URL.
-          example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
-        balances:
-          type: array
-          items:
-            $ref: "#/components/schemas/CustomerBalance"
-        compliance:
-          $ref: "#/components/schemas/CustomerCompliance"
-        createdAt:
-          type: string
-          description: Creation date and time.
-          format: date-time
-          example: "2021-01-01T00:00:00Z"
-        updatedAt:
-          type: string
-          description: Last update date and time.
-          format: date-time
-          example: "2021-01-01T00:00:00Z"
     CustomerAddress:
       type: object
       description: Address where the customer is located.
@@ -588,11 +575,11 @@ components:
         line1:
           type: string
           description: Address's first line.
-          example: "Rua dos Bobos, 0"
+          example: "Rua Voluntários da Pátria, 89"
         line2:
           type: string
           description: Address's second line.
-          example: "Apto 101"
+          example: "Apto 302"
         country:
           type: string
           description: Address's country code following ISO 3166-1 alpha-2.
@@ -655,62 +642,72 @@ components:
           description: Last update date and time.
           example: "2021-01-01T00:00:00Z"
     CustomerDocumentRequest:
-      type: object
-      properties:
-        metadata:
-          type: object
-          properties:
-            country:
-              type: string
-              description: Document's country code following ISO 3166-1 alpha-2
-              enum: [BRA]
-              example: "BRA"
-            type:
-              type: string
-              description: Document's type
-              enum: [id_card, passport, driving_license, utility_bill]
-              example: "id_card"
-            side:
-              type: string
-              description: Document's side
-              enum: [front_side, back_side]
-              example: "front_side"
-              default: "front_side"
-        file:
-          type: string
-          description: The document file to be uploaded.
-          format: binary
-      required:
-        - metadata
-        - file
+      allOf:
+        - oneOf:
+            - allOf:
+              - type: object
+                description: Customer type is individual
+                title: Individual
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Document type.
+                        enum: [id_card, passport, driving_license, utility_bill]
+                      country:
+                        type: string
+                        description: Document country.
+                        enum: [BRA]
+                      side:
+                        type: string
+                        description: Document side. Only required for documents with both sides.
+                        nullable: true
+                        enum: [front_side, back_side]
+                  file:
+                    type: string
+                    description: The document file to be uploaded.
+                    format: binary
+              - required:
+                  - metadata
+                  - file
+            - allOf:
+              - type: object
+                description: Customer type is business
+                title: Business
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Document type.
+                        enum: [incorporation_articles, proof_of_address]
+                      country:
+                        type: string
+                        description: Document country code following ISO 3166-1 alpha-2.
+                        enum: [BRA]
+                  file:
+                    type: string
+                    description: The document file to be uploaded.
+                    format: binary
+              - required:
+                  - metadata
+                  - file
     ExchangeRateRequest:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Exchange rate's type.
-          enum: ["floating", "locked"]
-          default: "floating"
-          example: "floating"
-        sourceCurrency:
-          type: string
-          enum: [USDC, USDT, BRL]
-          description: Exchange rate's source currency.
-          example: "BRL"
-        sourceAmount:
-          type: string
-          description: Exchange rate's source amount.
-          example: "10000.00"
-        targetCurrency:
-          type: string
-          enum: [BRL, USDC, USDT]
-          description: Exchange rate's target currency.
-          example: "USDC"
-        targetAmount:
-          type: string
-          description: Exchange rate's target amount.
-          example: null
-          nullable: true
+      allOf:
+        - oneOf:
+          - allOf:
+            - type: object
+              description: Exchange rate type is floating
+              title: Floating
+            - $ref: "#/components/schemas/ExchangeRateFloating"
+          - allOf:
+            - type: object
+              description: Exchange rate type is locked
+              title: Locked
+            - $ref: "#/components/schemas/ExchangeRateLocked"
       required:
         - type
         - sourceCurrency
@@ -718,22 +715,66 @@ components:
         - sourceAmount
         - targetAmount
     ExchangeRateResponse:
+      allOf:
+        - oneOf:
+          - allOf:
+            - type: object
+              description: Exchange rate type is floating
+              title: Floating
+              properties:
+                type:
+                  type: string
+                  description: Exchange rate's type.
+                  enum: ["floating"]
+                  example: "floating"
+          - allOf:
+            - type: object
+              description: Exchange rate type is locked
+              title: Locked
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: Exchange rate's unique identifier.
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                type:
+                  type: string
+                  description: Exchange rate's type.
+                  enum: ["locked"]
+                  example: "locked"
+        - type: object
+          properties:
+            sourceCurrency:
+              type: string
+              description: Exchange rate's source currency.
+              example: "USDC"
+            sourceAmount:
+              type: string
+              description: Exchange rate's source amount.
+              example: "10000.00"
+            targetCurrency:
+              type: string
+              description: Exchange rate's target currency.
+              example: "BRL"
+            targetAmount:
+              type: string
+              description: Exchange rate's target amount.
+              example: "59030.00"
+            rate:
+              type: string
+              description: Exchange rate's rate.
+              example: "5.9030"
+    ExchangeRateFloating:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: Exchange rate's unique identifier.
-          example: null
-          nullable: true
         type:
           type: string
           description: Exchange rate's type.
-          enum: ["floating", "locked"]
-          default: "floating"
+          enum: ["floating"]
+          example: "floating"
         sourceCurrency:
           type: string
-          enum: [USDC, USDT, BRL]
+          enum: [BRL]
           description: Exchange rate's source currency.
           example: "BRL"
         sourceAmount:
@@ -742,18 +783,31 @@ components:
           example: "10000.00"
         targetCurrency:
           type: string
-          enum: [BRL, USDC, USDT]
+          enum: [USDC, USDT]
+          description: Exchange rate's target currency.
+          example: "USDC"
+    ExchangeRateLocked:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Exchange rate's type.
+          enum: ["locked"]
+          example: "locked"
+        sourceCurrency:
+          type: string
+          enum: [BRL]
+          description: Exchange rate's source currency.
+          example: "BRL"
+        targetCurrency:
+          type: string
+          enum: [USDC, USDT]
           description: Exchange rate's target currency.
           example: "USDC"
         targetAmount:
           type: string
           description: Exchange rate's target amount.
-          nullable: true
-          example: "59030.00"
-        rate:
-          type: string
-          example: "5.9030"
-          description: Exchange rate's rate.
+          example: "59030.00"          
     TransactionResponse:
       type: object
       properties:
