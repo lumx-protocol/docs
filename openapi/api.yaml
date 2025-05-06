@@ -966,8 +966,13 @@ components:
     CustomerDocumentRequest:
       type: object
       properties:
+        file:
+          type: string
+          description: Document's file to be uploaded.
+          format: binary
         metadata:
           type: object
+          description: Document's metadata of the file.
           properties:
             type:
               type: string
@@ -993,13 +998,9 @@ components:
           required:
             - type
             - country
-        file:
-          type: string
-          description: The document file to be uploaded.
-          format: binary
       required:
-        - metadata
         - file
+        - metadata
     ExchangeRateRequest:
       allOf:
         - oneOf:
@@ -1494,7 +1495,7 @@ components:
             to:
               type: string
               description: Customer's id that will receive the tokens. Can also be any valid blockchain address.
-              examples:
+              example:
                 - "123e4567-e89b-12d3-a456-426614174000"
                 - "0x1234567890123456789012345678901234567890"
             amount:
