@@ -130,8 +130,8 @@ paths:
             format: uuid
           description: Customer's unique identifier.
       responses:
-        "200":
-          description: Resource successfully started verification process.
+        "202":
+          description: Customer verification successfully started.
       security:
         - apiKey: []
   /exchange-rates:
@@ -213,6 +213,18 @@ paths:
                   value:
                     data:
                       - $ref: "#/components/examples/TransactionOfframpSuccessExample/value"
+                "Transfer - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferProcessingExample/value"
+                "Transfer - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferSuccessExample/value"
+                "Transfer - Failed":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferFailedExample/value"
               schema:
                 type: object
                 properties:
@@ -254,7 +266,7 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Resource successfully retrieved.
+          description: Transaction successfully retrieved.
           content:
             application/json:
               examples:
@@ -274,6 +286,12 @@ paths:
                   $ref: "#/components/examples/TransactionOfframpSuccessExample"
                 "Off-ramp - Failed":
                   $ref: "#/components/examples/TransactionOfframpFailedExample"
+                "Transfer - Processing":
+                  $ref: "#/components/examples/TransactionTransferProcessingExample"
+                "Transfer - Success":
+                  $ref: "#/components/examples/TransactionTransferSuccessExample"
+                "Transfer - Failed":
+                  $ref: "#/components/examples/TransactionTransferFailedExample"
               schema:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
@@ -292,8 +310,8 @@ paths:
             schema:
               $ref: "#/components/schemas/TransactionOnRampRequest"
       responses:
-        "201":
-          description: Resource successfully created.
+        "202":
+          description: On-ramp transaction started successfully.
           content:
             application/json:
               schema:
@@ -307,15 +325,15 @@ paths:
       tags:
         - Transactions
       summary: Off-ramp
-      description: This endpoint converts stablecoin to fiat.
+      description: This endpoint converts stablecoins to fiat.
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/TransactionOffRampRequest"
       responses:
-        "201":
-          description: Resource successfully created.
+        "202":
+          description: Off-ramp transaction started successfully.
           content:
             application/json:
               schema:
@@ -327,15 +345,15 @@ paths:
       tags:
         - Transactions
       summary: Transfer
-      description: This endpoint transfers funds between customers.
+      description: This endpoint starts a transfer of funds between customers.
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/TransactionTransferRequest"
       responses:
-        "201":
-          description: Resource successfully created.
+        "202":
+          description: Transfer transaction started successfully.
           content:
             application/json:
               schema:
@@ -626,6 +644,46 @@ components:
             message: "The provided PIX key is invalid or not found."
         createdAt: "2024-03-20T15:30:00Z"
         updatedAt: "2024-03-20T15:30:05Z"
+    TransactionTransferProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000" 
+        state:
+          status: "processing"
+    TransactionTransferSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000" 
+        state:
+          status: "success"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+    TransactionTransferFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000"
+        state:
+          status: "failed"
+          error: {}
   schemas:
     CustomerRequest:
       allOf:
@@ -700,11 +758,9 @@ components:
               format: uuid
               readOnly: true
         - oneOf:
-            - allOf:
-                - type: object
-                - $ref: "#/components/schemas/CustomerIndividual"
-                  description: Customer type is individual.
-                  title: Individual
+            - $ref: "#/components/schemas/CustomerIndividual"
+              description: Customer type is individual.
+              title: Individual
             - allOf:
                 - type: object
                   description: Customer type is business.
@@ -714,7 +770,7 @@ components:
                   properties:
                     beneficiaries:
                       type: array
-                      description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+                      description: List of beneficiaries associated with this business.
                       items: 
                         type: object 
                         allOf:
@@ -1019,7 +1075,7 @@ components:
               example: "59030.00"
             rate:
               type: string
-              description: Exchange rate's rate.
+              description: The exchange rate between the currencies.
               example: "5.9030"
     ExchangeRateFloating:
       type: object
@@ -1082,10 +1138,10 @@ components:
           enum: ["on_ramp", "off_ramp", "transfer"]
         request:
           type: object
-          description: Transaction's request.
+          description: Transaction's request. See examples for more details.
         state:
           type: object
-          description: Transaction's state.
+          description: Transaction's current state. See examples for more details.
     TransactionOnRampRequest:
       allOf:
         - oneOf:
@@ -1389,10 +1445,17 @@ components:
           description: Customer's id that will send the tokens.
           example: "123e4567-e89b-12d3-a456-426614174000"
         to:
-          type: string
-          format: uuid
-          description: Customer's id that will receive the tokens.
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          oneOf:
+            - type: string
+              format: uuid
+              title: customer
+              description: Customer's id that will receive the tokens.
+              example: "123e4567-e89b-12d3-a456-426614174000"
+            - type: string
+              format: eth-address
+              title: address
+              description: Blockchain address that will receive the tokens.
+              example: "0x1234567890123456789012345678901234567890"
         amount:
           type: string
           description: Amount to be transferred.
@@ -1422,8 +1485,29 @@ components:
           example: "transfer"
         request:
           type: object
+          properties:
+            currency:
+              type: string
+              description: Stablecoin to be transferred.
+              example: "USDC"
+            from:
+              type: string
+              format: uuid
+              description: Customer's id that will send the tokens.
+              example: "123e4567-e89b-12d3-a456-426614174000"
+            to:
+              type: string
+              description: Customer's id that will receive the tokens. Can also be any valid blockchain address.
+              examples:
+                - "123e4567-e89b-12d3-a456-426614174000"
+                - "0x1234567890123456789012345678901234567890"
+            amount:
+              type: string
+              description: Amount to be transferred.
+              example: "10000.000000"
         state:
           type: object
+          description: Status of the transfer operation. See examples for more details.
     TransactionTimestamps:
       type: object
       properties:
