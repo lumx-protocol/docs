@@ -366,7 +366,7 @@ components:
             legalName: "Lumx S.A"
             taxId: "42.887.120/0001-00"
             incorporationDate: "2020-01-01"
-            country: "BR"
+            country: "BRA"
             walletAddress: "0x1234567890123456789012345678901234567890"
             blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
             compliance:
@@ -407,7 +407,7 @@ components:
         legalName: "Lumx S.A"
         taxId: "42.887.120/0001-00"
         incorporationDate: "2020-01-01"
-        country: "BR"
+        country: "BRA"
         beneficiaries:
           - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
             type: "individual"
@@ -650,10 +650,6 @@ components:
                         - $ref: "#/components/schemas/CustomerIndividual"
                         - type: object
                           properties:
-                            id:
-                              type: string
-                              description: Beneficiary's unique identifier.
-                              format: uuid
                             type:
                               description: Beneficiary's type.
                             name:
@@ -669,7 +665,6 @@ components:
                               description: The share percentage of the beneficiary.
                               example: 20
                         - required:
-                            - id
                             - type
                             - name
                             - taxId
@@ -722,6 +717,7 @@ components:
                                 type: string
                                 description: Beneficiary's unique identifier.
                                 format: uuid
+                                example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
                               type:
                                 description: Beneficiary's type.
                               name:
@@ -738,6 +734,8 @@ components:
                                 example: 20
         - type: object
           properties:
+            taxId:
+              description: Customer's tax ID.
             walletAddress:
               type: string
               description: Customer's wallet address.
@@ -783,6 +781,8 @@ components:
             - $ref: "#/components/schemas/CustomerBusiness"
         - type: object
           properties:
+            taxId:
+              description: Customer's tax ID.
             walletAddress:
               type: string
               description: Customer's wallet address.
