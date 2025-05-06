@@ -543,9 +543,7 @@ components:
           payment:
             rail: "pix"
             brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-          error:
-            code: "INSUFFICIENT_FUNDS"
-            message: "The payment was rejected due to insufficient funds."
+          error: {}
         createdAt: "2024-03-20T15:30:00Z"
         updatedAt: "2024-03-20T15:30:05Z"
     TransactionOfframpAwaitingFundsExample:
@@ -639,9 +637,7 @@ components:
           status: "failed"
           payment:
             rail: "pix"
-          error:
-            code: "invalid_pix_key"
-            message: "The provided PIX key is invalid or not found."
+          error: {}
         createdAt: "2024-03-20T15:30:00Z"
         updatedAt: "2024-03-20T15:30:05Z"
     TransactionTransferProcessingExample:
