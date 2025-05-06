@@ -55,6 +55,8 @@ paths:
                   $ref: "#/components/examples/CustomerBusinessExample"
               schema:
                 $ref: "#/components/schemas/CustomerResponse"
+      security:
+        - apiKey: []
   "/customers/{id}":
     get:
       tags:
@@ -129,7 +131,7 @@ paths:
           description: Customer's unique identifier.
       responses:
         "200":
-          description: Resource successfully verified.
+          description: Resource successfully started verification process.
       security:
         - apiKey: []
   /exchange-rates:
@@ -234,6 +236,8 @@ paths:
                           allOf:
                             - $ref: "#/components/schemas/TransactionTransferResponse"
                             - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
   "/transactions/{id}":
     get:
       tags:
@@ -274,6 +278,8 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
   /transactions/on-ramp:
     post:
       tags:
@@ -367,6 +373,7 @@ components:
             taxId: "42.887.120/0001-00"
             incorporationDate: "2020-01-01"
             country: "BRA"
+            email: "hello@lumx.io"
             walletAddress: "0x1234567890123456789012345678901234567890"
             blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
             compliance:
@@ -408,6 +415,7 @@ components:
         taxId: "42.887.120/0001-00"
         incorporationDate: "2020-01-01"
         country: "BRA"
+        email: "hello@lumx.io"
         beneficiaries:
           - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
             type: "individual"
@@ -852,6 +860,10 @@ components:
           type: string
           description: Customer's country using ISO 3166-1 alpha-3 code.
           example: "BRA"
+        email:
+          type: string
+          description: Customer's email.
+          example: "hello@lumx.io"
     CustomerCompliance:
       type: object
       description: Customer's compliance KYC/KYB.
