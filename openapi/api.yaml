@@ -20,13 +20,9 @@ paths:
             application/json:
               examples:
                 Individual:
-                  value:
-                    data:
-                      - $ref: "#/components/examples/CustomerIndividualExample"
+                  $ref: "#/components/examples/CustomerIndividualArrayExample"
                 Business:
-                  value:
-                    data:
-                      - $ref: "#/components/examples/CustomerBusinessExample"
+                  $ref: "#/components/examples/CustomerBusinessArrayExample"
               schema:
                 type: object
                 properties:
@@ -34,7 +30,7 @@ paths:
                     description: An array containing all customers.
                     type: array
                     items:
-                      $ref: "#/components/schemas/CustomerResponse"
+                      $ref: "#/components/schemas/CustomerArrayResponse"
       security:
         - apiKey: []
     post:
@@ -91,8 +87,6 @@ paths:
                   $ref: "#/components/examples/CustomerBusinessExample"
               schema:
                 $ref: "#/components/schemas/CustomerResponse"
-        "404":
-          description: Resource not found.
       security:
         - apiKey: []
   "/customers/{id}/documents":
@@ -100,7 +94,7 @@ paths:
       tags:
         - Customers
       summary: Upload a document
-      description: This endpoint uploads a document of a customer.
+      description: This endpoint uploads a document necessary to verify a customer.
       parameters:
         - name: id
           in: path
@@ -143,7 +137,7 @@ paths:
       tags:
         - Exchange Rates
       summary: Get an exchange rate
-      description: This endpoint returns an exchange rate quote currencies.
+      description: This endpoint returns an exchange rate quote between two currencies.
       requestBody:
         content:
           application/json:
@@ -165,8 +159,9 @@ paths:
                     rate: "5.9255"
                 Locked:
                   value:
-                    type: "locked"
                     id: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "locked"
+                    expiresAt: "2026-05-05T00:00:00Z"
                     sourceCurrency: "USDC"
                     sourceAmount: "1012.572778"
                     targetCurrency: "BRL"
@@ -187,6 +182,35 @@ paths:
           description: Resources successfully retrieved.
           content:
             application/json:
+              examples:
+                "On-ramp - Awaiting funds":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampAwaitingFundsExample/value"
+                "On-ramp - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampProcessingExample/value"
+                "On-ramp - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampSuccessExample/value"
+                "On-ramp - Failed":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampFailedExample/value"
+                "Off-ramp - Awaiting funds":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpAwaitingFundsExample/value"
+                "Off-ramp - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpProcessingExample/value"
+                "Off-ramp - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpSuccessExample/value"
               schema:
                 type: object
                 properties:
@@ -219,6 +243,7 @@ paths:
       parameters:
         - name: id
           in: path
+          description: Transaction's unique identifier.
           required: true
           schema:
             type: string
@@ -229,194 +254,22 @@ paths:
           content:
             application/json:
               examples:
-                "On-ramp with awaiting funds status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174000"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "10000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "awaiting_funds"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "On-ramp with processing status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "On-ramp with success status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      receipt:
-                        rate: "6.0066"
-                        sourceAmount: "1000.00"
-                        targetAmount: "5925.55"
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "10.000000"
-                            flat: "1"
-                          developer:
-                            percentage: "0.000000"
-                            flat: "0"
-                      blockchain:
-                        transactionHash: "0x1234567890123456789012345678901234567890"
-                        blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "On-ramp with failed status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      error:
-                        code: "INSUFFICIENT_FUNDS"
-                        message: "The payment was rejected due to insufficient funds"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "Off-ramp with awaiting funds status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174003"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyType: "email"
-                        keyValue: "user@email.com"
-                    state:
-                      status: "awaiting_funds"
-                      payment:
-                        rail: "pix"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "Off-ramp with processing status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174003"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyType: "email"
-                        keyValue: "user@email.com"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "Off-ramp with success status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174003"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyType: "email"
-                        keyValue: "user@email.com"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                      receipt:
-                        rate: "6.0066"
-                        sourceAmount: "1000.00"
-                        targetAmount: "5925.55"
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "10.000000"
-                            flat: "1"
-                          developer:
-                            percentage: "0.000000"
-                            flat: "0"
-                      blockchain:
-                        transactionHash: "0x1234567890123456789012345678901234567890"
-                        blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "Off-ramp with failed status":
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174003"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyType: "email"
-                        keyValue: "user@email.com"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                      error:
-                        code: "INVALID_PIX_KEY"
-                        message: "The provided PIX key is invalid or not found"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
+                "On-ramp - Awaiting funds":
+                  $ref: "#/components/examples/TransactionOnrampAwaitingFundsExample"
+                "On-ramp - Processing":
+                  $ref: "#/components/examples/TransactionOnrampProcessingExample"
+                "On-ramp - Success":
+                  $ref: "#/components/examples/TransactionOnrampSuccessExample"
+                "On-ramp - Failed":
+                  $ref: "#/components/examples/TransactionOnrampFailedExample"
+                "Off-ramp - Awaiting funds":
+                  $ref: "#/components/examples/TransactionOfframpAwaitingFundsExample"
+                "Off-ramp - Processing":
+                  $ref: "#/components/examples/TransactionOfframpProcessingExample"
+                "Off-ramp - Success":
+                  $ref: "#/components/examples/TransactionOfframpSuccessExample"
+                "Off-ramp - Failed":
+                  $ref: "#/components/examples/TransactionOfframpFailedExample"
               schema:
                 allOf:
                   - $ref: "#/components/schemas/TransactionResponse"
@@ -485,6 +338,46 @@ paths:
                   - $ref: "#/components/schemas/TransactionTimestamps"
 components:
   examples:
+    CustomerIndividualArrayExample:
+      value:
+        data:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            email: "william.default@example.com"
+            walletAddress: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            compliance:
+              status: "pending"
+              level: "standard"
+              transactionLimits:
+                single: "1000.00"
+                daily: "10000.00"
+                monthly: "100000.00"
+            createdAt: "2021-01-01T00:00:00Z"
+            updatedAt: "2021-01-01T00:00:00Z"
+    CustomerBusinessArrayExample:
+      value:
+        data:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "business"
+            legalName: "Lumx S.A"
+            taxId: "42.887.120/0001-00"
+            incorporationDate: "2020-01-01"
+            country: "BR"
+            walletAddress: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            compliance:
+              status: "pending"
+              level: "standard"
+              transactionLimits:
+                single: "1000.00"
+                daily: "10000.00"
+                monthly: "100000.00"
+            createdAt: "2021-01-01T00:00:00Z"
+            updatedAt: "2021-01-01T00:00:00Z"  
     CustomerIndividualExample:
       value:
         id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
@@ -493,18 +386,11 @@ components:
         taxId: "123.456.789-00"
         birthDate: "1990-01-01"
         email: "william.default@example.com"
-        address:
-          line1: "Rua Voluntários da Pátria, 89"
-          line2: "Apto 302"
-          country: "BRA"
-          state: "SP"
-          city: "São Paulo"
-          zipCode: "01234-567"
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
         balances:
           - currency: "USDC"
-            amount: "10000.00"
+            amount: "10000.000000"
         compliance:
           status: "pending"
           level: "standard"
@@ -521,26 +407,20 @@ components:
         legalName: "Lumx S.A"
         taxId: "42.887.120/0001-00"
         incorporationDate: "2020-01-01"
+        country: "BR"
         beneficiaries:
-          - type: "individual"
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
             name: "William Default"
             taxId: "123.456.789-00"
             birthDate: "1990-01-01"
             email: "william.default@example.com"
-            address: "Rua Voluntários da Pátria, 89"
             sharePercentage: 20
-        address:
-          line1: "Rua Voluntários da Pátria, 89"
-          line2: "Apto 302"
-          country: "BRA"
-          state: "SP"
-          city: "São Paulo"
-          zipCode: "01234-567"
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
         balances:
           - currency: "USDC"
-            amount: "10000.00"
+            amount: "10000.000000"
         compliance:
           status: "pending"
           level: "standard"
@@ -550,6 +430,194 @@ components:
             monthly: "100000.00"
         createdAt: "2021-01-01T00:00:00Z"
         updatedAt: "2021-01-01T00:00:00Z"   
+    TransactionOnrampAwaitingFundsExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        customerId: "123e4567-e89b-12d3-a456-426614174000"
+        type: "on_ramp"
+        request:
+          sourceCurrency: "BRL"
+          targetCurrency: "USDC"
+          amount: "10000.00"
+          payment:
+            rail: "pix"
+        state:
+          status: "awaiting_funds"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "on_ramp"
+        request:
+          sourceCurrency: "BRL"
+          targetCurrency: "USDC"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+        state:
+          status: "success"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "on_ramp"
+        request:
+          sourceCurrency: "BRL"
+          targetCurrency: "USDC"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+        state:
+          status: "processing"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+          receipt:
+            rate: "6.0066"
+            sourceAmount: "1000.00"
+            targetAmount: "5925.55"
+            sourceCurrency: "USDC"
+            targetCurrency: "BRL"
+            fees:
+              currency: "USDC"
+              lumx:
+                percentage: "10.000000"
+                flat: "1"
+              developer:
+                percentage: "0.000000"
+                flat: "0"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "on_ramp"
+        request:
+          sourceCurrency: "BRL"
+          targetCurrency: "USDC"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+        state:
+          status: "failed"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+          error:
+            code: "INSUFFICIENT_FUNDS"
+            message: "The payment was rejected due to insufficient funds."
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpAwaitingFundsExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "off_ramp"
+        request:
+          sourceCurrency: "USDC"
+          targetCurrency: "BRL"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+            keyType: "email"
+            keyValue: "user@email.com"
+        state:
+          status: "awaiting_funds"
+          payment:
+            rail: "pix"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "on_ramp"
+        request:
+          sourceCurrency: "USDC"
+          targetCurrency: "BRL"
+          amount: "1000.00"
+          payment:
+            rail: "pix2"
+            keyType: "email"
+            keyValue: "user@email.com"
+        state:
+          status: "processing"
+          payment:
+            rail: "pix"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "off_ramp"
+        request:
+          sourceCurrency: "USDC"
+          targetCurrency: "BRL"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+            keyType: "email"
+            keyValue: "user@email.com"
+        state:
+          status: "success"
+          payment:
+            rail: "pix"
+          receipt:
+            rate: "6.0066"
+            sourceAmount: "1000.00"
+            targetAmount: "5925.55"
+            sourceCurrency: "USDC"
+            targetCurrency: "BRL"
+            fees:
+              currency: "USDC"
+              lumx:
+                percentage: "10.000000"
+                flat: "1"
+              developer:
+                percentage: "0.000000"
+                flat: "0"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        type: "off_ramp"
+        request:
+          sourceCurrency: "USDC"
+          targetCurrency: "BRL"
+          amount: "1000.00"
+          payment:
+            rail: "pix"
+            keyType: "email"
+            keyValue: "user@email.com"
+        state:
+          status: "failed"
+          payment:
+            rail: "pix"
+          error:
+            code: "invalid_pix_key"
+            message: "The provided PIX key is invalid or not found."
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
   schemas:
     CustomerRequest:
       allOf:
@@ -563,14 +631,51 @@ components:
         - oneOf:
             - allOf:
                 - type: object
-                  description: Customer type is individual
+                  description: Customer type is individual.
                   title: Individual
                 - $ref: "#/components/schemas/CustomerIndividual"
             - allOf:
-                - type: object
-                  description: Customer type is business
-                  title: Business
-                - $ref: "#/components/schemas/CustomerBusiness"
+              - type: object
+                description: Customer type is business.
+                title: Business
+              - $ref: "#/components/schemas/CustomerBusiness"
+              - type: object
+                properties:
+                  beneficiaries:
+                    type: array
+                    description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+                    items: 
+                      type: object 
+                      allOf:
+                        - $ref: "#/components/schemas/CustomerIndividual"
+                        - type: object
+                          properties:
+                            id:
+                              type: string
+                              description: Beneficiary's unique identifier.
+                              format: uuid
+                            type:
+                              description: Beneficiary's type.
+                            name:
+                              description: Beneficiary's name.
+                            taxId:
+                              description: Beneficiary's tax ID.
+                            birthDate:
+                              description: Beneficiary's birth date.
+                            email:
+                              description: Beneficiary's email.
+                            sharePercentage:
+                              type: number
+                              description: The share percentage of the beneficiary.
+                              example: 20
+                        - required:
+                            - id
+                            - type
+                            - name
+                            - taxId
+                            - birthDate
+                            - email
+                            - sharePercentage
       required:
         - id
         - type
@@ -579,9 +684,9 @@ components:
         - taxId
         - birthDate
         - email
+        - country
         - incorporationDate
         - beneficiaries
-        - address
     CustomerResponse:
       allOf:
         - type: object
@@ -593,15 +698,44 @@ components:
               readOnly: true
         - oneOf:
             - allOf:
+                - type: object
                 - $ref: "#/components/schemas/CustomerIndividual"
-                  description: Customer type is individual
+                  description: Customer type is individual.
                   title: Individual
-                - type: object
             - allOf:
-                - $ref: "#/components/schemas/CustomerBusiness"
-                  description: Customer type is business
-                  title: Business
                 - type: object
+                  description: Customer type is business.
+                  title: Business
+                - $ref: "#/components/schemas/CustomerBusiness"
+                - type: object
+                  properties:
+                    beneficiaries:
+                      type: array
+                      description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+                      items: 
+                        type: object 
+                        allOf:
+                          - $ref: "#/components/schemas/CustomerIndividual"
+                          - type: object
+                            properties:
+                              id:
+                                type: string
+                                description: Beneficiary's unique identifier.
+                                format: uuid
+                              type:
+                                description: Beneficiary's type.
+                              name:
+                                description: Beneficiary's name.
+                              taxId:
+                                description: Beneficiary's tax ID.
+                              email:
+                                description: Beneficiary's email.
+                              birthDate:
+                                description: Beneficiary's birth date.
+                              sharePercentage:
+                                type: number
+                                description: The share percentage of the beneficiary.
+                                example: 20
         - type: object
           properties:
             walletAddress:
@@ -628,6 +762,47 @@ components:
               description: Last update date and time.
               format: date-time
               example: "2021-01-01T00:00:00Z"
+    CustomerArrayResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+        - oneOf:
+          - allOf:
+            - type: object
+              description: Customer type is individual.
+              title: Individual
+            - $ref: "#/components/schemas/CustomerIndividual"
+          - allOf:
+            - type: object
+              description: Customer type is business.
+              title: Business
+            - $ref: "#/components/schemas/CustomerBusiness"
+        - type: object
+          properties:
+            walletAddress:
+              type: string
+              description: Customer's wallet address.
+              example: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl:
+              type: string
+              description: Customer's block explorer URL.
+              example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            compliance:
+              $ref: "#/components/schemas/CustomerCompliance"
+            createdAt:
+              type: string
+              description: Creation date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
+            updatedAt:
+              type: string
+              description: Last update date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
     CustomerIndividual:
       type: object
       properties:
@@ -638,23 +813,21 @@ components:
           example: "individual"
         name:
           type: string
-          description: Customer full name
+          description: Customer's full name.
           example: "William Default"
         taxId:
           type: string
-          description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
+          description: Customer's tax ID. It must be a valid tax ID in the country where the customer lives.
           example: "123.456.789-00"
         birthDate:
           type: string
-          description: Customer birth date
+          description: Customer's birth date.
           format: date
           example: "1990-01-01"
         email:
           type: string
-          description: Customer email
+          description: Customer's email.
           example: "william.default@example.com"
-        address:
-          $ref: "#/components/schemas/CustomerAddress"
     CustomerBusiness:
       type: object
       properties:
@@ -664,95 +837,39 @@ components:
           enum: ["business"]
         legalName:
           type: string
-          description: Customer legal name
+          description: Customer legal name.
           example: "Lumx S.A"
         taxId:
           type: string
-          description: Customer's tax ID. It must be a valid tax ID where the country of the customer lives in.
+          description: Customer's tax ID. It must be a valid tax ID in the country where the company is incorporated.
           example: "42.887.120/0001-00"
         incorporationDate:
           type: string
-          description: Customer incorporation date
+          description: Customer incorporation date.
           format: date
           example: "2020-01-01"
-        beneficiaries:
-            type: array
-            description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
-            items: 
-              type: object 
-              allOf:
-                - $ref: "#/components/schemas/CustomerIndividual"
-                - type: object
-                  properties:
-                    type:
-                      description: Beneficiary's type.
-                    name:
-                      description: Beneficiary's name.
-                    taxId:
-                      description: Beneficiary's tax ID.
-                    birthDate:
-                      description: Beneficiary's birth date.
-                    address:
-                      description: Address where the beneficiary is located.
-                    sharePercentage:
-                      type: number
-                      description: The share percentage of the beneficiary.
-                      example: 20
-                - required:
-                    - type
-                    - name
-                    - taxId
-                    - birthDate
-                    - email
-                    - address
-                    - sharePercentage
-        address:
-          $ref: "#/components/schemas/CustomerAddress"
-    CustomerAddress:
-      type: object
-      description: Address where the customer is located.
-      properties:
-        line1:
-          type: string
-          description: Address's first line.
-          example: "Rua Voluntários da Pátria, 89"
-        line2:
-          type: string
-          description: Address's second line.
-          example: "Apto 302"
         country:
           type: string
-          description: Address's country code following ISO 3166-1 alpha-2.
-          enum: [BRA]
+          description: Customer's country using ISO 3166-1 alpha-3 code.
           example: "BRA"
-        state:
-          type: string
-          description: Address's state.
-          example: "SP"
-        city:
-          type: string
-          description: Address's city.
-          example: "São Paulo"
-        zipCode:
-          type: string
-          description: Address's zip code.
-          example: "01234-567"
     CustomerCompliance:
       type: object
+      description: Customer's compliance KYC/KYB.
       properties:
         status:
           type: string
-          description: Status of the customer's KYC.
+          description: Compliance's status.
           enum:
             ["pending", "approved", "final_rejection", "temporary_rejection"]
           example: "pending"
         level:
           type: string
-          description: Level of the customer's KYC.
+          description: Compliance's level.
           enum: ["standard"]
           example: "standard"
         transactionLimits:
           type: object
+          description: Compliance's transaction limits.
           properties:
             single:
               type: string
@@ -768,6 +885,7 @@ components:
               example: "100000.00"
     CustomerBalance:
       type: object
+      description: Customer's balance.
       properties:
         currency:
           type: string
@@ -782,71 +900,53 @@ components:
           description: Last update date and time.
           example: "2021-01-01T00:00:00Z"
     CustomerDocumentRequest:
-      allOf:
-        - oneOf:
-            - allOf:
-                - type: object
-                  description: Customer type is individual
-                  title: Individual
-                  properties:
-                    metadata:
-                      type: object
-                      properties:
-                        type:
-                          type: string
-                          description: Document type.
-                          enum:
-                            [id_card, passport, driving_license, utility_bill]
-                        country:
-                          type: string
-                          description: Document country.
-                          enum: [BRA]
-                        side:
-                          type: string
-                          description: Document side. Only required for documents with both sides.
-                          nullable: true
-                          enum: [front_side, back_side]
-                    file:
-                      type: string
-                      description: The document file to be uploaded.
-                      format: binary
-                - required:
-                    - metadata
-                    - file
-            - allOf:
-                - type: object
-                  description: Customer type is business
-                  title: Business
-                  properties:
-                    metadata:
-                      type: object
-                      properties:
-                        type:
-                          type: string
-                          description: Document type.
-                          enum: [incorporation_articles, proof_of_address]
-                        country:
-                          type: string
-                          description: Document country code following ISO 3166-1 alpha-2.
-                          enum: [BRA]
-                    file:
-                      type: string
-                      description: The document file to be uploaded.
-                      format: binary
-                - required:
-                    - metadata
-                    - file
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Document type.
+              enum: [id_card, passport, drivers_license, utility_bill, incorporation_articles, proof_of_address]
+              example: "id_card"
+            country:
+              type: string
+              description: Document country using ISO 3166-1 alpha-3 code.
+              example: "BRA"
+            side:
+              type: string
+              description: Document side. Only required for documents with both sides.
+              nullable: true
+              enum: [front_side, back_side]
+              example: "front_side"
+            beneficiaryId:
+              type: string
+              description: Beneficiary's unique identifier. Only required for documents of beneficiaries.
+              nullable: true
+              format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
+          required:
+            - type
+            - country
+        file:
+          type: string
+          description: The document file to be uploaded.
+          format: binary
+      required:
+        - metadata
+        - file
     ExchangeRateRequest:
       allOf:
         - oneOf:
             - allOf:
                 - type: object
-                  description: Exchange rate type is floating
+                  description: Exchange rate type is floating.
                   title: Floating
                 - $ref: "#/components/schemas/ExchangeRateFloating"
             - allOf:
                 - type: object
-                  description: Exchange rate type is locked
+                  description: Exchange rate type is locked.
                   title: Locked
                 - $ref: "#/components/schemas/ExchangeRateLocked"
       required:
@@ -860,7 +960,7 @@ components:
         - oneOf:
             - allOf:
                 - type: object
-                  description: Exchange rate type is floating
+                  description: Exchange rate type is floating.
                   title: Floating
                   properties:
                     type:
@@ -870,7 +970,7 @@ components:
                       example: "floating"
             - allOf:
                 - type: object
-                  description: Exchange rate type is locked
+                  description: Exchange rate type is locked.
                   title: Locked
                   properties:
                     id:
@@ -883,6 +983,10 @@ components:
                       description: Exchange rate's type.
                       enum: ["locked"]
                       example: "locked"
+                    expiresAt:
+                      type: string
+                      description: Expiration date and time. The exchange rate duration is 5 minutes.
+                      example: "2026-05-05T00:00:00Z"
         - type: object
           properties:
             sourceCurrency:
@@ -975,12 +1079,12 @@ components:
         - oneOf:
             - allOf:
                 - type: object
-                  description: On-ramp using floating exchange rate
+                  description: On-ramp using floating exchange rate.
                   title: Floating
                 - $ref: "#/components/schemas/TransactionOnRampFloating"
             - allOf:
                 - type: object
-                  description: On-ramp using locked exchange rate
+                  description: On-ramp using locked exchange rate.
                   title: Locked
                 - $ref: "#/components/schemas/TransactionOnRampLocked"
     TransactionOnRampLocked:
@@ -1107,12 +1211,12 @@ components:
         - oneOf:
             - allOf:
                 - type: object
-                  description: Off-ramp using floating exchange rate
+                  description: Off-ramp using floating exchange rate.
                   title: Floating
                 - $ref: "#/components/schemas/TransactionOffRampFloating"
             - allOf:
                 - type: object
-                  description: Off-ramp using locked exchange rate
+                  description: Off-ramp using locked exchange rate.
                   title: Locked
                 - $ref: "#/components/schemas/TransactionOffRampLocked"
     TransactionOffRampLocked:
@@ -1323,4 +1427,4 @@ components:
     apiKey:
       type: http
       scheme: bearer
-      description: Bearer authentication header of the form `Bearer <API_KEY>`.
+      description: Bearer authentication header on the format `Bearer <API_KEY>`.
