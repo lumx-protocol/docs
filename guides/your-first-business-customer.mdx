@@ -1,0 +1,460 @@
+---
+title: 'Create Your First Business Customer'
+description: 'Learn how to create and verify a business customer using the Lumx API'
+---
+
+### Step 1: Create a Business Customer
+
+Start by creating a new business customer using the Create Customer endpoint.
+
+<Frame>
+  <div className="flex items-center w-full justify-between px-4 py-2 border-b border-gray-200">
+    <div className="flex items-center">
+      <span className="bg-blue-100 text-blue-700 font-mono text-sm px-3 py-1 rounded-full mr-3">POST</span>
+      <code className="text-sm font-semibold">/customers</code>
+    </div>
+    <a href="/api-reference/customers" className="ml-5 text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+  </div>
+</Frame>
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.lumx.io/v1/customers \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "business",
+    "email": "business@example.com",
+    "business_name": "Example Corp",
+    "phone_number": "+15555555555",
+    "tax_id": "123456789",
+    "business_type": "corporation",
+    "incorporation_date": "2020-01-01",
+    "address": {
+      "line1": "123 Business Ave",
+      "city": "San Francisco",
+      "state": "CA",
+      "postal_code": "94105",
+      "country": "US"
+    }
+  }'
+```
+</CodeGroup>
+
+<Note>
+  Remember to save the `customer_id` from the response as you'll need it for the next steps.
+</Note>
+
+## Step 2: Upload Business Documents
+
+For business customer verification, you need to upload two documents:
+1. Articles of Incorporation
+2. Proof of Address (business utility bill, lease agreement, etc.)
+
+<Steps>
+  <Step title="Upload Articles of Incorporation">
+    Use the Upload Document endpoint to upload the business's incorporation documents:
+
+    <Frame>
+      <div className="flex items-center w-full justify-between px-4 py-2 border-b border-gray-200">
+        <div className="flex items-center">
+          <span className="bg-blue-100 text-blue-700 font-mono text-sm px-3 py-1 rounded-full mr-3">POST</span>
+          <code className="text-sm font-semibold">/customers/{customer_id}/documents</code>
+        </div>
+        <a href="/api-reference/documents" className="text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+      </div>
+    </Frame>
+
+    <CodeGroup>
+    ```bash cURL
+    curl -X POST https://api.lumx.io/v1/customers/{customer_id}/documents \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: multipart/form-data" \
+      -F "document_type=incorporation_articles" \
+      -F "file=@/path/to/incorporation_articles.pdf"
+    ```
+    
+    ```javascript Node.js
+    const axios = require('axios');
+    const FormData = require('form-data');
+    const fs = require('fs');
+    
+    const uploadIncorporationArticles = async (customerId) => {
+      try {
+        const formData = new FormData();
+        formData.append('document_type', 'incorporation_articles');
+        formData.append('file', fs.createReadStream('/path/to/incorporation_articles.pdf'));
+        
+        const response = await axios.post(
+          `https://api.lumx.io/v1/customers/${customerId}/documents`,
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer YOUR_API_KEY`,
+              ...formData.getHeaders()
+            }
+          }
+        );
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error uploading document:", error.response?.data || error.message);
+      }
+    };
+    ```
+    
+    ```python Python
+    import requests
+    
+    def upload_incorporation_articles(customer_id):
+        url = f"https://api.lumx.io/v1/customers/{customer_id}/documents"
+        headers = {
+            "Authorization": "Bearer YOUR_API_KEY"
+        }
+        files = {
+            "file": open("/path/to/incorporation_articles.pdf", "rb")
+        }
+        data = {
+            "document_type": "incorporation_articles"
+        }
+        
+        response = requests.post(url, files=files, data=data, headers=headers)
+        print(response.json())
+        return response.json()
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Upload Proof of Address">
+    Upload a business utility bill, lease agreement, or other proof of address document:
+
+    <Frame>
+      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+        <div className="flex items-center">
+          <span className="bg-blue-100 text-blue-700 font-mono text-sm px-3 py-1 rounded-full mr-3">POST</span>
+          <code className="text-sm font-semibold">/customers/{customer_id}/documents</code>
+        </div>
+        <a href="/api-reference/documents" className="text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+      </div>
+      <div className="p-4">
+        <p className="text-sm text-gray-700">Uploads a document for business verification</p>
+      </div>
+    </Frame>
+
+    <CodeGroup>
+    ```bash cURL
+    curl -X POST https://api.lumx.io/v1/customers/{customer_id}/documents \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: multipart/form-data" \
+      -F "document_type=proof_of_address" \
+      -F "file=@/path/to/proof_of_address.pdf"
+    ```
+    
+    ```javascript Node.js
+    const axios = require('axios');
+    const FormData = require('form-data');
+    const fs = require('fs');
+    
+    const uploadProofOfAddress = async (customerId) => {
+      try {
+        const formData = new FormData();
+        formData.append('document_type', 'proof_of_address');
+        formData.append('file', fs.createReadStream('/path/to/proof_of_address.pdf'));
+        
+        const response = await axios.post(
+          `https://api.lumx.io/v1/customers/${customerId}/documents`,
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer YOUR_API_KEY`,
+              ...formData.getHeaders()
+            }
+          }
+        );
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error uploading document:", error.response?.data || error.message);
+      }
+    };
+    ```
+    
+    ```python Python
+    import requests
+    
+    def upload_proof_of_address(customer_id):
+        url = f"https://api.lumx.io/v1/customers/{customer_id}/documents"
+        headers = {
+            "Authorization": "Bearer YOUR_API_KEY"
+        }
+        files = {
+            "file": open("/path/to/proof_of_address.pdf", "rb")
+        }
+        data = {
+            "document_type": "proof_of_address"
+        }
+        
+        response = requests.post(url, files=files, data=data, headers=headers)
+        print(response.json())
+        return response.json()
+    ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+<Warning>
+  Business verification might require additional documents depending on your business type and jurisdiction. Be prepared to provide additional documentation if requested.
+</Warning>
+
+## Step 3: Start Customer Verification
+
+Once you've uploaded all required documents, initiate the verification process:
+
+<Frame>
+  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+    <div className="flex items-center">
+      <span className="bg-blue-100 text-blue-700 font-mono text-sm px-3 py-1 rounded-full mr-3">POST</span>
+      <code className="text-sm font-semibold">/customers/{customer_id}/verifications</code>
+    </div>
+    <a href="/api-reference/verifications" className="text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+  </div>
+  <div className="p-4">
+    <p className="text-sm text-gray-700">Starts the verification process for a business customer</p>
+  </div>
+</Frame>
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.lumx.io/v1/customers/{customer_id}/verifications \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+const startVerification = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `https://api.lumx.io/v1/customers/${customerId}/verifications`,
+      {},
+      {
+        headers: {
+          'Authorization': `Bearer YOUR_API_KEY`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error starting verification:", error.response?.data || error.message);
+  }
+};
+```
+
+```python Python
+import requests
+
+def start_verification(customer_id):
+    url = f"https://api.lumx.io/v1/customers/{customer_id}/verifications"
+    headers = {
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json"
+    }
+    
+    response = requests.post(url, json={}, headers=headers)
+    print(response.json())
+    return response.json()
+```
+</CodeGroup>
+
+## Step 4: Check Verification Status
+
+You can check the status of the verification process at any time:
+
+<Frame>
+  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+    <div className="flex items-center">
+      <span className="bg-green-100 text-green-700 font-mono text-sm px-3 py-1 rounded-full mr-3">GET</span>
+      <code className="text-sm font-semibold">/customers/{customer_id}/verifications/latest</code>
+    </div>
+    <a href="/api-reference/verifications" className="text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+  </div>
+  <div className="p-4">
+    <p className="text-sm text-gray-700">Retrieves the status of the latest verification attempt</p>
+  </div>
+</Frame>
+
+<CodeGroup>
+```bash cURL
+curl -X GET https://api.lumx.io/v1/customers/{customer_id}/verifications/latest \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+const checkVerificationStatus = async (customerId) => {
+  try {
+    const response = await axios.get(
+      `https://api.lumx.io/v1/customers/${customerId}/verifications/latest`,
+      {
+        headers: {
+          'Authorization': `Bearer YOUR_API_KEY`
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error checking verification status:", error.response?.data || error.message);
+  }
+};
+```
+
+```python Python
+import requests
+
+def check_verification_status(customer_id):
+    url = f"https://api.lumx.io/v1/customers/{customer_id}/verifications/latest"
+    headers = {
+        "Authorization": "Bearer YOUR_API_KEY"
+    }
+    
+    response = requests.get(url, headers=headers)
+    print(response.json())
+    return response.json()
+```
+</CodeGroup>
+
+The verification status will be one of the following:
+- `pending`: Verification is in progress
+- `approved`: Verification was successful
+- `rejected`: Verification failed (with reason provided)
+- `more_information_needed`: Additional information or documents required
+
+<Tip>
+  Business verification typically takes longer than individual verification due to the additional due diligence required.
+</Tip>
+
+## Additional Information
+
+For businesses, you may also need to provide information about the beneficial owners and controlling persons:
+
+<Frame>
+  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+    <div className="flex items-center">
+      <span className="bg-blue-100 text-blue-700 font-mono text-sm px-3 py-1 rounded-full mr-3">POST</span>
+      <code className="text-sm font-semibold">/customers/{customer_id}/beneficial-owners</code>
+    </div>
+    <a href="/api-reference/beneficial-owners" className="text-blue-500 hover:text-blue-700 text-sm">View in API Reference →</a>
+  </div>
+  <div className="p-4">
+    <p className="text-sm text-gray-700">Adds a beneficial owner to a business customer</p>
+  </div>
+</Frame>
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.lumx.io/v1/customers/{customer_id}/beneficial-owners \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane@example.com",
+    "date_of_birth": "1985-05-15",
+    "ownership_percentage": 60,
+    "title": "CEO",
+    "address": {
+      "line1": "456 Executive Way",
+      "city": "San Francisco",
+      "state": "CA",
+      "postal_code": "94105",
+      "country": "US"
+    }
+  }'
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+const addBeneficialOwner = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `https://api.lumx.io/v1/customers/${customerId}/beneficial-owners`,
+      {
+        first_name: "Jane",
+        last_name: "Smith",
+        email: "jane@example.com",
+        date_of_birth: "1985-05-15",
+        ownership_percentage: 60,
+        title: "CEO",
+        address: {
+          line1: "456 Executive Way",
+          city: "San Francisco",
+          state: "CA",
+          postal_code: "94105",
+          country: "US"
+        }
+      },
+      {
+        headers: {
+          'Authorization': `Bearer YOUR_API_KEY`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding beneficial owner:", error.response?.data || error.message);
+  }
+};
+```
+
+```python Python
+import requests
+
+def add_beneficial_owner(customer_id):
+    url = f"https://api.lumx.io/v1/customers/{customer_id}/beneficial-owners"
+    headers = {
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane@example.com",
+        "date_of_birth": "1985-05-15",
+        "ownership_percentage": 60,
+        "title": "CEO",
+        "address": {
+            "line1": "456 Executive Way",
+            "city": "San Francisco",
+            "state": "CA",
+            "postal_code": "94105",
+            "country": "US"
+        }
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
+    return response.json()
+```
+</CodeGroup>
+
+See the [Compliance Requirements](/compliance/compliance-requirements) for more details on beneficial ownership reporting.
+
+<Tip>
+  You can also set up [webhooks](/get-started/webhooks) to be notified when a customer's verification status changes.
+</Tip>
+
+## Next Steps
+
+Once your business customer is verified, you can:
+- [Create accounts](/concepts/accounts) for the business
+- Enable business transactions
+- Set up additional authorized users
+- View business activity in the [Lumx Dashboard](https://dashboard.lumx.io) 

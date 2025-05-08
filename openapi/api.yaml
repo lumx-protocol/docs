@@ -8,67 +8,21 @@ servers:
   - url: https://api.lumx.io
 paths:
   /customers:
-    post:
-      summary: Create a customer
-      description: This endpoint creates a customer. At least one document is required.
-      tags:
-        - Customers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CustomerCreateRequest"
-      responses:
-        "201":
-          description: Successfully created the customer.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
-        "400":
-          description: Invalid request parameters
-        "409":
-          description: A conflict error ocurred trying to create a customer
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Another customer with the same document already exists
-                  customer:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 3d830599-f834-43c9-93f1-3ff6cf84798c
-      security:
-        - apiKey: []
     get:
       tags:
         - Customers
       summary: Read all customers
       description: This endpoint reads all customers.
-      # parameters:
-      #   - in: query
-      #     name: cursor
-      #     schema:
-      #       type: string
-      #     required: false
-      #     description: The cursor for pagination.
-      #   - in: query
-      #     name: size
-      #     schema:
-      #       type: integer
-      #     required: false
-      #     description: The number of customers to return.
       responses:
         "200":
-          description: The list of customers was retrieved successfully.
+          description: Resources successfully retrieved.
           content:
             application/json:
+              examples:
+                Individual:
+                  $ref: "#/components/examples/CustomerIndividualArrayExample"
+                Business:
+                  $ref: "#/components/examples/CustomerBusinessArrayExample"
               schema:
                 type: object
                 properties:
@@ -76,14 +30,31 @@ paths:
                     description: An array containing all customers.
                     type: array
                     items:
-                      $ref: "#/components/schemas/CustomerResponse"
-                  # pagination:
-                  #   type: object
-                  #   properties:
-                  #     cursor:
-                  #       type: string
-                  #     pageSize:
-                  #       type: number
+                      $ref: "#/components/schemas/CustomerArrayResponse"
+      security:
+        - apiKey: []
+    post:
+      tags:
+        - Customers
+      summary: Create a customer
+      description: This endpoint creates a customer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerRequest"
+      responses:
+        "201":
+          description: Resource successfully created.
+          content:
+            application/json:
+              examples:
+                Individual:
+                  $ref: "#/components/examples/CustomerCreateIndividualExample"
+                Business:
+                  $ref: "#/components/examples/CustomerCreateBusinessExample"
+              schema:
+                $ref: "#/components/schemas/CustomerCreateResponse"
       security:
         - apiKey: []
   "/customers/{id}":
@@ -91,7 +62,7 @@ paths:
       tags:
         - Customers
       summary: Read a customer
-      description: This endpoint reads a customer's details.
+      description: This endpoint reads a customer.
       parameters:
         - name: id
           in: path
@@ -99,7 +70,7 @@ paths:
           schema:
             type: string
             format: uuid
-          description: The ID of the customer.
+          description: Customer's unique identifier.
         - name: includeBalances
           in: query
           required: false
@@ -108,61 +79,16 @@ paths:
           description: Whether to include balances in the response.
       responses:
         "200":
-          description: Customer details retrieved successfully.
+          description: Resource successfully retrieved.
           content:
             application/json:
+              examples:
+                Individual:
+                  $ref: "#/components/examples/CustomerIndividualExample"
+                Business:
+                  $ref: "#/components/examples/CustomerBusinessExample"
               schema:
                 $ref: "#/components/schemas/CustomerResponse"
-        "404":
-          description: Customer not found!.
-      security:
-        - apiKey: []
-    patch:
-      tags:
-        - Customers
-      summary: Update a customer
-      description: Updates a customer's details and documents. All fields are optional and documents will be added or updated if provided.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The ID of the customer.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CustomerUpdateRequest"
-      responses:
-        "200":
-          description: Customer updated successfully.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CustomerResponse"
-        "400":
-          description: Invalid request parameters.
-        "404":
-          description: Customer not found!
-        "409":
-          description: An error ocurred trying to create a customer
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Another customer with the same document already exists
-                  customer:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        format: uuid
-                        example: 3d830599-f834-43c9-93f1-3ff6cf84798c
       security:
         - apiKey: []
   "/customers/{id}/documents":
@@ -170,7 +96,7 @@ paths:
       tags:
         - Customers
       summary: Upload a document
-      description: This endpoint uploads a document for KYC/KYB.
+      description: This endpoint uploads a document necessary to verify a customer.
       parameters:
         - name: id
           in: path
@@ -178,26 +104,23 @@ paths:
           schema:
             type: string
             format: uuid
+          description: Customer's unique identifier.
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/DocumentUploadRequest"
+              $ref: "#/components/schemas/CustomerUploadDocumentRequest"
       responses:
         "200":
-          description: Document uploaded successfully.
-          content: {}
-        "400":
-          description: Bad request.
-          content: {}
+          description: Resource successfully accepted.
       security:
         - apiKey: []
-  "/customers/{id}/verify":
-    post:
+  "/customers/{id}/verifications":
+    get:
       tags:
         - Customers
-      summary: Verify a customer
-      description: This endpoint starts the KYC/KYB verification process for a customer.
+      summary: Read a customer verification
+      description: This endpoint reads a customer verification.
       parameters:
         - name: id
           in: path
@@ -205,43 +128,32 @@ paths:
           schema:
             type: string
             format: uuid
-      security:
-        - apiKey: []
-  /exchange-rate:
-    get:
-      tags:
-        - Exchange Rates
-      summary: Get an exchange rate (deprecated)
-      description: Get the current exchange rate between two currencies.
-      parameters:
-        - name: sourceCurrency
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: [BRL, USDC, USDT]
-          description: The currency to convert from.
-        - name: sourceAmount
-          in: query
-          required: true
-          schema:
-            type: string
-            example: "10000.00"
-          description: The amount to convert.
-        - name: targetCurrency
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: [BRL, USDC, USDT]
-          description: The currency to convert to.
+          description: Customer's unique identifier.
       responses:
         "200":
-          description: Exchange rate quote returned successfully.
+          description: Resource successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ExchangeRateOldResponse"
+                $ref: "#/components/schemas/CustomerVerificationResponse"
+      security:
+        - apiKey: []
+    post:
+      tags:
+        - Customers
+      summary: Start a customer verification
+      description: This endpoint starts a customer verification.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+      responses:
+        "202":
+          description: Resource successfully started.
       security:
         - apiKey: []
   /exchange-rates:
@@ -249,8 +161,7 @@ paths:
       tags:
         - Exchange Rates
       summary: Get an exchange rate
-      description: >-
-        Get the current exchange rate between two currencies.
+      description: This endpoint returns an exchange rate quote between two currencies.
       requestBody:
         content:
           application/json:
@@ -258,11 +169,155 @@ paths:
               $ref: "#/components/schemas/ExchangeRateRequest"
       responses:
         "200":
-          description: Exchange rate quote returned successfully.
+          description: Resource successfully retrieved.
           content:
             application/json:
+              examples:
+                Floating:
+                  value:
+                    type: "floating"
+                    sourceCurrency: "BRL"
+                    sourceAmount: "60000.00"
+                    targetCurrency: "USDC"
+                    targetAmount: "10125.727780"
+                    rate: "5.9255"
+                Locked:
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174001"
+                    type: "locked"
+                    expiresAt: "2026-05-05T00:00:00Z"
+                    sourceCurrency: "BRL"
+                    sourceAmount: "5925.55"
+                    targetCurrency: "USDC"
+                    targetAmount: "10000.000000"
+                    rate: "5.9255"
               schema:
                 $ref: "#/components/schemas/ExchangeRateResponse"
+      security:
+        - apiKey: []
+  /transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Read all transactions
+      description: This endpoint reads all of your transactions.
+      responses:
+        "200":
+          description: Resources successfully retrieved.
+          content:
+            application/json:
+              examples:
+                "On-ramp - Awaiting funds":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampAwaitingFundsExample/value"
+                "On-ramp - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampProcessingExample/value"
+                "On-ramp - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampSuccessExample/value"
+                "On-ramp - Failed":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOnrampFailedExample/value"
+                "Off-ramp - Awaiting funds":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpAwaitingFundsExample/value"
+                "Off-ramp - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpProcessingExample/value"
+                "Off-ramp - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionOfframpSuccessExample/value"
+                "Transfer - Processing":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferProcessingExample/value"
+                "Transfer - Success":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferSuccessExample/value"
+                "Transfer - Failed":
+                  value:
+                    data:
+                      - $ref: "#/components/examples/TransactionTransferFailedExample/value"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    description: An array containing all transactions.
+                    items:
+                      oneOf:
+                        - type: object
+                          title: On-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionOnRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Off-ramps
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionOffRampResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+                        - type: object
+                          title: Transfers
+                          allOf:
+                            - $ref: "#/components/schemas/TransactionTransferResponse"
+                            - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
+  "/transactions/{id}":
+    get:
+      tags:
+        - Transactions
+      summary: Read a transaction
+      description: This endpoint reads a transaction.
+      parameters:
+        - name: id
+          in: path
+          description: Transaction's unique identifier.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Transaction successfully retrieved.
+          content:
+            application/json:
+              examples:
+                "On-ramp - Awaiting funds":
+                  $ref: "#/components/examples/TransactionOnrampAwaitingFundsExample"
+                "On-ramp - Processing":
+                  $ref: "#/components/examples/TransactionOnrampProcessingExample"
+                "On-ramp - Success":
+                  $ref: "#/components/examples/TransactionOnrampSuccessExample"
+                "On-ramp - Failed":
+                  $ref: "#/components/examples/TransactionOnrampFailedExample"
+                "Off-ramp - Awaiting funds":
+                  $ref: "#/components/examples/TransactionOfframpAwaitingFundsExample"
+                "Off-ramp - Processing":
+                  $ref: "#/components/examples/TransactionOfframpProcessingExample"
+                "Off-ramp - Success":
+                  $ref: "#/components/examples/TransactionOfframpSuccessExample"
+                "Off-ramp - Failed":
+                  $ref: "#/components/examples/TransactionOfframpFailedExample"
+                "Transfer - Processing":
+                  $ref: "#/components/examples/TransactionTransferProcessingExample"
+                "Transfer - Success":
+                  $ref: "#/components/examples/TransactionTransferSuccessExample"
+                "Transfer - Failed":
+                  $ref: "#/components/examples/TransactionTransferFailedExample"
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/TransactionResponse"
+                  - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
   /transactions/on-ramp:
@@ -270,121 +325,20 @@ paths:
       tags:
         - Transactions
       summary: On-ramp
-      description: >-
-        Convert from fiat to stablecoin.
+      description: This endpoint converts fiat to stablecoin.
       requestBody:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/CrossRampRequest"
-                - $ref: "#/components/schemas/OnRampRequest"
+              $ref: "#/components/schemas/TransactionOnRampRequest"
       responses:
-        "201":
-          description: On-ramp operation created successfully.
+        "202":
+          description: On-ramp transaction started successfully.
           content:
             application/json:
-              examples:
-                success:
-                  summary: Successful on-ramp
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      receipt:
-                        rate: "0.166"
-                        sourceAmount: "6000.00"
-                        targetAmount: "986.80"
-                        sourceCurrency: "BRL"
-                        targetCurrency: "USDC"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "9.988916"
-                            flat: "1"
-                          developer:
-                            percentage: "0.998891"
-                            flat: "0.1"
-                        blockchain:
-                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
-                          blockExplorerUrl: "https://polygonscan.com/"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:10Z"
-                awaiting_funds:
-                  summary: Awaiting funds
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "awaiting_funds"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:00Z"
-                processing:
-                  summary: Processing
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                failed:
-                  summary: Failed
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      error:
-                        code: "INSUFFICIENT_FUNDS"
-                        message: "The payment was rejected due to insufficient funds"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: "#/components/schemas/OnRampResponse"
+                  - $ref: "#/components/schemas/TransactionOnRampResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
@@ -393,1409 +347,1384 @@ paths:
       tags:
         - Transactions
       summary: Off-ramp
-      description: >-
-        Convert from stablecoin to fiat.
+      description: This endpoint converts stablecoins to fiat.
       requestBody:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: "#/components/schemas/CrossRampRequest"
-                - $ref: "#/components/schemas/OffRampRequest"
+              $ref: "#/components/schemas/TransactionOffRampRequest"
       responses:
-        "201":
-          description: Off-ramp operation created successfully.
+        "202":
+          description: Off-ramp transaction started successfully.
           content:
             application/json:
-              examples:
-                success:
-                  summary: Successful off-ramp
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                      receipt:
-                        rate: "6.0066"
-                        sourceAmount: "1000.00"
-                        targetAmount: "5925.55"
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "10.000000"
-                            flat: "1"
-                          developer:
-                            percentage: "1.000000"
-                            flat: "0.1"
-                        blockchain:
-                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
-                          blockExplorerUrl: "https://polygonscan.com/"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:10Z"
-                processing:
-                  summary: Processing
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                awaiting_funds:
-                  summary: Awaiting funds
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "awaiting_funds"
-                      payment:
-                        rail: "pix"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:00Z"
-                failed:
-                  summary: Failed
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                      error:
-                        code: "INVALID_PIX_KEY"
-                        message: "The provided PIX key is invalid or not found"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:15Z"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  - $ref: "#/components/schemas/OffRampResponse"
+                  - $ref: "#/components/schemas/TransactionOffRampResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-  /transactions/transfers:
+  /transactions/transfer:
     post:
       tags:
         - Transactions
       summary: Transfer
-      description: >-
-        Transfer stablecoins between customers or to an external crypto wallet.
+      description: This endpoint starts a transfer of funds between customers.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TransferRequest"
+              $ref: "#/components/schemas/TransactionTransferRequest"
       responses:
-        "201":
-          description: Transfer transaction created successfully.
+        "202":
+          description: Transfer transaction started successfully.
           content:
             application/json:
+              example:
+                $ref: "#/components/examples/TransactionTransferProcessingExample"
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/BaseTransactionResponse"
-                  # - $ref: "#/components/schemas/TransferResponse"
+                  - $ref: "#/components/schemas/TransactionTransferResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
       security:
         - apiKey: []
-  # "/transactions/{transactionId}/execute":
-  #   post:
-  #     tags:
-  #       - Transactions
-  #     summary: Execute a transaction
-  #     description: "Execute a transaction that you previously signed using your signing provider. Important: This is an ASYNC route! Use the read transaction route to check the transaction's status."
-  #     parameters:
-  #       - name: transactionId
-  #         in: path
-  #         description: The ID of the transaction.
-  #         required: true
-  #         schema:
-  #           type: string
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/ExecuteTransactionRequest"
-  #             required:
-  #               - signedTransaction
-  #     responses:
-  #       "202":
-  #         description: The transaction was validated and will be submitted to the blockchain.
-  #         content:
-  #           application/json:
-  #             schema:
-  #               oneOf:
-  #                 - type: object
-  #                   title: Off-ramp
-  #                   allOf:
-  #                     - $ref: "#/components/schemas/BaseTransactionResponse"
-  #                     - $ref: "#/components/schemas/OffRampResponse"
-  #                     - $ref: "#/components/schemas/TransactionTimestamps"
-  #                     - type: object
-  #                       properties:
-  #                         status:
-  #                           enum: ['processing']
-  #                 - type: object
-  #                   title: Transfer
-  #                   allOf:
-  #                     - $ref: "#/components/schemas/BaseTransactionResponse"
-  #                     - $ref: "#/components/schemas/TransferResponse"
-  #                     - $ref: "#/components/schemas/TransactionTimestamps"
-  #                     - type: object
-  #                       properties:
-  #                         status:
-  #                           enum: ['processing']
-  #     security:
-  #       - apiKey: []
-  "/transactions/{transactionId}":
-    get:
-      tags:
-        - Transactions
-      summary: Read a transaction
-      description: This endpoint reads a transaction made with your API key.
-      parameters:
-        - name: transactionId
-          in: path
-          description: The ID of the transaction.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: The details of the transaction were retrieved successfully.
-          content:
-            application/json:
-              examples:
-                "off-ramp: processing":
-                  summary: Processing
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "off-ramp: success":
-                  summary: Successful off-ramp
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "1000.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                      receipt:
-                        rate: "6.0066"
-                        sourceAmount: "1000.00"
-                        targetAmount: "5925.55"
-                        sourceCurrency: "USDC"
-                        targetCurrency: "BRL"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "10.000000"
-                            flat: "1"
-                          developer:
-                            percentage: "1.000000"
-                            flat: "0.1"
-                        blockchain:
-                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
-                          blockExplorerUrl: "https://polygonscan.com/"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:10Z"
-                "off-ramp: failed":
-                  summary: Failed
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174002"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "off_ramp"
-                    request:
-                      sourceCurrency: "USDC"
-                      targetCurrency: "BRL"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                        keyValue: "user@email.com"
-                        keyType: "email"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                      error:
-                        code: "INVALID_PIX_KEY"
-                        message: "The provided PIX key is invalid or not found"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:15Z"
-                "on-ramp: awaiting_funds":
-                  summary: Awaiting funds
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "100.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "awaiting_funds"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:00Z"
-                "on-ramp: processing":
-                  summary: Processing
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "processing"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:05Z"
-                "on-ramp: success":
-                  summary: Successful on-ramp
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "success"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      receipt:
-                        rate: "0.166"
-                        sourceAmount: "6000.00"
-                        targetAmount: "986.80"
-                        sourceCurrency: "BRL"
-                        targetCurrency: "USDC"
-                        fees:
-                          currency: "USDC"
-                          lumx:
-                            percentage: "9.988916"
-                            flat: "1"
-                          developer:
-                            percentage: "0.998891"
-                            flat: "0.1"
-                        blockchain:
-                          transactionHash: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
-                          blockExplorerUrl: "https://polygonscan.com/"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:10Z"
-                "on-ramp: failed":
-                  summary: Failed
-                  value:
-                    id: "123e4567-e89b-12d3-a456-426614174000"
-                    customerId: "123e4567-e89b-12d3-a456-426614174001"
-                    type: "on_ramp"
-                    request:
-                      sourceCurrency: "BRL"
-                      targetCurrency: "USDC"
-                      amount: "6000.00"
-                      payment:
-                        rail: "pix"
-                    state:
-                      status: "failed"
-                      payment:
-                        rail: "pix"
-                        brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-                      error:
-                        code: "INSUFFICIENT_FUNDS"
-                        message: "The payment was rejected due to insufficient funds"
-                    createdAt: "2024-03-20T15:30:00Z"
-                    updatedAt: "2024-03-20T15:30:15Z"
-              schema:
-                oneOf:
-                  - type: object
-                    title: On-ramp
-                    allOf:
-                      - $ref: "#/components/schemas/BaseTransactionResponse"
-                      - $ref: "#/components/schemas/OnRampResponse"
-                      - $ref: "#/components/schemas/TransactionTimestamps"
-                  - type: object
-                    title: Off-ramp
-                    allOf:
-                      - $ref: "#/components/schemas/BaseTransactionResponse"
-                      - $ref: "#/components/schemas/OffRampResponse"
-                      - $ref: "#/components/schemas/TransactionTimestamps"
-                  - type: object
-                    title: Transfer
-                    allOf:
-                      - $ref: "#/components/schemas/BaseTransactionResponse"
-                      - $ref: "#/components/schemas/TransferResponse"
-                      - $ref: "#/components/schemas/TransactionTimestamps"
-      security:
-        - apiKey: []
-  /transactions:
-    get:
-      tags:
-        - Transactions
-      summary: Read all transactions
-      description: This endpoint reads all transactions made with your API key.
-      # parameters:
-      #   - in: query
-      #     name: cursor
-      #     schema:
-      #       type: string
-      #     required: false
-      #     description: The cursor for pagination.
-      #   - in: query
-      #     name: size
-      #     schema:
-      #       type: integer
-      #     required: false
-      #     description: The number of transactions to return.
-      #   - in: query
-      #     name: startDate
-      #     schema:
-      #       type: string
-      #       format: date-time
-      #     required: false
-      #     description: The start date and time for filtering the results.
-      #   - in: query
-      #     name: endDate
-      #     schema:
-      #       type: string
-      #       format: date-time
-      #     required: false
-      #     description: The end date and time for filtering the results.
-      #   - in: query
-      #     name: type
-      #     schema:
-      #       type: string
-      #       enum:
-      #         - mint
-      #         - transfer
-      #         - custom
-      #     required: false
-      #     description: The type of the transaction.
-      #   - in: query
-      #     name: status
-      #     schema:
-      #       type: string
-      #       enum:
-      #         - success
-      #         - failed
-      #         - created
-      #     required: false
-      #     description: The status of the transaction.
-      #   - in: query
-      #     name: contractId
-      #     schema:
-      #       type: string
-      #     description: The id of the contract.
-      responses:
-        "200":
-          description: The list of transactions was retrieved successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    description: An array containing all transactions made by wallets of this project.
-                    items:
-                      oneOf:
-                        - type: object
-                          title: On-ramps
-                          allOf:
-                            - $ref: "#/components/schemas/BaseTransactionResponse"
-                            - $ref: "#/components/schemas/OnRampResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
-                        - type: object
-                          title: Off-ramps
-                          allOf:
-                            - $ref: "#/components/schemas/BaseTransactionResponse"
-                            - $ref: "#/components/schemas/OffRampResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
-                        - type: object
-                          title: Transfers
-                          allOf:
-                            - $ref: "#/components/schemas/BaseTransactionResponse"
-                            # - $ref: "#/components/schemas/TransferResponse"
-                            - $ref: "#/components/schemas/TransactionTimestamps"
-                  # pagination:
-                  #   type: object
-                  #   properties:
-                  #     cursor:
-                  #       type: string
-                  #       description: The cursor for the next page.
-                  #     pageSize:
-                  #       type: number
-                  #       description: The size of the page.
-      security:
-        - apiKey: []
 components:
+  examples:
+    CustomerIndividualArrayExample:
+      value:
+        data:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            country: "BRA"
+            email: "william.default@example.com"
+            walletAddress: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            verification:
+              status: "pending"
+              level: "standard"
+            transactionLimits:
+              single: "1000.00"
+              daily: "10000.00"
+              monthly: "100000.00"
+            createdAt: "2021-01-01T00:00:00Z"
+            updatedAt: "2021-01-01T00:00:00Z"
+    CustomerBusinessArrayExample:
+      value:
+        data:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "business"
+            legalName: "Lumx S.A"
+            taxId: "42.887.120/0001-00"
+            incorporationDate: "2020-01-01"
+            country: "BRA"
+            email: "hello@lumx.io"
+            walletAddress: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            compliance:
+              status: "pending"
+              level: "standard"
+              transactionLimits:
+                single: "1000.00"
+                daily: "10000.00"
+                monthly: "100000.00"
+            createdAt: "2021-01-01T00:00:00Z"
+            updatedAt: "2021-01-01T00:00:00Z"  
+    CustomerIndividualExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "individual"
+        name: "William Default"
+        taxId: "123.456.789-00"
+        birthDate: "1990-01-01"
+        country: "BRA"
+        email: "william.default@example.com"
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
+          - currency: "USDC"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+          - currency: "USDT"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
+            single: "1000.00"
+            daily: "10000.00"
+            monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerBusinessExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "business"
+        legalName: "Lumx S.A"
+        taxId: "42.887.120/0001-00"
+        incorporationDate: "2020-01-01"
+        country: "BRA"
+        email: "hello@lumx.io"
+        beneficiaries:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            country: "BRA"
+            email: "william.default@example.com"
+            sharePercentage: 20
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        balances:
+          - currency: "USDC"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+          - currency: "USDT"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
+          single: "1000.00"
+          daily: "10000.00"
+          monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerCreateIndividualExample:
+       value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "individual"
+        name: "William Default"
+        taxId: "123.456.789-00"
+        birthDate: "1990-01-01"
+        country: "BRA"
+        email: "william.default@example.com"
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
+            single: "1000.00"
+            daily: "10000.00"
+            monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerCreateBusinessExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "business"
+        legalName: "Lumx S.A"
+        taxId: "42.887.120/0001-00"
+        incorporationDate: "2020-01-01"
+        country: "BRA"
+        email: "hello@lumx.io"
+        beneficiaries:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            country: "BRA"
+            email: "william.default@example.com"
+            sharePercentage: 20
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
+          single: "1000.00"
+          daily: "10000.00"
+          monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    TransactionOnrampAwaitingFundsExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "on_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
+        state:
+          status: "awaiting_funds"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "on_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
+        state:
+          status: "success"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "on_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
+        state:
+          status: "processing"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+          receipt:
+            rate: "6.0066"
+            sourceAmount: "1000.000000"
+            targetAmount: "5925.55"
+            sourceCurrency: "USDC"
+            targetCurrency: "BRL"
+            fees:
+              currency: "USDC"
+              lumx:
+                percentage: "10.000000"
+                flat: "1"
+              developer:
+                percentage: "0.000000"
+                flat: "0"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOnrampFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174002"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "on_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
+        state:
+          status: "failed"
+          payment:
+            rail: "pix"
+            brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+          error: {}
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpAwaitingFundsExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "off_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
+        state:
+          status: "awaiting_funds"
+          payment:
+            rail: "pix"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "on_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
+        state:
+          status: "processing"
+          payment:
+            rail: "pix"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "off_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
+        state:
+          status: "success"
+          payment:
+            rail: "pix"
+          receipt:
+            rate: "6.0066"
+            sourceAmount: "1000.00"
+            targetAmount: "5925.55"
+            sourceCurrency: "USDC"
+            targetCurrency: "BRL"
+            fees:
+              currency: "USDC"
+              lumx:
+                percentage: "10.000000"
+                flat: "1"
+              developer:
+                percentage: "0.000000"
+                flat: "0"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionOfframpFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "off_ramp"
+        request:
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
+        state:
+          status: "failed"
+          payment:
+            rail: "pix"
+          error: {}
+        createdAt: "2024-03-20T15:30:00Z"
+        updatedAt: "2024-03-20T15:30:05Z"
+    TransactionTransferProcessingExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000" 
+        state:
+          status: "processing"
+    TransactionTransferSuccessExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000" 
+        state:
+          status: "success"
+          blockchain:
+            transactionHash: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl: "https://amoy.polygonscan.com/tx/0x1234567890123456789012345678901234567890"
+    TransactionTransferFailedExample:
+      value:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "transfer"
+        request:
+          currency: "USDC"
+          from: "123e4567-e89b-12d3-a456-426614174001"
+          to: "123e4567-e89b-12d3-a456-426614174002"
+          amount: "1000.000000"
+        state:
+          status: "failed"
+          error: {}
+    TransactionOnrampRequestExample:
+      value:
+        sourceCurrency: "BRL"
+        sourceAmount: "10000.00"
+        targetCurrency: "USDC"
+        payment:
+          rail: "pix"
+    TransactionOfframpRequestExample:
+      value:
+        sourceCurrency: "BRL"
+        sourceAmount: "10000.00"
+        targetCurrency: "BRL"
+        payment:
+          rail: "pix"
+          keyType: "cpf"
+          keyValue: "123.456.789-00"
   schemas:
-    ProjectRequest:
-      type: object
-      properties:
-        name:
-          description: The name of the project.
-          type: string
-        blockchainName:
-          description: The blockchain used by the project. More blockchains coming soon.
-          type: string
-          enum: ["Polygon"]
-    ProjectResponse:
-      type: object
-      properties:
-        id:
-          description: The id of the project.
-          type: string
-          format: uuid
-        name:
-          description: The name of the project.
-          type: string
-        blockchain:
-          type: object
-          description: Details of the blockchain used by the project.
-          properties:
-            name:
-              type: string
-              example: "Polygon"
-              description: The name of the blockchain.
-            decimalChainId:
-              type: number
-              description: The decimal chain ID of the blockchain.
-        createdAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the project was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: The timestamp from when the project was last updated.
-        apiKey:
-          description: The API key associated with the project.
-          type: string
-    CustomerCreateRequest:
+    CustomerRequest:
       allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+              readOnly: true
         - oneOf:
             - allOf:
-                - $ref: "#/components/schemas/CustomerIndividual"
-                  description: Individual customer
+                - type: object
+                  description: Customer type is individual.
                   title: Individual
-                - type: object
-                  required:
-                    - name
-                    - birthDate
-                    - email
+                - $ref: "#/components/schemas/CustomerIndividual"
             - allOf:
-                - $ref: "#/components/schemas/CustomerBusiness"
-                  description: Business customer
-                  title: Business
-                - type: object
-                  required:
-                    - legalName
-                    - incorporationDate
-          discriminator:
-            propertyName: type
-            mapping:
-              individual: "#/components/schemas/CustomerIndividual"
-              business: "#/components/schemas/CustomerBusiness"
-        - $ref: "#/components/schemas/CustomerCreateRulesRequest"
-    CustomerUpdateRequest:
+              - type: object
+                description: Customer type is business.
+                title: Business
+              - $ref: "#/components/schemas/CustomerBusiness"
+              - type: object
+                properties:
+                  beneficiaries:
+                    type: array
+                    description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
+                    items: 
+                      type: object 
+                      allOf:
+                        - $ref: "#/components/schemas/CustomerIndividual"
+                        - type: object
+                          properties:
+                            type:
+                              description: Beneficiary's type.
+                            name:
+                              description: Beneficiary's name.
+                            taxId:
+                              description: Beneficiary's tax ID.
+                            birthDate:
+                              description: Beneficiary's birth date.
+                            country:
+                              description: Beneficiary's country.
+                            email:
+                              description: Beneficiary's email.
+                            sharePercentage:
+                              type: number
+                              description: The share percentage of the beneficiary.
+                              example: 20
+                        - required:
+                            - type
+                            - name
+                            - taxId
+                            - birthDate
+                            - country
+                            - email
+                            - sharePercentage
+      required:
+        - id
+        - type
+        - name
+        - legalName
+        - taxId
+        - birthDate
+        - email
+        - country
+        - incorporationDate
+        - beneficiaries
+    CustomerResponse:
       allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+              readOnly: true
         - oneOf:
             - $ref: "#/components/schemas/CustomerIndividual"
-              description: Individual customer
+              description: Customer type is individual.
               title: Individual
-            - $ref: "#/components/schemas/CustomerBusiness"
-              description: Business customer
-              title: Business
-          discriminator:
-            propertyName: type
-            mapping:
-              individual: "#/components/schemas/CustomerIndividual"
-              business: "#/components/schemas/CustomerBusiness"
-    CustomerCreateRulesRequest:
-      type: object
-      required:
-        - type
-        - documents
-        - address
-      properties:
-        address:
-          type: object
-          required:
-            - line1
-            - line2
-            - country
-            - state
-            - city
-            - zipCode
-    CustomerUpdateRulesRequest:
-      type: object
-      minProperties: 2
-      required:
-        - type
-    CustomerBase:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: Unique customer identifier
-          format: uuid
-          readOnly: true
-        type:
-          type: string
-          description: The type of this customer.
-          enum: ["individual", "business"]
-        address:
-          $ref: "#/components/schemas/CustomerAddress"
-          example:
-            line1: "Rua dos Bobos, 0"
-            line2: "Apto 101"
-            country: "BRA"
-            state: "SP"
-            city: "São Paulo"
-            zipCode: "01234-567"
-        documents:
-          type: array
-          description: List of customer documents
-          items:
-            $ref: "#/components/schemas/CustomerDocument"
-          example:
-            - country: BRA
-              type: TAX_ID
-              value: 123.456.789-00
-        createdAt:
-          type: string
-          description: Record creation timestamp
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          description: Record last update timestamp
-          format: date-time
-          readOnly: true
-        walletAddress:
-          type: string
-          description: The wallet address of the customer.
-          example: "0x1234567890123456789012345678901234567890"
-          readOnly: true
-    CustomerResponse:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: Unique customer identifier
-          format: uuid
-          readOnly: true
-        type:
-          type: string
-          description: The type of this customer.
-          enum: ["individual", "business"]
-        address:
-          $ref: "#/components/schemas/CustomerAddress"
-          example:
-            line1: "Rua dos Bobos, 0"
-            line2: "Apto 101"
-            country: "BRA"
-            state: "SP"
-            city: "São Paulo"
-            zipCode: "01234-567"
-        documents:
-          type: array
-          description: List of customer documents
-          items:
-            $ref: "#/components/schemas/CustomerDocument"
-          example:
-            - country: BRA
-              type: TAX_ID
-              value: 123.456.789-00
-        createdAt:
-          type: string
-          description: Record creation timestamp
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          description: Record last update timestamp
-          format: date-time
-          readOnly: true
-        walletAddress:
-          type: string
-          description: The wallet address of the customer.
-          example: "0x1234567890123456789012345678901234567890"
-        kyc:
-          type: object
+            - allOf:
+                - type: object
+                  description: Customer type is business.
+                  title: Business
+                - $ref: "#/components/schemas/CustomerBusiness"
+                - type: object
+                  properties:
+                    beneficiaries:
+                      type: array
+                      description: List of beneficiaries associated with this business.
+                      items: 
+                        type: object 
+                        allOf:
+                          - $ref: "#/components/schemas/CustomerIndividual"
+                          - type: object
+                            properties:
+                              id:
+                                type: string
+                                description: Beneficiary's unique identifier.
+                                format: uuid
+                                example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                              type:
+                                description: Beneficiary's type.
+                              name:
+                                description: Beneficiary's name.
+                              taxId:
+                                description: Beneficiary's tax ID.
+                              birthDate:
+                                description: Beneficiary's birth date.
+                              country:
+                                description: Beneficiary's country.
+                              email:
+                                description: Beneficiary's email.
+                              sharePercentage:
+                                type: number
+                                description: The share percentage of the beneficiary.
+                                example: 20
+        - type: object
           properties:
-            status:
+            taxId:
+              description: Customer's tax ID.
+            walletAddress:
               type: string
-              description: The status of the customer's KYC.
-              enum:
-                [
-                  "pending",
-                  "approved",
-                  "final_rejection",
-                  "temporary_rejection",
-                ]
-            level:
+              description: Customer's wallet address.
+              example: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl:
               type: string
-              description: The level of the customer's KYC.
-              example: "standard"
+              description: Customer's block explorer URL.
+              example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            balances:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomerBalance"
+            verification:
+              $ref: "#/components/schemas/CustomerVerification"
             transactionLimits:
               type: object
+              description: Verification's transaction limits.
               properties:
-                daily:
-                  type: number
-                  description: The daily limit for the customer's KYC.
-                monthly:
-                  type: number
-                  description: The monthly limit for the customer's KYC.
                 single:
-                  type: number
-                  description: The limit for a single transaction for the customer's KYC.
-    CustomerAddress:
-      type: object
-      additionalProperties: false
-      properties:
-        line1:
-          type: string
-          description: The first line of the address
-          example: "Rua dos Bobos, 0"
-        line2:
-          type: string
-          description: The second line of the address
-          example: "Apto 101"
-        country:
-          type: string
-          description: The country code where the customer is located following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
-          enum: [BRA]
-          example: "BRA"
-        state:
-          type: string
-          description: The state where the customer is located
-          example: "SP"
-        city:
-          type: string
-          description: The city where the customer is located
-          example: "São Paulo"
-        zipCode:
-          type: string
-          description: The postal code where the customer is located
-          example: "01234-567"
-    CustomerDocument:
-      type: object
-      required:
-        - country
-        - type
-        - value
-      additionalProperties: false
-      properties:
-        country:
-          type: string
-          description: The country code that issued the document following ISO 3166-1 alpha-2 (BRA is the only one accepted at the moment)
-          enum: [BRA]
-        type:
-          type: string
-          description: The type of document (TAX_ID is the only one accepted at the moment)
-          enum: [TAX_ID]
-        value:
-          type: string
-          description: The document value/number.
-          example: 123.456.789-00
+                  type: string
+                  description: Single transaction limit for the customer's KYC.
+                  example: "1000.00"
+                daily:
+                  type: string
+                  description: Daily limit for the customer's KYC.
+                  example: "10000.00"
+                monthly:
+                  type: string
+                  description: Monthly limit for the customer's KYC.
+                  example: "100000.00"
+            createdAt:
+              type: string
+              description: Creation date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
+            updatedAt:
+              type: string
+              description: Last update date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
+    CustomerArrayResponse:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Customer's unique identifier.
+              format: uuid
+        - oneOf:
+          - allOf:
+            - type: object
+              description: Customer type is individual.
+              title: Individual
+            - $ref: "#/components/schemas/CustomerIndividual"
+          - allOf:
+            - type: object
+              description: Customer type is business.
+              title: Business
+            - $ref: "#/components/schemas/CustomerBusiness"
+        - type: object
+          properties:
+            taxId:
+              description: Customer's tax ID.
+            walletAddress:
+              type: string
+              description: Customer's wallet address.
+              example: "0x1234567890123456789012345678901234567890"
+            blockExplorerUrl:
+              type: string
+              description: Customer's block explorer URL.
+              example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            verification:
+              $ref: "#/components/schemas/CustomerVerification"
+            transactionLimits:
+              type: object
+              description: Customer's transaction limits.
+              properties:
+                single:
+                  type: string
+                  description: Single transaction limit for the customer's KYC.
+                  example: "1000.00"
+                daily:
+                  type: string
+                  description: Daily limit for the customer's KYC.
+                  example: "10000.00"
+                monthly:
+                  type: string
+                  description: Monthly limit for the customer's KYC.
+                  example: "100000.00"
+            createdAt:
+              type: string
+              description: Creation date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
+            updatedAt:
+              type: string
+              description: Last update date and time.
+              format: date-time
+              example: "2021-01-01T00:00:00Z"
     CustomerIndividual:
       type: object
-      allOf:
-        - $ref: "#/components/schemas/CustomerBase"
-        - type: object
-          properties:
-            type:
-              enum: ["individual"]
-            name:
-              type: string
-              description: Customer full name
-            birthDate:
-              type: string
-              description: Customer birth date
-              format: date
-              example: "1990-01-01"
-            email:
-              type: string
-              description: Customer email
-              example: "john.doe@example.com"
-          required:
-            - name
-            - birthDate
-            - email
-            - address
-            - type
+      properties:
+        type:
+          type: string
+          description: Customer's type.
+          enum: ["individual"]
+          example: "individual"
+        name:
+          type: string
+          description: Customer's full name.
+          example: "William Default"
+        taxId:
+          type: string
+          description: Customer's tax ID. It must be a valid tax ID in the country where the customer lives.
+          example: "123.456.789-00"
+        birthDate:
+          type: string
+          description: Customer's birth date.
+          format: date
+          example: "1990-01-01"
+        country:
+          type: string
+          description: Customer's country using ISO 3166-1 alpha-3 code.
+          enum: ["BRA"]
+          example: "BRA"
+        email:
+          type: string
+          description: Customer's email.
+          example: "william.default@example.com"
     CustomerBusiness:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/CustomerBase"
-        - type: object
-          properties:
-            type:
-              enum: ["business"]
-            legalName:
-              type: string
-              description: Customer legal name
-            incorporationDate:
-              type: string
-              description: Customer incorporation date
-              format: date
-              example: "2020-01-01"
-            beneficiaries:
-              type: array
-              description: List of beneficiaries associated with this business. Only individuals with a share percentage of 20% or greater are required.
-              items: 
-                type: object 
-                allOf:
-                  - $ref: "#/components/schemas/CustomerIndividual"
-                  - type: object
-                    properties:
-                      sharePercentage:
-                        type: number
-                        description: The share percentage of the beneficiary.
-                        example: 20
-                    required:
-                      - sharePercentage
-    Customer:
-      oneOf:
-        - $ref: "#/components/schemas/CustomerIndividual"
-          title: Individual
-        - $ref: "#/components/schemas/CustomerBusiness"
-          title: Business
-      discriminator:
-        propertyName: type
-        mapping:
-          individual: "#/components/schemas/CustomerIndividual"
-          business: "#/components/schemas/CustomerBusiness"
-    DocumentUploadRequest:
-      type: object
-      required:
-        - metadata
-        - file
-      properties:
-        metadata:
-          type: object
-          properties:
-            country:
-              type: string
-              description: The country code that issued the document following ISO 3166-1 alpha-2
-            type:
-              type: string
-              description: The type of document
-              enum: [ID_CARD, PASSPORT, DRIVING_LICENSE, UTILITY_BILL, TAX_ID]
-            side:
-              type: string
-              description: The side of the document (FRONT_SIDE or BACK_SIDE)
-              enum: [FRONT_SIDE, BACK_SIDE]
-        file:
-          type: string
-          description: The document file to be uploaded.
-          format: binary
-
-    ExchangeRateOldResponse:
-      type: object
-      properties:
-        sourceCurrency:
-          type: string
-          enum: [USDC, USDT, BRL]
-          description: The currency to convert from.
-        sourceAmount:
-          type: string
-          example: "10000.00"
-          description: The amount to be converted from the source currency.
-        targetCurrency:
-          type: string
-          enum: [BRL, USDC, USDT]
-          description: The currency to convert to.
-        rate:
-          type: string
-          example: "5.9030"
-          description: The exchange rate between source and target currencies.
-    ExchangeRateRequest:
       type: object
       properties:
         type:
           type: string
-          description: The type of this exchange rate. Use FLOATING for indicative rates and LOCKED to get an exchangeRateId that you can use when creating on ramps or off ramps.
-          enum: ["FLOATING", "LOCKED"]
-        sourceCurrency:
+          description: Customer's type.
+          enum: ["business"]
+        legalName:
           type: string
-          enum: [USDC, USDT, BRL]
-          description: The currency to convert from.
-        sourceAmount:
+          description: Customer legal name.
+          example: "Lumx S.A"
+        taxId:
           type: string
-          example: "10000.00"
-          description: The amount to be converted from the source currency. Only used for FLOATING rates.
-        targetCurrency:
+          description: Customer's tax ID. It must be a valid tax ID in the country where the company is incorporated.
+          example: "42.887.120/0001-00"
+        incorporationDate:
           type: string
-          enum: [BRL, USDC, USDT]
-          description: The currency to convert to.
-        targetAmount:
+          description: Customer incorporation date.
+          format: date
+          example: "2020-01-01"
+        country:
           type: string
-          example: "59030.00"
-          description: The amount to be converted to the target currency. Only used for LOCKED rates.
+          description: Customer's country using ISO 3166-1 alpha-3 code.
+          example: "BRA"
+        email:
+          type: string
+          description: Customer's email.
+          example: "hello@lumx.io"
+    CustomerVerification:
+      type: object
+      description: Customer's verification KYC/KYB.
+      properties:
+        status:
+          type: string
+          description: Verification's status.
+          enum:
+            ["pending", "approved", "final_rejection", "temporary_rejection"]
+          example: "pending"
+        level:
+          type: string
+          description: Verification's level.
+          enum: ["standard"]
+          example: "standard"
+    CustomerBalance:
+      type: object
+      description: Customer's balance.
+      properties:
+        currency:
+          type: string
+          description: Balance's currency.
+          enum: [USDC, USDT]
+        amount:
+          type: string
+          description: Balance's amount.
+          example: "1000.00"
+        updatedAt:
+          type: string
+          description: Last update date and time.
+          example: "2021-01-01T00:00:00Z"
+    CustomerCreateResponse:
+      allOf:
+          - type: object
+            properties:
+              id:
+                type: string
+                description: Customer's unique identifier.
+                format: uuid
+                readOnly: true
+          - oneOf:
+              - $ref: "#/components/schemas/CustomerIndividual"
+                description: Customer type is individual.
+                title: Individual
+              - allOf:
+                  - type: object
+                    description: Customer type is business.
+                    title: Business
+                  - $ref: "#/components/schemas/CustomerBusiness"
+                  - type: object
+                    properties:
+                      beneficiaries:
+                        type: array
+                        description: List of beneficiaries associated with this business.
+                        items: 
+                          type: object 
+                          allOf:
+                            - $ref: "#/components/schemas/CustomerIndividual"
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                  description: Beneficiary's unique identifier.
+                                  format: uuid
+                                  example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                                type:
+                                  description: Beneficiary's type.
+                                name:
+                                  description: Beneficiary's name.
+                                taxId:
+                                  description: Beneficiary's tax ID.
+                                email:
+                                  description: Beneficiary's email.
+                                birthDate:
+                                  description: Beneficiary's birth date.
+                                country:
+                                  description: Beneficiary's country.
+                                sharePercentage:
+                                  type: number
+                                  description: The share percentage of the beneficiary.
+                                  example: 20
+          - type: object
+            properties:
+              taxId:
+                description: Customer's tax ID.
+              walletAddress:
+                type: string
+                description: Customer's wallet address.
+                example: "0x1234567890123456789012345678901234567890"
+              blockExplorerUrl:
+                type: string
+                description: Customer's block explorer URL.
+                example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+              verification:
+                $ref: "#/components/schemas/CustomerVerification"
+              transactionLimits:
+                type: object
+                description: Verification's transaction limits.
+                properties:
+                  single:
+                    type: string
+                    description: Single transaction limit for the customer's KYC.
+                    example: "1000.00"
+                  daily:
+                    type: string
+                    description: Daily limit for the customer's KYC.
+                    example: "10000.00"
+                  monthly:
+                    type: string
+                    description: Monthly limit for the customer's KYC.
+                    example: "100000.00"
+              createdAt:
+                type: string
+                description: Creation date and time.
+                format: date-time
+                example: "2021-01-01T00:00:00Z"
+              updatedAt:
+                type: string
+                description: Last update date and time.
+                format: date-time
+                example: "2021-01-01T00:00:00Z"
+    CustomerUploadDocumentRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          description: Document's file to be uploaded. The maximum size is 5MB.
+          format: binary
+          # contentEncoding: binary
+        metadata:
+          type: object
+          description: Document's metadata of the file.
+          properties:
+            type:
+              type: string
+              description: Document type.
+              enum: [id_card, passport, drivers_license, utility_bill, incorporation_articles, proof_of_address]
+              example: "id_card"
+            country:
+              type: string
+              description: Document country using ISO 3166-1 alpha-3 code.
+              example: "BRA"
+            side:
+              type: string
+              description: Document side. Only required for documents with both sides.
+              nullable: true
+              enum: [front_side, back_side]
+              example: "front_side"
+            beneficiaryId:
+              type: string
+              description: Beneficiary's unique identifier. Only required for documents of beneficiaries.
+              nullable: true
+              format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
+          required:
+            - type
+            - country
+      required:
+        - file
+        - metadata
+    CustomerVerificationResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: Customer's unique identifier.
+          format: uuid
+        status:
+          type: string
+          description: Customer verification's status.
+          enum: ["pending", "approved", "final_rejection", "temporary_rejection"]
+          example: "temporary_rejection"
+        level:
+          type: string
+          description: Customer verification's level.
+          example: "standard"
+          enum: ["standard"]
+        statusReason:
+          type: object
+          description: Customer verification's status reason.
+          properties:
+            rejectLabels:
+              type: array
+              description: Customer verification's reject labels.
+              example:
+                - screenshot
+                - unsatisfactory_photos
+            rejectSubLabels:
+              type: array
+              description: Customer verification's reject sub labels.
+              example:
+                - proofOfAddress_listOfDocs
+                - badPhoto
+                - proofOfAddress
+                - differentDocs
+                - badPhoto_screenshot
+    ExchangeRateRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: Exchange rate type is floating.
+                  title: Floating
+                - $ref: "#/components/schemas/ExchangeRateFloating"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is locked.
+                  title: Locked
+                - $ref: "#/components/schemas/ExchangeRateLocked"
       required:
         - type
         - sourceCurrency
-        - targetCurrency
+        - sourceAmount
+        - targetCurrency  
+        - targetAmount
     ExchangeRateResponse:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: Exchange rate type is floating.
+                  title: Floating
+                  properties:
+                    type:
+                      type: string
+                      description: Exchange rate's type.
+                      enum: ["floating"]
+                      example: "floating"
+                    sourceCurrency:
+                      type: string
+                      description: Exchange rate's source currency.
+                      example: "BRL"
+                    sourceAmount:
+                      type: string
+                      description: Exchange rate's source amount.
+                      example: "60000.00"
+                    targetCurrency:
+                      type: string
+                      description: Exchange rate's target currency.
+                      example: "USDC"
+                    targetAmount:
+                      type: string
+                      description: Exchange rate's target amount.
+                      example: "10125.727780"
+            - allOf:
+                - type: object
+                  description: Exchange rate type is locked.
+                  title: Locked
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: Exchange rate's unique identifier.
+                      example: "123e4567-e89b-12d3-a456-426614174000"
+                    type:
+                      type: string
+                      description: Exchange rate's type.
+                      enum: ["locked"]
+                      example: "locked"
+                    expiresAt:
+                      type: string
+                      description: Expiration date and time. The exchange rate duration is 5 minutes.
+                      example: "2026-05-05T00:00:00Z"
+                    sourceCurrency:
+                      type: string
+                      description: Exchange rate's source currency.
+                      example: "BRL"
+                    sourceAmount:
+                      type: string
+                      description: Exchange rate's source amount.
+                      example: "5925.55"
+                    targetCurrency:
+                      type: string
+                      description: Exchange rate's target currency.
+                      example: "USDC"
+                    targetAmount:
+                      type: string
+                      description: Exchange rate's target amount.
+                      example: "10000.000000"
+        - type: object
+          properties:
+            rate:
+              type: string
+              description: The exchange rate between the currencies.
+              example: "5.9255"
+    ExchangeRateFloating:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Exchange rate's type.
+          enum: ["floating"]
+          example: "floating"
+        sourceCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's source currency.
+          example: "BRL"
+        sourceAmount:
+          type: string
+          description: Exchange rate's source amount.
+          example: "60000.00"
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's target currency.
+          example: "USDC"
+    ExchangeRateLocked:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Exchange rate's type.
+          enum: ["locked"]
+          example: "locked"
+        sourceCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's source currency.
+          example: "BRL"
+        targetCurrency:
+          type: string
+          enum: [BRL, USDC, USDT]
+          description: Exchange rate's target currency.
+          example: "USDC"
+        targetAmount:
+          type: string
+          description: Exchange rate's target amount.
+          example: "10000.000000"
+    TransactionResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          description: The id of the exchange rate. Only returned for LOCKED rates.
+          description: Transaction's unique identifier.
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
         type:
           type: string
-          description: The type of this exchange rate.
-          enum: ["FLOATING", "LOCKED"]
-        sourceCurrency:
-          type: string
-          enum: [USDC, USDT, BRL]
-          description: The currency to convert from.
-        sourceAmount:
-          type: string
-          example: "10000.00"
-          description: The amount to be converted from the source currency.
-        targetCurrency:
-          type: string
-          enum: [BRL, USDC, USDT]
-          description: The currency to convert to.
-        targetAmount:
-          type: string
-          example: "59030.00"
-          description: The amount to be converted to the target currency.
-        rate:
-          type: string
-          example: "5.9030"
-          description: The exchange rate between source and target currencies.
-    CrossRampRequest:
+          description: Transaction's type.
+          enum: ["on_ramp", "off_ramp", "transfer"]
+        request:
+          type: object
+          description: Transaction's request. See examples for more details.
+        state:
+          type: object
+          description: Transaction's current state. See examples for more details.
+    TransactionOnRampRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: On-ramp using floating exchange rate.
+                  title: Floating
+                - $ref: "#/components/schemas/TransactionOnRampFloating"
+            - allOf:
+                - type: object
+                  description: On-ramp using locked exchange rate.
+                  title: Locked
+                - $ref: "#/components/schemas/TransactionOnRampLocked"
+    TransactionOnRampFloating:
       type: object
-      required:
-        - customerId
-        - payment
-        - amount
-        - sourceCurrency
-        - targetCurrency
       properties:
         customerId:
           type: string
           format: uuid
-          description: The id of the customer performing the operation.
+          description: Customer's unique identifier.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         sourceCurrency:
           type: string
+          enum: [BRL]
+          description: Transaction's source currency.
+          example: "BRL"
+        sourceAmount:
+          type: string
+          description: Transaction's source amount.
+          example: "10000.00"
         targetCurrency:
           type: string
-        amount:
+          enum: [USDC, USDT]
+          description: Transaction's target currency.
+          example: "USDC"
+        payment:
+          type: object
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+      required:
+        - customerId
+        - sourceCurrency
+        - sourceAmount
+        - targetCurrency
+        - payment
+    TransactionOnRampLocked:
+      type: object
+      properties:
+        customerId:
           type: string
-          format: number
+          format: uuid
+          description: Customer's unique identifier.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         exchangeRateId:
           type: string
           format: uuid
-          description: The id of the exchange rate to be used for this transaction. If empty, a floating rate will be used.
-    BaseTransactionResponse:
+          description: Exchange rate's id to be used for this transaction.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        payment:
+          type: object
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+      required:
+        - customerId
+        - payment
+        - exchangeRateId
+    TransactionOnRampResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          description: The id of the transaction.
+          description: On-ramp operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
         customerId:
           type: string
           format: uuid
-          description: The customer performing the operation.
+          description: Customer's unique identifier.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type:
           type: string
-          description: The type of this transaction
-          enum: ["on_ramp", "off_ramp", "transfer", "swap"]
+          description: On-ramp operation's type.
+          enum: ["on_ramp"]
+          example: "on_ramp"
         request:
           type: object
-          description: The parameters used when creating this transaction.
+          properties:
+            sourceCurrency:
+              type: string
+              description: Fiat currency to be converted.
+              example: "BRL"
+            targetCurrency:
+              type: string
+              description: Stablecoin to be received.
+              example: "USDC"
+            amount:
+              type: string
+              description: Amount to be converted.
+              example: "10000.00"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
         state:
           type: object
-          description: The transaction's results.
+          description: On-ramp operation's current state. See examples for more details.
+    TransactionOffRampRequest:
+      allOf:
+        - oneOf:
+            - allOf:
+                - type: object
+                  description: Off-ramp using floating exchange rate.
+                  title: Floating
+                - $ref: "#/components/schemas/TransactionOffRampFloating"
+            - allOf:
+                - type: object
+                  description: Off-ramp using locked exchange rate.
+                  title: Locked
+                - $ref: "#/components/schemas/TransactionOffRampLocked"
+    TransactionOffRampFloating:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        sourceCurrency:
+          type: string
+          enum: [USDC, USDT]
+          description: Transaction's source currency.
+          example: "USDC"
+        sourceAmount:
+          type: string
+          description: Transaction's source amount.
+          example: "10000.00"
+        targetCurrency:
+          type: string
+          enum: [BRL]
+          description: Transaction's target currency.
+          example: "BRL"
+        payment:
+          type: object
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+            keyType:
+              type: string
+              description: Payment rail's key type.
+              enum: [cpf, cnpj, email, phone, random]
+              example: "cpf"
+            keyValue:
+              type: string
+              description: Payment rail's key value.
+              example: "123.456.789-00"
+      required:
+        - customerId
+        - sourceCurrency
+        - sourceAmount
+        - targetCurrency
+        - payment
+    TransactionOffRampLocked:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange Rate's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        payment:
+          type: object
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+            keyType:
+              type: string
+              description: Payment rail's key type.
+              enum: [cpf, cnpj, email, phone, random]
+              example: "cpf"
+            keyValue:
+              type: string
+              description: Payment rail's key value.
+              example: "123.456.789-00"
+      required:
+        - customerId
+        - payment
+        - exchangeRateId
+    TransactionOffRampResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Off-ramp operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type:
+          type: string
+          description: Off-ramp operation's type.
+          enum: ["off_ramp"]
+          example: "off_ramp"
+        request:
+          type: object
+          properties:
+            sourceCurrency:
+              type: string
+              description: Stablecoin to be converted.
+              example: "USDC"
+            targetCurrency:
+              type: string
+              description: Fiat currency to be received.
+              example: "BRL"
+            amount:
+              type: string
+              description: Amount to be converted.
+              example: "10000.00"
+            payment:
+              type: object
+              properties:
+                rail:
+                  type: string
+                  description: Payment rail to be used.
+                  example: "pix"
+                keyType:
+                  type: string
+                  description: Payment rail's key type.
+                  enum: [cpf, cnpj, email, phone, random]
+                  example: "cpf"
+                keyValue:
+                  type: string
+                  description: Payment rail's key value.
+                  example: "123.456.789-00"
+        state:
+          type: object
+          description: Off-ramp operation's current state. See examples for more details.
+    TransactionTransferRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          enum: [USDC, USDT]
+          description: Transfer's currency.
+          example: "USDC"
+        from:
+          type: string
+          format: uuid
+          description: Customer's unique identifier that will send the tokens.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        to:
+          oneOf:
+            - type: string
+              format: uuid
+              title: customer
+              description: Customer's unique identifier that will receive the tokens.
+              example: "980dc26b-42fd-4044-8a42-2271d20a2eb9"
+            - type: string
+              format: eth-address
+              title: address
+              description: Blockchain address that will receive the tokens.
+              example: "0x1234567890123456789012345678901234567890"
+        amount:
+          type: string
+          description: Transfer's amount.
+          example: "10000.000000"
+      required:
+        - currency
+        - amount
+        - from
+        - to
+    TransactionTransferResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Transfer operation's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: Transfer operation's type.
+          enum: ["transfer"]
+          example: "transfer"
+        request:
+          type: object
+          properties:
+            currency:
+              type: string
+              description: Stablecoin to be transferred.
+              example: "USDC"
+            from:
+              type: string
+              format: uuid
+              description: Customer's id that will send the tokens.
+              example: "123e4567-e89b-12d3-a456-426614174000"
+            to:
+              type: string
+              description: Customer's id that will receive the tokens. Can also be any valid blockchain address.
+              example:
+                - "123e4567-e89b-12d3-a456-426614174000"
+                - "0x1234567890123456789012345678901234567890"
+            amount:
+              type: string
+              description: Amount to be transferred.
+              example: "10000.000000"
+        state:
+          type: object
+          description: Transfer operation's current state. See examples for more details.
     TransactionTimestamps:
       type: object
       properties:
         createdAt:
           type: string
           format: date-time
-          description: The timestamp from when the transaction was submitted.
+          description: Creation date and time.
         updatedAt:
           type: string
           format: date-time
-          description: The timestamp from when the transaction was last updated.
-    BlockchainReceipt:
-      type: object
-      description: Blockchains information regarding this transaction
-      properties:
-        transactionHash:
-          type: string
-          description: Transaction hash recorded on the blockchain
-          example: "0x0bf375d559848032092823fc6b821cc72426b890e91ab1a5d2acc7183c325832"
-        blockExplorerUrl:
-          type: string
-          description: Block explorer from the chain
-          example: "https://polygonscan.com/"
-    OnRampRequest:
-      type: object
-      properties:
-        payment:
-          type: object
-          required:
-            - rail
-          properties:
-            rail:
-              type: string
-              enum: ["pix"]
-              description: The payment rail that will be used for this transaction.
-        sourceCurrency:
-          enum: [BRL]
-          description: The fiat currency to convert from.
-        targetCurrency:
-          enum: [USDC, USDT]
-          description: The stablecoin to convert to.
-        amount:
-          example: "100.99"
-          description: The amount to be converted from fiat to stablecoin. If exchangeRateId is provided, the amount MUST match the sourceAmount from the exchange rate response obtained previously.
-    OnRampResponse:
-      type: object
-      properties:
-        type:
-          enum: ["on_ramp"]
-        status:
-          enum:
-            - awaiting_funds
-            - processing
-            - success
-            - failed
-        request:
-          description: An object containing the parameters used for this on-ramp.
-          allOf:
-            - $ref: "#/components/schemas/CrossRampRequest"
-            - $ref: "#/components/schemas/OnRampRequest"
-        state:
-          oneOf:
-            - allOf:
-                - $ref: "#/components/schemas/OngoingOnRampTransactionState"
-            - allOf:
-                - $ref: "#/components/schemas/FinishedOnRampTransactionState"
-                - $ref: "#/components/schemas/SuccessOnRampTransactionState"
-            - allOf:
-                - $ref: "#/components/schemas/FinishedOnRampTransactionState"
-                - $ref: "#/components/schemas/FailedOnRampTransactionState"
-    OngoingOnRampTransactionState:
-      type: object
-      title: On ramp processing
-      properties:
-        status:
-          enum:
-            - awaiting_funds
-            - processing
-        payment:
-          $ref: "#/components/schemas/OnRampStatePayment"
-          description: The payment details to add funds for this on ramp transaction.
-    FinishedOnRampTransactionState:
-      type: object
-      properties:
-        status:
-          enum:
-            - success
-            - failed
-        payment:
-          $ref: "#/components/schemas/OnRampStatePayment"
-          description: The payment details to add funds for this on ramp transaction.
-    SuccessOnRampTransactionState:
-      type: object
-      title: On ramp success
-      properties:
-        receipt:
-          $ref: "#/components/schemas/OnRampSuccessReceipt"
-          description: The receipt details for this transaction.
-    FailedOnRampTransactionState:
-      type: object
-      title: On ramp failure
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Code number
-            message:
-              type: string
-              description: Error message
-    OffRampRequest:
-      type: object
-      required:
-        - sourceCurrency
-        - targetCurrency
-        - amount
-        - payment
-      properties:
-        payment:
-          description: The definition of how and where the funds from the off ramp transaction will be sent.
-          type: object
-          required:
-            - rail
-            - keyValue
-            - keyType
-          properties:
-            rail:
-              type: string
-              enum: ["pix"]
-              description: The payment rail that will be used for this transaction.
-            keyValue:
-              type: string
-              description: The PIX key identifying the account where to send funds.
-            keyType:
-              type: string
-              enum: ["phone", "CPF", "CNPJ", "email", "random"]
-        sourceCurrency:
-          enum: [USDC, USDT]
-          description: The stablecoin to convert from.
-        targetCurrency:
-          enum: [BRL]
-          description: The fiat currency to convert to.
-        amount:
-          example: "100.123456"
-          description: The amount to be converted from stablecoin to fiat. If exchangeRateId is provided, the amount MUST match the targetAmount from the exchange rate response obtained previously.
-    OffRampResponse:
-      type: object
-      properties:
-        type:
-          enum: ["off_ramp"]
-        request:
-          description: An object containing the parameters used for this off-ramp.
-          allOf:
-            - $ref: "#/components/schemas/CrossRampRequest"
-            - $ref: "#/components/schemas/OffRampRequest"
-        state:
-          oneOf:
-            - allOf:
-                - $ref: "#/components/schemas/OngoingOffRampTransactionState"
-            - allOf:
-                - $ref: "#/components/schemas/FinishedOffRampTransactionState"
-                - $ref: "#/components/schemas/SuccessOffRampTransactionState"
-            - allOf:
-                - $ref: "#/components/schemas/FinishedOffRampTransactionState"
-                - $ref: "#/components/schemas/FailedOffRampTransactionState"
-    OngoingOffRampTransactionState:
-      type: object
-      title: Off ramp processing
-      properties:
-        status:
-          enum:
-            - awaiting_funds
-            - processing
-        payment:
-          $ref: "#/components/schemas/StatePayment"
-          description: The payment details for this off ramp transaction.
-    SuccessOffRampTransactionState:
-      type: object
-      title: Off ramp success
-      properties:
-        receipt:
-          $ref: "#/components/schemas/OffRampSuccessReceipt"
-          description: The receipt details for this transaction.
-    FinishedOffRampTransactionState:
-      type: object
-      properties:
-        status:
-          enum:
-            - success
-            - failed
-        payment:
-          $ref: "#/components/schemas/StatePayment"
-          description: The payment details for this off ramp transaction.
-    FailedOffRampTransactionState:
-      type: object
-      title: Off ramp failure
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Code number
-            message:
-              type: string
-              description: Error message
-    TransferRequest:
-      type: object
-      required:
-        - currency
-        - from
-        - to
-        - amount
-      properties:
-        currency:
-          type: string
-          enum: ["USDC", "USDT"]
-          description: The stablecoin to be transferred.
-        from:
-          type: string
-          format: uuid
-          description: The id of the customer who is sending the tokens.
-        to:
-          type: string
-          description: The wallet address or customer ID who will receive the tokens.
-          examples:
-            - "123e4567-e89b-12d3-a456-426614174000"
-            - "0xa65aae78edef916d4102ba7b5672068c0d35fbff"
-        amount:
-          type: string
-          format: number
-          example: 100.123456
-          description: The amount to be transferred.
-    TransferResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of this transaction.
-          enum: ["transfer"]
-        request:
-          description: An object containing the parameters used for this transfer.
-          $ref: "#/components/schemas/TransferRequest"
-        state:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-                - processing
-                - success
-                - failed
-            blockchain:
-              $ref: "#/components/schemas/BlockchainReceipt"
-    ExecuteTransactionRequest:
-      type: object
-      required:
-        - transactionSignatures
-      properties:
-        transactionSignatures:
-          description: All signatures required for this transaction.
-          type: array
-          items:
-            type: string
-    StatePayment:
-      type: object
-      description: The payment details for this transaction.
-      properties:
-        rail:
-          type: string
-          enum: ["pix"]
-          description: The payment rail that will be used for this transaction.
-    OnRampStatePayment:
-      allOf:
-        - $ref: "#/components/schemas/StatePayment"
-        - type: object
-          properties:
-            brCode:
-              type: string
-              description: The PIX copy-and-paste code to be used for payment.
-              example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
-    OnRampSuccessReceipt:
-      type: object
-      description: The receipt details for this transaction.
-      properties:
-        rate:
-          type: number
-          description: The exchange rate used for this transaction.
-          example: 0.166
-        sourceAmount:
-          type: number
-          description: The amount that was converted from the source currency.
-          example: 6000
-        targetAmount:
-          type: number
-          description: The converted amount after fees.
-          example: 986.80
-        sourceCurrency:
-          type: string
-          description: The currency to convert from.
-          example: "BRL"
-        targetCurrency:
-          type: string
-          description: The currency to convert to.
-          example: "USDC"
-        fees:
-          type: object
-          description: The fee details for this transaction.
-          properties:
-            currency:
-              type: string
-              description: The currency of the fee.
-              example: "USDC"
-              enum: ["BRL", "USDC", "USDT"]
-            lumx:
-              type: object
-              description: The fees charged by Lumx for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 9.988916
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 1
-            developer:
-              type: object
-              description: The fees charged by the developer (you) for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 0.998891
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 0.1
-        blockchain:
-          $ref: "#/components/schemas/BlockchainReceipt"
-    OffRampSuccessReceipt:
-      type: object
-      description: The receipt details for this transaction.
-      properties:
-        rate:
-          type: number
-          description: The exchange rate used for this transaction.
-          example: 6.0066
-        sourceAmount:
-          type: number
-          description: The amount that was converted from the source currency.
-          example: 1000.00
-        targetAmount:
-          type: number
-          description: The converted amount after fees.
-          example: 5925.55
-        sourceCurrency:
-          type: string
-          description: The currency to convert from.
-          example: "USDC"
-        targetCurrency:
-          type: string
-          description: The currency to convert to.
-          example: "BRL"
-        fees:
-          type: object
-          description: The fee details for this transaction.
-          properties:
-            currency:
-              type: string
-              description: The currency of the fee.
-              example: "USDC"
-              enum: ["BRL", "USDC", "USDT"]
-            lumx:
-              type: object
-              description: The fees charged by Lumx for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 10.000000
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 1
-            developer:
-              type: object
-              description: The fees charged by the developer (you) for processing this transaction.
-              properties:
-                percentage:
-                  type: number
-                  description: The percentage fee, calculated as a percentage of the target amount.
-                  example: 1.000000
-                flat:
-                  type: number
-                  description: The flat fee which is subtracted from the target amount.
-                  example: 0.1
-        blockchain:
-          $ref: "#/components/schemas/BlockchainReceipt"
+          description: Last update date and time.
   securitySchemes:
     apiKey:
       type: http
       scheme: bearer
-      description: Bearer authentication header of the form `Bearer <API_KEY>`.
+      description: Bearer authentication header on the format `Bearer <API_KEY>`.

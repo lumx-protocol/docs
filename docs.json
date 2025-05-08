@@ -58,11 +58,6 @@
           "icon": "rocket"
         },
         {
-          "anchor": "System Status",
-          "href": "https://status.lumx.io",
-          "icon": "signal"
-        },
-        {
           "anchor": "Community",
           "href": "https://join.slack.com/t/lumxprotocol/shared_invite/zt-2r5c6zxk3-5QGGZ3mUtLel5te1dIG4Mg",
           "icon": "slack"
