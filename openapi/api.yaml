@@ -50,11 +50,11 @@ paths:
             application/json:
               examples:
                 Individual:
-                  $ref: "#/components/examples/CustomerIndividualExample"
+                  $ref: "#/components/examples/CustomerCreateIndividualExample"
                 Business:
-                  $ref: "#/components/examples/CustomerBusinessExample"
+                  $ref: "#/components/examples/CustomerCreateBusinessExample"
               schema:
-                $ref: "#/components/schemas/CustomerResponse"
+                $ref: "#/components/schemas/CustomerCreateResponse"
       security:
         - apiKey: []
   "/customers/{id}":
@@ -109,18 +109,40 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/CustomerDocumentRequest"
+              $ref: "#/components/schemas/CustomerUploadDocumentRequest"
       responses:
         "200":
           description: Resource successfully accepted.
       security:
         - apiKey: []
-  "/customers/{id}/verify":
+  "/customers/{id}/verifications":
+    get:
+      tags:
+        - Customers
+      summary: Read a customer verification
+      description: This endpoint reads a customer verification.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+      responses:
+        "200":
+          description: Resource successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerVerificationResponse"
+      security:
+        - apiKey: []
     post:
       tags:
         - Customers
-      summary: Verify a customer
-      description: This endpoint verifies a customer.
+      summary: Start a customer verification
+      description: This endpoint starts a customer verification.
       parameters:
         - name: id
           in: path
@@ -131,7 +153,7 @@ paths:
           description: Customer's unique identifier.
       responses:
         "202":
-          description: Customer verification successfully started.
+          description: Resource successfully started.
       security:
         - apiKey: []
   /exchange-rates:
@@ -154,20 +176,20 @@ paths:
                 Floating:
                   value:
                     type: "floating"
-                    sourceCurrency: "USDC"
-                    sourceAmount: "1000.00000"
-                    targetCurrency: "BRL"
-                    targetAmount: "5925.55"
+                    sourceCurrency: "BRL"
+                    sourceAmount: "60000.00"
+                    targetCurrency: "USDC"
+                    targetAmount: "10125.727780"
                     rate: "5.9255"
                 Locked:
                   value:
                     id: "123e4567-e89b-12d3-a456-426614174001"
                     type: "locked"
                     expiresAt: "2026-05-05T00:00:00Z"
-                    sourceCurrency: "USDC"
-                    sourceAmount: "1012.572778"
-                    targetCurrency: "BRL"
-                    targetAmount: "6000"
+                    sourceCurrency: "BRL"
+                    sourceAmount: "5925.55"
+                    targetCurrency: "USDC"
+                    targetAmount: "10000.000000"
                     rate: "5.9255"
               schema:
                 $ref: "#/components/schemas/ExchangeRateResponse"
@@ -340,6 +362,8 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/TransactionOffRampResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
   /transactions/transfer:
     post:
       tags:
@@ -356,10 +380,14 @@ paths:
           description: Transfer transaction started successfully.
           content:
             application/json:
+              example:
+                $ref: "#/components/examples/TransactionTransferProcessingExample"
               schema:
                 allOf:
                   - $ref: "#/components/schemas/TransactionTransferResponse"
                   - $ref: "#/components/schemas/TransactionTimestamps"
+      security:
+        - apiKey: []
 components:
   examples:
     CustomerIndividualArrayExample:
@@ -370,16 +398,17 @@ components:
             name: "William Default"
             taxId: "123.456.789-00"
             birthDate: "1990-01-01"
+            country: "BRA"
             email: "william.default@example.com"
             walletAddress: "0x1234567890123456789012345678901234567890"
             blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
-            compliance:
+            verification:
               status: "pending"
               level: "standard"
-              transactionLimits:
-                single: "1000.00"
-                daily: "10000.00"
-                monthly: "100000.00"
+            transactionLimits:
+              single: "1000.00"
+              daily: "10000.00"
+              monthly: "100000.00"
             createdAt: "2021-01-01T00:00:00Z"
             updatedAt: "2021-01-01T00:00:00Z"
     CustomerBusinessArrayExample:
@@ -410,16 +439,21 @@ components:
         name: "William Default"
         taxId: "123.456.789-00"
         birthDate: "1990-01-01"
+        country: "BRA"
         email: "william.default@example.com"
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
         balances:
           - currency: "USDC"
             amount: "10000.000000"
-        compliance:
+            updatedAt: "2021-01-01T00:00:00Z"
+          - currency: "USDT"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+        verification:
           status: "pending"
           level: "standard"
-          transactionLimits:
+        transactionLimits:
             single: "1000.00"
             daily: "10000.00"
             monthly: "100000.00"
@@ -440,6 +474,7 @@ components:
             name: "William Default"
             taxId: "123.456.789-00"
             birthDate: "1990-01-01"
+            country: "BRA"
             email: "william.default@example.com"
             sharePercentage: 20
         walletAddress: "0x1234567890123456789012345678901234567890"
@@ -447,26 +482,75 @@ components:
         balances:
           - currency: "USDC"
             amount: "10000.000000"
-        compliance:
+            updatedAt: "2021-01-01T00:00:00Z"
+          - currency: "USDT"
+            amount: "10000.000000"
+            updatedAt: "2021-01-01T00:00:00Z"
+        verification:
           status: "pending"
           level: "standard"
-          transactionLimits:
+        transactionLimits:
+          single: "1000.00"
+          daily: "10000.00"
+          monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerCreateIndividualExample:
+       value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "individual"
+        name: "William Default"
+        taxId: "123.456.789-00"
+        birthDate: "1990-01-01"
+        country: "BRA"
+        email: "william.default@example.com"
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
             single: "1000.00"
             daily: "10000.00"
             monthly: "100000.00"
         createdAt: "2021-01-01T00:00:00Z"
-        updatedAt: "2021-01-01T00:00:00Z"   
+        updatedAt: "2021-01-01T00:00:00Z"
+    CustomerCreateBusinessExample:
+      value:
+        id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        type: "business"
+        legalName: "Lumx S.A"
+        taxId: "42.887.120/0001-00"
+        incorporationDate: "2020-01-01"
+        country: "BRA"
+        email: "hello@lumx.io"
+        beneficiaries:
+          - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+            type: "individual"
+            name: "William Default"
+            taxId: "123.456.789-00"
+            birthDate: "1990-01-01"
+            country: "BRA"
+            email: "william.default@example.com"
+            sharePercentage: 20
+        walletAddress: "0x1234567890123456789012345678901234567890"
+        blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        verification:
+          status: "pending"
+          level: "standard"
+        transactionLimits:
+          single: "1000.00"
+          daily: "10000.00"
+          monthly: "100000.00"
+        createdAt: "2021-01-01T00:00:00Z"
+        updatedAt: "2021-01-01T00:00:00Z"
     TransactionOnrampAwaitingFundsExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174000"
-        customerId: "123e4567-e89b-12d3-a456-426614174000"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "on_ramp"
         request:
-          sourceCurrency: "BRL"
-          targetCurrency: "USDC"
-          amount: "10000.00"
-          payment:
-            rail: "pix"
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
         state:
           status: "awaiting_funds"
           payment:
@@ -477,14 +561,10 @@ components:
     TransactionOnrampProcessingExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174002"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "on_ramp"
         request:
-          sourceCurrency: "BRL"
-          targetCurrency: "USDC"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
         state:
           status: "success"
           payment:
@@ -495,14 +575,10 @@ components:
     TransactionOnrampSuccessExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174002"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "on_ramp"
         request:
-          sourceCurrency: "BRL"
-          targetCurrency: "USDC"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
         state:
           status: "processing"
           payment:
@@ -510,7 +586,7 @@ components:
             brCode: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
           receipt:
             rate: "6.0066"
-            sourceAmount: "1000.00"
+            sourceAmount: "1000.000000"
             targetAmount: "5925.55"
             sourceCurrency: "USDC"
             targetCurrency: "BRL"
@@ -530,14 +606,10 @@ components:
     TransactionOnrampFailedExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174002"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "on_ramp"
         request:
-          sourceCurrency: "BRL"
-          targetCurrency: "USDC"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
+          $ref: "#/components/examples/TransactionOnrampRequestExample/value"
         state:
           status: "failed"
           payment:
@@ -549,16 +621,10 @@ components:
     TransactionOfframpAwaitingFundsExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174003"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "off_ramp"
         request:
-          sourceCurrency: "USDC"
-          targetCurrency: "BRL"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
-            keyType: "email"
-            keyValue: "user@email.com"
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
         state:
           status: "awaiting_funds"
           payment:
@@ -568,16 +634,10 @@ components:
     TransactionOfframpProcessingExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174003"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "on_ramp"
         request:
-          sourceCurrency: "USDC"
-          targetCurrency: "BRL"
-          amount: "1000.00"
-          payment:
-            rail: "pix2"
-            keyType: "email"
-            keyValue: "user@email.com"
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
         state:
           status: "processing"
           payment:
@@ -587,16 +647,10 @@ components:
     TransactionOfframpSuccessExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174003"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "off_ramp"
         request:
-          sourceCurrency: "USDC"
-          targetCurrency: "BRL"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
-            keyType: "email"
-            keyValue: "user@email.com"
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
         state:
           status: "success"
           payment:
@@ -623,16 +677,10 @@ components:
     TransactionOfframpFailedExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174003"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "off_ramp"
         request:
-          sourceCurrency: "USDC"
-          targetCurrency: "BRL"
-          amount: "1000.00"
-          payment:
-            rail: "pix"
-            keyType: "email"
-            keyValue: "user@email.com"
+          $ref: "#/components/examples/TransactionOfframpRequestExample/value"
         state:
           status: "failed"
           payment:
@@ -643,7 +691,7 @@ components:
     TransactionTransferProcessingExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174004"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "transfer"
         request:
           currency: "USDC"
@@ -655,7 +703,7 @@ components:
     TransactionTransferSuccessExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174004"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "transfer"
         request:
           currency: "USDC"
@@ -670,7 +718,7 @@ components:
     TransactionTransferFailedExample:
       value:
         id: "123e4567-e89b-12d3-a456-426614174004"
-        customerId: "123e4567-e89b-12d3-a456-426614174001"
+        customerId: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type: "transfer"
         request:
           currency: "USDC"
@@ -680,6 +728,22 @@ components:
         state:
           status: "failed"
           error: {}
+    TransactionOnrampRequestExample:
+      value:
+        sourceCurrency: "BRL"
+        sourceAmount: "10000.00"
+        targetCurrency: "USDC"
+        payment:
+          rail: "pix"
+    TransactionOfframpRequestExample:
+      value:
+        sourceCurrency: "BRL"
+        sourceAmount: "10000.00"
+        targetCurrency: "BRL"
+        payment:
+          rail: "pix"
+          keyType: "cpf"
+          keyValue: "123.456.789-00"
   schemas:
     CustomerRequest:
       allOf:
@@ -720,6 +784,8 @@ components:
                               description: Beneficiary's tax ID.
                             birthDate:
                               description: Beneficiary's birth date.
+                            country:
+                              description: Beneficiary's country.
                             email:
                               description: Beneficiary's email.
                             sharePercentage:
@@ -731,6 +797,7 @@ components:
                             - name
                             - taxId
                             - birthDate
+                            - country
                             - email
                             - sharePercentage
       required:
@@ -784,10 +851,12 @@ components:
                                 description: Beneficiary's name.
                               taxId:
                                 description: Beneficiary's tax ID.
-                              email:
-                                description: Beneficiary's email.
                               birthDate:
                                 description: Beneficiary's birth date.
+                              country:
+                                description: Beneficiary's country.
+                              email:
+                                description: Beneficiary's email.
                               sharePercentage:
                                 type: number
                                 description: The share percentage of the beneficiary.
@@ -808,8 +877,24 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/CustomerBalance"
-            compliance:
-              $ref: "#/components/schemas/CustomerCompliance"
+            verification:
+              $ref: "#/components/schemas/CustomerVerification"
+            transactionLimits:
+              type: object
+              description: Verification's transaction limits.
+              properties:
+                single:
+                  type: string
+                  description: Single transaction limit for the customer's KYC.
+                  example: "1000.00"
+                daily:
+                  type: string
+                  description: Daily limit for the customer's KYC.
+                  example: "10000.00"
+                monthly:
+                  type: string
+                  description: Monthly limit for the customer's KYC.
+                  example: "100000.00"
             createdAt:
               type: string
               description: Creation date and time.
@@ -851,8 +936,24 @@ components:
               type: string
               description: Customer's block explorer URL.
               example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
-            compliance:
-              $ref: "#/components/schemas/CustomerCompliance"
+            verification:
+              $ref: "#/components/schemas/CustomerVerification"
+            transactionLimits:
+              type: object
+              description: Customer's transaction limits.
+              properties:
+                single:
+                  type: string
+                  description: Single transaction limit for the customer's KYC.
+                  example: "1000.00"
+                daily:
+                  type: string
+                  description: Daily limit for the customer's KYC.
+                  example: "10000.00"
+                monthly:
+                  type: string
+                  description: Monthly limit for the customer's KYC.
+                  example: "100000.00"
             createdAt:
               type: string
               description: Creation date and time.
@@ -884,6 +985,11 @@ components:
           description: Customer's birth date.
           format: date
           example: "1990-01-01"
+        country:
+          type: string
+          description: Customer's country using ISO 3166-1 alpha-3 code.
+          enum: ["BRA"]
+          example: "BRA"
         email:
           type: string
           description: Customer's email.
@@ -916,37 +1022,21 @@ components:
           type: string
           description: Customer's email.
           example: "hello@lumx.io"
-    CustomerCompliance:
+    CustomerVerification:
       type: object
-      description: Customer's compliance KYC/KYB.
+      description: Customer's verification KYC/KYB.
       properties:
         status:
           type: string
-          description: Compliance's status.
+          description: Verification's status.
           enum:
             ["pending", "approved", "final_rejection", "temporary_rejection"]
           example: "pending"
         level:
           type: string
-          description: Compliance's level.
+          description: Verification's level.
           enum: ["standard"]
           example: "standard"
-        transactionLimits:
-          type: object
-          description: Compliance's transaction limits.
-          properties:
-            single:
-              type: string
-              description: Single transaction limit for the customer's KYC.
-              example: "1000.00"
-            daily:
-              type: string
-              description: Daily limit for the customer's KYC.
-              example: "10000.00"
-            monthly:
-              type: string
-              description: Monthly limit for the customer's KYC.
-              example: "100000.00"
     CustomerBalance:
       type: object
       description: Customer's balance.
@@ -963,13 +1053,104 @@ components:
           type: string
           description: Last update date and time.
           example: "2021-01-01T00:00:00Z"
-    CustomerDocumentRequest:
+    CustomerCreateResponse:
+      allOf:
+          - type: object
+            properties:
+              id:
+                type: string
+                description: Customer's unique identifier.
+                format: uuid
+                readOnly: true
+          - oneOf:
+              - $ref: "#/components/schemas/CustomerIndividual"
+                description: Customer type is individual.
+                title: Individual
+              - allOf:
+                  - type: object
+                    description: Customer type is business.
+                    title: Business
+                  - $ref: "#/components/schemas/CustomerBusiness"
+                  - type: object
+                    properties:
+                      beneficiaries:
+                        type: array
+                        description: List of beneficiaries associated with this business.
+                        items: 
+                          type: object 
+                          allOf:
+                            - $ref: "#/components/schemas/CustomerIndividual"
+                            - type: object
+                              properties:
+                                id:
+                                  type: string
+                                  description: Beneficiary's unique identifier.
+                                  format: uuid
+                                  example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                                type:
+                                  description: Beneficiary's type.
+                                name:
+                                  description: Beneficiary's name.
+                                taxId:
+                                  description: Beneficiary's tax ID.
+                                email:
+                                  description: Beneficiary's email.
+                                birthDate:
+                                  description: Beneficiary's birth date.
+                                country:
+                                  description: Beneficiary's country.
+                                sharePercentage:
+                                  type: number
+                                  description: The share percentage of the beneficiary.
+                                  example: 20
+          - type: object
+            properties:
+              taxId:
+                description: Customer's tax ID.
+              walletAddress:
+                type: string
+                description: Customer's wallet address.
+                example: "0x1234567890123456789012345678901234567890"
+              blockExplorerUrl:
+                type: string
+                description: Customer's block explorer URL.
+                example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+              verification:
+                $ref: "#/components/schemas/CustomerVerification"
+              transactionLimits:
+                type: object
+                description: Verification's transaction limits.
+                properties:
+                  single:
+                    type: string
+                    description: Single transaction limit for the customer's KYC.
+                    example: "1000.00"
+                  daily:
+                    type: string
+                    description: Daily limit for the customer's KYC.
+                    example: "10000.00"
+                  monthly:
+                    type: string
+                    description: Monthly limit for the customer's KYC.
+                    example: "100000.00"
+              createdAt:
+                type: string
+                description: Creation date and time.
+                format: date-time
+                example: "2021-01-01T00:00:00Z"
+              updatedAt:
+                type: string
+                description: Last update date and time.
+                format: date-time
+                example: "2021-01-01T00:00:00Z"
+    CustomerUploadDocumentRequest:
       type: object
       properties:
         file:
           type: string
-          description: Document's file to be uploaded.
+          description: Document's file to be uploaded. The maximum size is 5MB.
           format: binary
+          # contentEncoding: binary
         metadata:
           type: object
           description: Document's metadata of the file.
@@ -1001,6 +1182,42 @@ components:
       required:
         - file
         - metadata
+    CustomerVerificationResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: Customer's unique identifier.
+          format: uuid
+        status:
+          type: string
+          description: Customer verification's status.
+          enum: ["pending", "approved", "final_rejection", "temporary_rejection"]
+          example: "temporary_rejection"
+        level:
+          type: string
+          description: Customer verification's level.
+          example: "standard"
+          enum: ["standard"]
+        statusReason:
+          type: object
+          description: Customer verification's status reason.
+          properties:
+            rejectLabels:
+              type: array
+              description: Customer verification's reject labels.
+              example:
+                - screenshot
+                - unsatisfactory_photos
+            rejectSubLabels:
+              type: array
+              description: Customer verification's reject sub labels.
+              example:
+                - proofOfAddress_listOfDocs
+                - badPhoto
+                - proofOfAddress
+                - differentDocs
+                - badPhoto_screenshot
     ExchangeRateRequest:
       allOf:
         - oneOf:
@@ -1017,8 +1234,8 @@ components:
       required:
         - type
         - sourceCurrency
-        - targetCurrency
         - sourceAmount
+        - targetCurrency  
         - targetAmount
     ExchangeRateResponse:
       allOf:
@@ -1033,6 +1250,22 @@ components:
                       description: Exchange rate's type.
                       enum: ["floating"]
                       example: "floating"
+                    sourceCurrency:
+                      type: string
+                      description: Exchange rate's source currency.
+                      example: "BRL"
+                    sourceAmount:
+                      type: string
+                      description: Exchange rate's source amount.
+                      example: "60000.00"
+                    targetCurrency:
+                      type: string
+                      description: Exchange rate's target currency.
+                      example: "USDC"
+                    targetAmount:
+                      type: string
+                      description: Exchange rate's target amount.
+                      example: "10125.727780"
             - allOf:
                 - type: object
                   description: Exchange rate type is locked.
@@ -1052,28 +1285,28 @@ components:
                       type: string
                       description: Expiration date and time. The exchange rate duration is 5 minutes.
                       example: "2026-05-05T00:00:00Z"
+                    sourceCurrency:
+                      type: string
+                      description: Exchange rate's source currency.
+                      example: "BRL"
+                    sourceAmount:
+                      type: string
+                      description: Exchange rate's source amount.
+                      example: "5925.55"
+                    targetCurrency:
+                      type: string
+                      description: Exchange rate's target currency.
+                      example: "USDC"
+                    targetAmount:
+                      type: string
+                      description: Exchange rate's target amount.
+                      example: "10000.000000"
         - type: object
           properties:
-            sourceCurrency:
-              type: string
-              description: Exchange rate's source currency.
-              example: "USDC"
-            sourceAmount:
-              type: string
-              description: Exchange rate's source amount.
-              example: "10000.00"
-            targetCurrency:
-              type: string
-              description: Exchange rate's target currency.
-              example: "BRL"
-            targetAmount:
-              type: string
-              description: Exchange rate's target amount.
-              example: "59030.00"
             rate:
               type: string
               description: The exchange rate between the currencies.
-              example: "5.9030"
+              example: "5.9255"
     ExchangeRateFloating:
       type: object
       properties:
@@ -1090,7 +1323,7 @@ components:
         sourceAmount:
           type: string
           description: Exchange rate's source amount.
-          example: "10000.00"
+          example: "60000.00"
         targetCurrency:
           type: string
           enum: [BRL, USDC, USDT]
@@ -1117,7 +1350,7 @@ components:
         targetAmount:
           type: string
           description: Exchange rate's target amount.
-          example: "59030.00"
+          example: "10000.000000"
     TransactionResponse:
       type: object
       properties:
@@ -1152,6 +1385,42 @@ components:
                   description: On-ramp using locked exchange rate.
                   title: Locked
                 - $ref: "#/components/schemas/TransactionOnRampLocked"
+    TransactionOnRampFloating:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+        sourceCurrency:
+          type: string
+          enum: [BRL]
+          description: Transaction's source currency.
+          example: "BRL"
+        sourceAmount:
+          type: string
+          description: Transaction's source amount.
+          example: "10000.00"
+        targetCurrency:
+          type: string
+          enum: [USDC, USDT]
+          description: Transaction's target currency.
+          example: "USDC"
+        payment:
+          type: object
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+      required:
+        - customerId
+        - sourceCurrency
+        - sourceAmount
+        - targetCurrency
+        - payment
     TransactionOnRampLocked:
       type: object
       properties:
@@ -1159,7 +1428,7 @@ components:
           type: string
           format: uuid
           description: Customer's unique identifier.
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         exchangeRateId:
           type: string
           format: uuid
@@ -1177,42 +1446,6 @@ components:
         - customerId
         - payment
         - exchangeRateId
-    TransactionOnRampFloating:
-      type: object
-      properties:
-        customerId:
-          type: string
-          format: uuid
-          description: Customer's unique identifier.
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        sourceCurrency:
-          type: string
-          enum: [BRL]
-          description: Fiat currency to be converted.
-          example: "BRL"
-        targetCurrency:
-          type: string
-          enum: [USDC, USDT]
-          description: Stablecoin to be received.
-          example: "USDC"
-        amount:
-          type: string
-          description: Amount to be converted. If exchangeRateId is provided, the amount MUST match the sourceAmount from the exchange rate response obtained previously.
-          example: "10000.00"
-        payment:
-          type: object
-          properties:
-            rail:
-              type: string
-              enum: [pix]
-              description: Payment rail to be used.
-              example: "pix"
-      required:
-        - customerId
-        - sourceCurrency
-        - targetCurrency
-        - amount
-        - payment
     TransactionOnRampResponse:
       type: object
       properties:
@@ -1225,7 +1458,7 @@ components:
           type: string
           format: uuid
           description: Customer's unique identifier.
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type:
           type: string
           description: On-ramp operation's type.
@@ -1255,22 +1488,7 @@ components:
                   example: "pix"
         state:
           type: object
-          properties:
-            status:
-              type: string
-              description: Status of the on-ramp operation.
-              example: "awaiting_funds"
-            payment:
-              type: object
-              properties:
-                rail:
-                  type: string
-                  description: Payment rail to be used.
-                  example: "pix"
-                brCode:
-                  type: string
-                  description: Payment's code.
-                  example: "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5915Test Merchant6009Sao Paulo62070503***63041234"
+          description: On-ramp operation's current state. See examples for more details.
     TransactionOffRampRequest:
       allOf:
         - oneOf:
@@ -1284,41 +1502,6 @@ components:
                   description: Off-ramp using locked exchange rate.
                   title: Locked
                 - $ref: "#/components/schemas/TransactionOffRampLocked"
-    TransactionOffRampLocked:
-      type: object
-      properties:
-        customerId:
-          type: string
-          format: uuid
-          description: Customer's unique identifier.
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        exchangeRateId:
-          type: string
-          format: uuid
-          description: Exchange rate's id to be used for this transaction.
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        payment:
-          type: object
-          description: The definition of how and where the funds from the off ramp transaction will be sent.
-          properties:
-            rail:
-              type: string
-              enum: [pix]
-              description: Payment rail to be used.
-              example: "pix"
-            keyType:
-              type: string
-              description: Payment rail's key type.
-              enum: [email]
-              example: "email"
-            keyValue:
-              type: string
-              description: Payment rail's key value.
-              example: "user@email.com"
-      required:
-        - customerId
-        - payment
-        - exchangeRateId
     TransactionOffRampFloating:
       type: object
       properties:
@@ -1330,17 +1513,17 @@ components:
         sourceCurrency:
           type: string
           enum: [USDC, USDT]
-          description: Stablecoin to be converted.
+          description: Transaction's source currency.
           example: "USDC"
+        sourceAmount:
+          type: string
+          description: Transaction's source amount.
+          example: "10000.00"
         targetCurrency:
           type: string
           enum: [BRL]
-          description: Fiat currency to be received.
+          description: Transaction's target currency.
           example: "BRL"
-        amount:
-          type: string
-          description: Amount to be converted. If exchangeRateId is provided, the amount MUST match the targetAmount from the exchange rate response obtained previously.
-          example: "10000.00"
         payment:
           type: object
           description: The definition of how and where the funds from the off ramp transaction will be sent.
@@ -1353,18 +1536,53 @@ components:
             keyType:
               type: string
               description: Payment rail's key type.
-              enum: [email]
-              example: "email"
+              enum: [cpf, cnpj, email, phone, random]
+              example: "cpf"
             keyValue:
               type: string
               description: Payment rail's key value.
-              example: "user@email.com"
+              example: "123.456.789-00"
       required:
         - customerId
         - sourceCurrency
+        - sourceAmount
         - targetCurrency
-        - amount
         - payment
+    TransactionOffRampLocked:
+      type: object
+      properties:
+        customerId:
+          type: string
+          format: uuid
+          description: Customer's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        exchangeRateId:
+          type: string
+          format: uuid
+          description: Exchange Rate's unique identifier.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        payment:
+          type: object
+          description: The definition of how and where the funds from the off ramp transaction will be sent.
+          properties:
+            rail:
+              type: string
+              enum: [pix]
+              description: Payment rail to be used.
+              example: "pix"
+            keyType:
+              type: string
+              description: Payment rail's key type.
+              enum: [cpf, cnpj, email, phone, random]
+              example: "cpf"
+            keyValue:
+              type: string
+              description: Payment rail's key value.
+              example: "123.456.789-00"
+      required:
+        - customerId
+        - payment
+        - exchangeRateId
     TransactionOffRampResponse:
       type: object
       properties:
@@ -1377,7 +1595,7 @@ components:
           type: string
           format: uuid
           description: Customer's unique identifier.
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         type:
           type: string
           description: Off-ramp operation's type.
@@ -1408,46 +1626,35 @@ components:
                 keyType:
                   type: string
                   description: Payment rail's key type.
-                  enum: [email]
-                  example: "email"
+                  enum: [cpf, cnpj, email, phone, random]
+                  example: "cpf"
                 keyValue:
                   type: string
                   description: Payment rail's key value.
-                  example: "user@email.com"
+                  example: "123.456.789-00"
         state:
           type: object
-          properties:
-            status:
-              type: string
-              description: Status of the on-ramp operation.
-              example: "awaiting_funds"
-            payment:
-              type: object
-              properties:
-                rail:
-                  type: string
-                  description: Payment rail to be used.
-                  example: "pix"
+          description: Off-ramp operation's current state. See examples for more details.
     TransactionTransferRequest:
       type: object
       properties:
         currency:
           type: string
           enum: [USDC, USDT]
-          description: Stablecoin to be transferred.
+          description: Transfer's currency.
           example: "USDC"
         from:
           type: string
           format: uuid
-          description: Customer's id that will send the tokens.
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: Customer's unique identifier that will send the tokens.
+          example: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
         to:
           oneOf:
             - type: string
               format: uuid
               title: customer
-              description: Customer's id that will receive the tokens.
-              example: "123e4567-e89b-12d3-a456-426614174000"
+              description: Customer's unique identifier that will receive the tokens.
+              example: "980dc26b-42fd-4044-8a42-2271d20a2eb9"
             - type: string
               format: eth-address
               title: address
@@ -1455,8 +1662,8 @@ components:
               example: "0x1234567890123456789012345678901234567890"
         amount:
           type: string
-          description: Amount to be transferred.
-          example: "10000.00"
+          description: Transfer's amount.
+          example: "10000.000000"
       required:
         - currency
         - amount
@@ -1504,7 +1711,7 @@ components:
               example: "10000.000000"
         state:
           type: object
-          description: Status of the transfer operation. See examples for more details.
+          description: Transfer operation's current state. See examples for more details.
     TransactionTimestamps:
       type: object
       properties:

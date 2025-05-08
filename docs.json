@@ -46,6 +46,16 @@
         ]
       },
       {
+        "tab": "Guides",
+        "pages": [{
+          "group": "Start your journey",
+          "pages": [
+            "guides/your-first-individual-customer",
+            "guides/your-first-business-customer"
+          ]
+        }]
+      },
+      {
         "tab": "API Reference",
         "openapi": "/openapi/api.yaml"
       }
