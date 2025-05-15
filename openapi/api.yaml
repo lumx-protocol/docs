@@ -897,12 +897,12 @@ components:
                   example: "100000.00"
             createdAt:
               type: string
-              description: Creation date and time.
+              description: Creation date and time (UTC).
               format: date-time
               example: "2021-01-01T00:00:00Z"
             updatedAt:
               type: string
-              description: Last update date and time.
+              description: Last update date and time (UTC).
               format: date-time
               example: "2021-01-01T00:00:00Z"
     CustomerArrayResponse:
@@ -956,12 +956,12 @@ components:
                   example: "100000.00"
             createdAt:
               type: string
-              description: Creation date and time.
+              description: Creation date and time (UTC).
               format: date-time
               example: "2021-01-01T00:00:00Z"
             updatedAt:
               type: string
-              description: Last update date and time.
+              description: Last update date and time (UTC).
               format: date-time
               example: "2021-01-01T00:00:00Z"
     CustomerIndividual:
@@ -1051,7 +1051,7 @@ components:
           example: "1000.00"
         updatedAt:
           type: string
-          description: Last update date and time.
+          description: Last update date and time (UTC).
           example: "2021-01-01T00:00:00Z"
     CustomerCreateResponse:
       allOf:
@@ -1135,12 +1135,12 @@ components:
                     example: "100000.00"
               createdAt:
                 type: string
-                description: Creation date and time.
+                description: Creation date and time (UTC).
                 format: date-time
                 example: "2021-01-01T00:00:00Z"
               updatedAt:
                 type: string
-                description: Last update date and time.
+                description: Last update date and time (UTC).
                 format: date-time
                 example: "2021-01-01T00:00:00Z"
     CustomerUploadDocumentRequest:
@@ -1283,7 +1283,7 @@ components:
                       example: "locked"
                     expiresAt:
                       type: string
-                      description: Expiration date and time. The exchange rate duration is 5 minutes.
+                      description: Expiration date and time (UTC). The exchange rate duration is 5 minutes.
                       example: "2026-05-05T00:00:00Z"
                     sourceCurrency:
                       type: string
