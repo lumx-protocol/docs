@@ -5,28 +5,26 @@ description: "Learn about how accounts work"
 
 At the accounts level, we have the following terms to disclose:
 
-- Client: you, our Lumx client, that has agreed to use our APIs.
-- Customer: Users of your business.&#x20;
-- Wallet: We provide wallets with flexible and powerful control over blockchain transactions and custom logic.
+- Client: You, our Lumx client, who has agreed to use our APIs.
+- Customer: Users of your business.
+- Wallet: Embedded wallets for your customers that have the power to send, receive, and hold stablecoins.
 
 ### Customers
 
-Customers represent users of your business. By creating or updating your customers through our API you can enable seamless transfers of stablecoins or fiat currencies between your customer's wallets or bank accounts.&#x20;
+Customers represent users of your business. By creating or updating your customers through our API, you can enable seamless transfers of stablecoins or fiat currencies between your customers' wallets or bank accounts.
 
-We currently handle a soft KYC/KYB (Name, Tax ID, and Birth Date) for your users in compliance with legal requirements when using our on/off ramp processes.&#x20;
-
-Deeper KYC/KYB options will be provided soon.&#x20;
+We handle KYC/KYB for your users in compliance with legal requirements when using our on/off ramp processes. You can always refer to our [compliance requirements](https://docs.lumx.io/compliance/compliance-requirements) page to understand which data we collect to validate it.
 
 ### Wallets
 
-Programmable wallets are ideal for applications requiring conditional transfers, complex multi-step blockchain interactions, special filters, or account recovery mechanisms, turning them into a key component that helps make blockchain accessible to regular “non-crypto-native” users.
+We provide an easy and safe way for you or your users to send, receive, and hold stablecoins. No external integrations or blockchain knowledge required.
 
-- Multiple signing and custody methods
+The key functionality of our wallets includes:
 
-We support multiple signing methods. You can either leverage our pre-build signers or bring your own signer depending on your custody model. You can use MPC or HSM for custodial wallet models or Passkeys for self-custodial.
-
-- Gas management
-
-To address the UX challenges of users needing to possess cryptocurrencies to cover transaction fees on blockchain networks, we provide an innovative gas management feature utilizing a “gas sponsorship” system, meaning we cover all gas costs for your transactions.&#x20;
+- Automatically creating individual wallets on behalf of your users.
+- Creating wallets for your company or treasury.
+- Transferring in and out of Lumx wallets.
+- Transferring stablecoins between different Lumx wallets.
+- Querying the balance for each wallet and across all wallets.
 
 Next, let's learn more about [On/Off Ramp processes](/concepts/orchestration).
