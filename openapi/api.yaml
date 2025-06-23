@@ -156,6 +156,29 @@ paths:
           description: Resource successfully started.
       security:
         - apiKey: []
+  '/customers/{id}/links':
+    post:
+      tags:
+        - Customers
+      summary: Create a compliance link
+      description: This endpoint generates a KYC/KYB link.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Customer's unique identifier.
+      responses:
+        '201':
+          description: Resource successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLinkResponse'
+      security:
+        - apiKey: []
   /exchange-rates:
     post:
       tags:
@@ -1218,6 +1241,12 @@ components:
                 - proofOfAddress
                 - differentDocs
                 - badPhoto_screenshot
+    CustomerLinkResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Customer's KYC/KYB link.
     ExchangeRateRequest:
       allOf:
         - oneOf:
