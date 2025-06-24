@@ -443,6 +443,7 @@ components:
         email: "william.default@example.com"
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        link: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
         balances:
           - currency: "USDC"
             amount: "10000.000000"
@@ -479,6 +480,7 @@ components:
             sharePercentage: 20
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        link: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
         balances:
           - currency: "USDC"
             amount: "10000.000000"
@@ -506,6 +508,7 @@ components:
         email: "william.default@example.com"
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        link: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
         verification:
           status: "pending"
           level: "standard"
@@ -535,6 +538,7 @@ components:
             sharePercentage: 20
         walletAddress: "0x1234567890123456789012345678901234567890"
         blockExplorerUrl: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+        link: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
         verification:
           status: "pending"
           level: "standard"
@@ -873,6 +877,10 @@ components:
               type: string
               description: Customer's block explorer URL.
               example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+            link:
+              type: string
+              description: Customer's KYC/KYB link.
+              example: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
             balances:
               type: array
               items:
@@ -1115,6 +1123,10 @@ components:
                 type: string
                 description: Customer's block explorer URL.
                 example: "https://amoy.polygonscan.com/address/0x1234567890123456789012345678901234567890"
+              link:
+                type: string
+                description: Customer's KYC/KYB link.
+                example: "https://kyc.example.com/customer/3c90c3cc-0d44-4b50-8888-8dd25736052a"
               verification:
                 $ref: "#/components/schemas/CustomerVerification"
               transactionLimits:
@@ -1218,6 +1230,40 @@ components:
                 - proofOfAddress
                 - differentDocs
                 - badPhoto_screenshot
+    CustomerLinkResponse:
+      type: object
+      properties:
+        customer:
+          type: object
+          description: Customer's KYC/KYB link information.
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Customer's unique identifier.
+              example: "123e4567-e89b-12d3-a456-426614174000"
+            link:
+              type: string
+              description: Customer's KYC/KYB link.
+              example: "link"
+          required:
+            - id
+            - link
+        beneficiaries:
+          type: array
+          description: List of beneficiary KYC links. Only present for business customers with beneficiaries.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Beneficiary's unique identifier.
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              link:
+                type: string
+                description: Beneficiary's KYC link.
+                example: "link"
     ExchangeRateRequest:
       allOf:
         - oneOf:
