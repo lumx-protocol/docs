@@ -1244,9 +1244,37 @@ components:
     CustomerLinkResponse:
       type: object
       properties:
-        url:
-          type: string
-          description: Customer's KYC/KYB link.
+        customer:
+          type: object
+          description: Customer's KYC/KYB link information.
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Customer's unique identifier.
+              example: "123e4567-e89b-12d3-a456-426614174000"
+            link:
+              type: string
+              description: Customer's KYC/KYB link.
+              example: "link"
+          required:
+            - id
+            - link
+        beneficiaries:
+          type: array
+          description: List of beneficiary KYC links. Only present for business customers with beneficiaries.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Beneficiary's unique identifier.
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              link:
+                type: string
+                description: Beneficiary's KYC link.
+                example: "link"
     ExchangeRateRequest:
       allOf:
         - oneOf:
