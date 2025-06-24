@@ -161,7 +161,7 @@ paths:
       tags:
         - Customers
       summary: Create a KYC/KYB link
-      description: This endpoint creates a KYC/KYB link.
+      description: This endpoint creates a link that makes it possible to start a KYC/KYB process for the customer.
       parameters:
         - name: id
           in: path
