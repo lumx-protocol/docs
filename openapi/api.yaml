@@ -160,8 +160,8 @@ paths:
     post:
       tags:
         - Customers
-      summary: Create a compliance link
-      description: This endpoint generates a KYC/KYB link.
+      summary: Create a KYC/KYB link
+      description: This endpoint creates a KYC/KYB link.
       parameters:
         - name: id
           in: path
